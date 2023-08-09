@@ -1,0 +1,138 @@
+public function httpApproach(Request $request)
+    {
+        $user = $request->user();
+        $prompt = $request->prompt;
+        $character_id = $request->character_id;
+        $user_id = $user->id;
+
+        $character = Character::find($character_id);
+
+        if (!$character) {
+            return response()->json([
+                'msgErr' => 'Character not found'
+            ]);
+        }
+
+        // here we are checking the user, if the user is not exist then we are returning the error message, although we do not need this becouse we will implement middleware for this and every request will be authenticated
+        if (!$user) {
+            return response()->json([
+                'msgErr' => 'User not found'
+            ]);
+        }
+
+        if ($user->user_type == 'free') {
+            $time_checkup = $this->count_users_request($user->id);
+
+            if ($time_checkup['count'] > 9) {
+                return response()->json([
+                    'limitErr' => 'You have exceeded the limit of 10 requests in 6 hours. Please upgrade to paid version.',
+                    'time' => $time_checkup['time_till_new_request']
+                ]);
+            }
+        }
+
+        try {
+
+            // $chat_id = $request->chat_id;
+            $chat_id = Chat::where('user_id', $user_id)->where('character_id', $character_id)->first()->id ?? null;
+
+            // if no chat id, create new chat
+            if (!$chat_id) {
+                // create new chat
+                $chat = Chat::create([
+                    // currently no user
+                    'user_id' => $user_id,
+                    'character_id' => $character_id,
+                    'prompt' => $prompt,
+                    'completion' => ''
+                ]);
+
+                $chat_id = $chat->id;
+
+                $recentPrompts = [];
+            } else {
+                // get recent 10 prompts
+                $ten_recent_prompts = Prompt::search($prompt, $chat_id, $user_id);
+
+                $recent_prompts = [];
+                foreach ($ten_recent_prompts as $recent_prompt) {
+
+                    $recent_prompts = array_merge($recent_prompts, [
+                        [
+                            'id' => $recent_prompt['id'],
+                            'prompt' => $recent_prompt['prompt'],
+                            'chat_id' => $recent_prompt['chat_id'],
+                            'completion' => Prompt::find($recent_prompt['id'])["completion"]
+                        ]
+                    ]);
+                }
+                // recentPrompts is an array of recent prompts
+                $recentPrompts = [];
+                foreach ($recent_prompts as $recent_prompt) {
+                    $recentPrompts = array_merge($recentPrompts, [
+                        $recent_prompt['prompt'],
+                    ]);
+                }
+            }
+
+
+            // Combine recent prompts and current prompt
+            $allPrompts = array_merge($recentPrompts, [$prompt]);
+            $promptsText = implode("\n\n", $allPrompts);
+
+            // Prepare the request payload
+            $payload = [
+                'prompt' => $character->character_description . "\n\n" . $promptsText,
+                'max_tokens' => 250,
+                'temperature' => 0.7,
+                'n' => 1,
+            ];
+
+            $client = new Client([
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer " . env('OPENAI_KEY')
+                ],
+            ]);
+
+            // Send the API request
+            $response = $client->post("https://api.openai.com/v1/engines/" . $this->models['davinci'] . "/completions", [
+                'json' => $payload,
+            ]);
+
+            $completion = json_decode($response->getBody())->choices[0]->text;
+
+            $completion = ltrim($completion, "\n");
+
+            // return response()->json($completion);
+
+            // $completion = str_replace(["\n\nCompletion:", "Completion:", "\n", "\r"], "", $open_ai_response['choices'][0]['text']);
+
+            $prompt = Prompt::create([
+                'prompt' => $prompt,
+                'completion' =>  $completion,
+                'user_id' => $user_id,
+                'character_id' => $character_id,
+                'chat_id' => $chat_id,
+                'character_type' => $character->type
+            ]);
+
+            $response = Prompt::where('chat_id', $chat_id)->orderBy('id', 'desc')->first();
+            $list = [];
+
+            $list['prompt'] = $response['prompt'];
+            $list['completion'] = $response['completion'];
+            $list['id'] = $response['id'];
+            $list['chat_id'] = $response['chat_id'];
+            $list['character_id'] = $response['character_id'];
+            $list['created_at'] = $response['created_at']->format('d M Y, h:i A');
+            if ($user->user_type == 'free')
+                $list['request_count'] = 10 - $this->count_users_request($user_id)['count'];
+
+            return (!$response) ?  "No response available!" : response()->json($list);
+        } catch (\Throwable $th) {
+            return  response()->json([
+                'msgErr' => $th->getMessage()
+            ]);
+        }
+    }
