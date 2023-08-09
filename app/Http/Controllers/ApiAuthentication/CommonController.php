@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\ApiAuthentication;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
@@ -26,5 +26,13 @@ class CommonController extends Controller
         return response()->json([
             'privacy_policy' => $settings->privacy_policy
         ]);
+    }
+
+    // countriesList
+    public function countriesList()
+    {
+        $countries = \App\Models\Country::where('status', 1)->select('id AS value', 'name AS label')->get();
+
+        return response()->json($countries);
     }
 }

@@ -2,11 +2,17 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\Authentication;
-
+use App\Http\Controllers\ApiAuthentication\Authentication;
+use App\Http\Controllers\ApiAuthentication\CommonController;
 
 Route::post('/signup', [Authentication::class,'sign_up']);
 Route::post('/login', [Authentication::class, 'login']);
+
+
+// open routes
+Route::prefix('frontend')->group(function() {
+    Route::get('/countries-list', [CommonController::class, 'countriesList']);
+});
 
 
 // admin routes
