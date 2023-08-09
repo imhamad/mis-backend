@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 09, 2023 at 02:08 PM
+-- Generation Time: Aug 09, 2023 at 08:17 PM
 -- Server version: 8.0.31
 -- PHP Version: 7.4.33
 
@@ -71,6 +71,32 @@ INSERT INTO `countries` (`id`, `code`, `name`, `status`, `created_at`, `updated_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `experties_and_offerings`
+--
+
+DROP TABLE IF EXISTS `experties_and_offerings`;
+CREATE TABLE IF NOT EXISTS `experties_and_offerings` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `icon` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int NOT NULL DEFAULT '1' COMMENT '1=active, 0=inactive',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `experties_and_offerings`
+--
+
+INSERT INTO `experties_and_offerings` (`id`, `title`, `description`, `icon`, `status`, `created_at`, `updated_at`) VALUES
+(6, 'Brand Identity', 'We create unique and powerful brand identities that help companies achieve their goals and stand out amoungst the competition.', 'images/1691611502-brand-identity.png', 1, '2023-08-09 14:39:49', '2023-08-09 15:06:05'),
+(9, 'Company Profile', 'Our unique and powerful brand identities that help companies achieve their goals and stand out amoungst the competition.', 'images/1691612137-company-profile.png', 1, '2023-08-09 15:15:37', '2023-08-09 15:15:37');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
@@ -99,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -114,7 +140,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2023_02_07_175529_create_motps_table', 1),
 (7, '2023_05_15_185835_create_categories_table', 1),
 (8, '2023_05_24_040932_create_supports_table', 1),
-(9, '2023_08_09_112925_create_countries_table', 2);
+(9, '2023_08_09_112925_create_countries_table', 2),
+(10, '2023_08_09_175304_create_experties_and_offerings_table', 3);
 
 -- --------------------------------------------------------
 
@@ -168,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `personal_access_tokens`
@@ -179,7 +206,10 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_id`, `tokenable_type`, `n
 (2, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, 'c2c3a87c928640391d013473e49fe3567d62bfad42725d13ac588584a1d4c8af', '[\"*\"]', NULL, NULL, '2023-08-09 06:09:54', '2023-08-09 06:09:54'),
 (3, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', 'Laravel Password Grant Client', NULL, 'bbd4d090d689052c4595080db847f028d8fec268ee10ed9d81d40c9777d92539', '[\"*\"]', NULL, NULL, '2023-08-09 06:10:00', '2023-08-09 06:10:00'),
 (4, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '5e911a964b930529114140f61a703ba6c1875af30018531e2051430caa3aeed5', '[\"*\"]', NULL, NULL, '2023-08-09 06:11:38', '2023-08-09 06:11:38'),
-(5, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, 'f18c0793bbac481c502ceb98abb6e2870eb7650603899a67f9743c2404f97797', '[\"*\"]', NULL, NULL, '2023-08-09 06:12:01', '2023-08-09 06:12:01');
+(5, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, 'f18c0793bbac481c502ceb98abb6e2870eb7650603899a67f9743c2404f97797', '[\"*\"]', NULL, NULL, '2023-08-09 06:12:01', '2023-08-09 06:12:01'),
+(6, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '991ddd8b477a2d5edc1a5f09a5c8d8762264e65fb55eb7e5fb438f72e388042f', '[\"*\"]', NULL, NULL, '2023-08-09 13:50:37', '2023-08-09 13:50:37'),
+(7, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '7b3d8f0638b077e0e8aff2f5802064be4a7c973536b9c6c98c17c793d1301df8', '[\"*\"]', '2023-08-09 13:51:22', NULL, '2023-08-09 13:51:09', '2023-08-09 13:51:22'),
+(8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-09 15:15:37', NULL, '2023-08-09 13:51:51', '2023-08-09 15:15:37');
 
 -- --------------------------------------------------------
 
@@ -248,14 +278,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `user_code`, `user_uuid`, `email_verified_at`, `password`, `user_type`, `remember_token`, `status`, `created_at`, `updated_at`) VALUES
-(3, 'Sulaiman', 'sulaimanbarki@gmail.com', 19575473, '47f958da-2189-46ee-81b5-b6696c069435', NULL, '$2y$10$d7jmD.3r8BOY1.YsO1LxM.YKyisrHYvJxKVAv6REJYVRjeP/J7uVi', 'admin', NULL, 1, '2023-08-09 06:09:54', '2023-08-09 06:09:54');
+(3, 'Sulaiman', 'sulaimanbarki@gmail.com', 19575473, '47f958da-2189-46ee-81b5-b6696c069435', NULL, '$2y$10$d7jmD.3r8BOY1.YsO1LxM.YKyisrHYvJxKVAv6REJYVRjeP/J7uVi', 'admin', NULL, 1, '2023-08-09 06:09:54', '2023-08-09 06:09:54'),
+(4, 'Sulaiman', 'sulaimanbarkii@gmail.com', 61952528, '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, '$2y$10$Q12iaEtHhufngqcYzKl0GuMBXFZ5k3gkmp0.PBCiRyFLEJxcdMRby', 'admin', NULL, 1, '2023-08-09 13:51:51', '2023-08-09 13:51:51');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

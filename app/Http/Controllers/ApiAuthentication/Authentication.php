@@ -32,15 +32,6 @@ class Authentication extends Controller
         ]);
 
         return $this->make_response($user);
-
-        $tokenResult = $user->createToken($user->user_uuid);
-        $accessToken = $tokenResult->plainTextToken;
-
-        return response()->json([
-            "msg" => $request->name . " has been added successfully",
-            "access_token" => $accessToken,
-            "token_type" => 'Bearer'
-        ]);
     }
 
     // login

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiAuthentication\Authentication;
@@ -16,8 +17,8 @@ Route::prefix('frontend')->group(function() {
 
 
 // admin routes
-Route::prefix('admin')->group(function() {
-
+Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
+    Route::resource('experties-offerings', ExpertiesAndOfferingsController::class);
 });
 
 
@@ -33,6 +34,7 @@ Route::group(["middleware" => "auth:sanctum"], function () {
         return $request->user();
     });
 });
+
 
 
 
