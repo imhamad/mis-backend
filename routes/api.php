@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SEOTagsController;
 use App\Http\Controllers\Admin\OurClientController;
+use App\Http\Controllers\Admin\OurTeamMembersController;
 use App\Http\Controllers\ApiAuthentication\Authentication;
 use App\Http\Controllers\Admin\OpenSourceCultureController;
 use App\Http\Controllers\ApiAuthentication\CommonController;
@@ -26,6 +27,7 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
 
     Route::resource('open-source-cultures', OpenSourceCultureController::class);
     Route::resource('our-clients', OurClientController::class);
+    Route::resource('our-team-members', OurTeamMembersController::class);
 
     Route::get('/get-theme-data', [CommonController::class, 'getThemeData']);
     Route::post('/update-theme-data', [CommonController::class, 'updateThemeData']);

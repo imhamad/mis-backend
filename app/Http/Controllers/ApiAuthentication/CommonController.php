@@ -59,7 +59,9 @@ class CommonController extends Controller
         // services page
         $theme->services_heroic_block_pre_title = $request->services_heroic_block_pre_title ? $request->services_heroic_block_pre_title : $theme->services_heroic_block_pre_title;
         $theme->services_heroic_block_title = $request->services_heroic_block_title ? $request->services_heroic_block_title : $theme->services_heroic_block_title;
-        $theme->services_process_image = $request->services_process_image ? $request->services_process_image : $theme->services_process_image;
+
+        if ($request->services_process_image)
+            $theme->services_process_image = imageUploader($request->services_process_image, 'service process-imag');
 
         // case studies page
         $theme->casestudy_heroic_block_pre_title = $request->casestudy_heroic_block_pre_title ? $request->casestudy_heroic_block_pre_title : $theme->casestudy_heroic_block_pre_title;
