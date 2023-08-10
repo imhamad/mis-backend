@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 09, 2023 at 08:17 PM
+-- Generation Time: Aug 10, 2023 at 11:01 AM
 -- Server version: 8.0.31
 -- PHP Version: 7.4.33
 
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -141,7 +141,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2023_05_15_185835_create_categories_table', 1),
 (8, '2023_05_24_040932_create_supports_table', 1),
 (9, '2023_08_09_112925_create_countries_table', 2),
-(10, '2023_08_09_175304_create_experties_and_offerings_table', 3);
+(10, '2023_08_09_175304_create_experties_and_offerings_table', 3),
+(11, '2023_08_10_043201_create_s_e_o_tags_table', 4),
+(12, '2023_08_10_100233_create_themes_table', 5),
+(13, '2023_08_10_104446_create_open_source_cultures_table', 6);
 
 -- --------------------------------------------------------
 
@@ -159,6 +162,31 @@ CREATE TABLE IF NOT EXISTS `motps` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `open_source_cultures`
+--
+
+DROP TABLE IF EXISTS `open_source_cultures`;
+CREATE TABLE IF NOT EXISTS `open_source_cultures` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `icon` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int NOT NULL DEFAULT '1' COMMENT '1=active, 0=inactive',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `open_source_cultures`
+--
+
+INSERT INTO `open_source_cultures` (`id`, `title`, `description`, `icon`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Company Profile', 'We create unique and powerful brand identities that help companies achieve their goals and stand out amoungst the competition.', 'images/1691665081-company-profile.png', 1, '2023-08-10 05:57:12', '2023-08-10 05:58:01');
 
 -- --------------------------------------------------------
 
@@ -209,7 +237,34 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_id`, `tokenable_type`, `n
 (5, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, 'f18c0793bbac481c502ceb98abb6e2870eb7650603899a67f9743c2404f97797', '[\"*\"]', NULL, NULL, '2023-08-09 06:12:01', '2023-08-09 06:12:01'),
 (6, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '991ddd8b477a2d5edc1a5f09a5c8d8762264e65fb55eb7e5fb438f72e388042f', '[\"*\"]', NULL, NULL, '2023-08-09 13:50:37', '2023-08-09 13:50:37'),
 (7, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '7b3d8f0638b077e0e8aff2f5802064be4a7c973536b9c6c98c17c793d1301df8', '[\"*\"]', '2023-08-09 13:51:22', NULL, '2023-08-09 13:51:09', '2023-08-09 13:51:22'),
-(8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-09 15:15:37', NULL, '2023-08-09 13:51:51', '2023-08-09 15:15:37');
+(8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-10 05:58:10', NULL, '2023-08-09 13:51:51', '2023-08-10 05:58:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `seo_tags`
+--
+
+DROP TABLE IF EXISTS `seo_tags`;
+CREATE TABLE IF NOT EXISTS `seo_tags` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `page_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo_title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seo_description` longtext COLLATE utf8mb4_unicode_ci,
+  `icon` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '1=Active, 0=Inactive',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `seo_tags_page_name_unique` (`page_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `seo_tags`
+--
+
+INSERT INTO `seo_tags` (`id`, `page_name`, `seo_title`, `seo_description`, `icon`, `status`, `created_at`, `updated_at`) VALUES
+(2, 'home', 'Home Page', 'We create unique and powerful brand identities that help companies achieve their goals and stand out amoungst the competition.', 'images/1691643598-.png', 1, '2023-08-09 23:59:58', '2023-08-09 23:59:58');
 
 -- --------------------------------------------------------
 
@@ -255,6 +310,36 @@ CREATE TABLE IF NOT EXISTS `supports` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `theme`
+--
+
+DROP TABLE IF EXISTS `theme`;
+CREATE TABLE IF NOT EXISTS `theme` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `about_heroic_block_pre_title` text COLLATE utf8mb4_unicode_ci,
+  `about_heroic_block_title` text COLLATE utf8mb4_unicode_ci,
+  `about_cta_link` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `about_open_source_culture` longtext COLLATE utf8mb4_unicode_ci,
+  `services_heroic_block_pre_title` text COLLATE utf8mb4_unicode_ci,
+  `services_heroic_block_title` text COLLATE utf8mb4_unicode_ci,
+  `services_process_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `casestudy_heroic_block_pre_title` text COLLATE utf8mb4_unicode_ci,
+  `casestudy_heroic_block_title` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `theme`
+--
+
+INSERT INTO `theme` (`id`, `about_heroic_block_pre_title`, `about_heroic_block_title`, `about_cta_link`, `about_open_source_culture`, `services_heroic_block_pre_title`, `services_heroic_block_title`, `services_process_image`, `casestudy_heroic_block_pre_title`, `casestudy_heroic_block_title`, `created_at`, `updated_at`) VALUES
+(1, 'ABOUT DEVELOPEVER', 'We\'re an employee-first company of friendly, creative problem solvers.', 'https://de-website-official.vercel.app/about', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that.', NULL, NULL, NULL, NULL, NULL, NULL, '2023-08-10 05:40:20');
 
 -- --------------------------------------------------------
 
