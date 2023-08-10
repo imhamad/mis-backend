@@ -88,18 +88,18 @@ class ExpertiesAndOfferingsController extends Controller
      */
     public function show($id)
     {
-        $expertiesAndOfferings = ExpertiesAndOffering::find($id);
+        $expertiesAndOffering = ExpertiesAndOffering::find($id);
 
-        if (!$expertiesAndOfferings) {
+        if (!$expertiesAndOffering) {
             return response()->json([
                 'msgErr' => 'Experties and offering not found.',
             ], 404);
         }
 
         // attach the image url
-        $expertiesAndOfferings->icon = url($expertiesAndOfferings->icon);
+        $expertiesAndOffering->icon = url($expertiesAndOffering->icon);
 
-        return response()->json($expertiesAndOfferings, 200);
+        return response()->json($expertiesAndOffering, 200);
     }
 
     /**

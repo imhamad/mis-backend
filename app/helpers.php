@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 if (!function_exists('saveBase64Image')) {
     function saveBase64Image($base64Data, $directory, $filename)
     {
@@ -20,5 +22,18 @@ if (!function_exists('saveBase64Image')) {
 
         // Return the URL of the saved image (without the domain)
         return $urlPath;
+    }
+}
+
+if (!function_exists('imageUploader')) {
+    function imageUploader($image, $slug)
+    {
+        $iconData = $image;
+        $iconName = time() . '-' . Str::slug($slug) . '.png';
+        $iconDirectory = 'images';
+
+        $url = saveBase64Image($iconData, $iconDirectory, $iconName);
+
+        return $url;
     }
 }

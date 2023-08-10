@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SEOTagsController;
+use App\Http\Controllers\Admin\OurClientController;
 use App\Http\Controllers\ApiAuthentication\Authentication;
+use App\Http\Controllers\Admin\OpenSourceCultureController;
 use App\Http\Controllers\ApiAuthentication\CommonController;
 use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
-use App\Http\Controllers\Admin\OpenSourceCultureController;
 
 Route::post('/signup', [Authentication::class,'sign_up']);
 Route::post('/login', [Authentication::class, 'login']);
@@ -24,6 +25,7 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
     Route::resource('seo-tags', SEOTagsController::class);
 
     Route::resource('open-source-cultures', OpenSourceCultureController::class);
+    Route::resource('our-clients', OurClientController::class);
 
     Route::get('/get-theme-data', [CommonController::class, 'getThemeData']);
     Route::post('/update-theme-data', [CommonController::class, 'updateThemeData']);
