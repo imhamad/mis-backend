@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\SEOTagsController;
 use App\Http\Controllers\ApiAuthentication\Authentication;
 use App\Http\Controllers\ApiAuthentication\CommonController;
+use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 
 Route::post('/signup', [Authentication::class,'sign_up']);
 Route::post('/login', [Authentication::class, 'login']);
@@ -19,6 +20,7 @@ Route::prefix('frontend')->group(function() {
 // admin routes
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
     Route::resource('experties-offerings', ExpertiesAndOfferingsController::class);
+    Route::resource('seo-tags', SEOTagsController::class);
 });
 
 
