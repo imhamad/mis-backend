@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'breadcrumb_title',
+        'service_title',
+        'service_first_paragraph',
+        'service_second_paragraph',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }
