@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 10, 2023 at 11:01 AM
+-- Generation Time: Aug 11, 2023 at 06:41 AM
 -- Server version: 8.0.31
 -- PHP Version: 7.4.33
 
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -144,7 +144,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (10, '2023_08_09_175304_create_experties_and_offerings_table', 3),
 (11, '2023_08_10_043201_create_s_e_o_tags_table', 4),
 (12, '2023_08_10_100233_create_themes_table', 5),
-(13, '2023_08_10_104446_create_open_source_cultures_table', 6);
+(13, '2023_08_10_104446_create_open_source_cultures_table', 6),
+(14, '2023_08_10_112938_create_our_clients_table', 7),
+(15, '2023_08_10_121808_create_our_team_members_table', 8),
+(16, '2023_08_10_130010_create_services_table', 9),
+(17, '2023_08_10_181741_create_service_deliverable_lists_table', 10),
+(18, '2023_08_10_181954_create_service_deliverable_icons_table', 10);
 
 -- --------------------------------------------------------
 
@@ -187,6 +192,61 @@ CREATE TABLE IF NOT EXISTS `open_source_cultures` (
 
 INSERT INTO `open_source_cultures` (`id`, `title`, `description`, `icon`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Company Profile', 'We create unique and powerful brand identities that help companies achieve their goals and stand out amoungst the competition.', 'images/1691665081-company-profile.png', 1, '2023-08-10 05:57:12', '2023-08-10 05:58:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `our_clients`
+--
+
+DROP TABLE IF EXISTS `our_clients`;
+CREATE TABLE IF NOT EXISTS `our_clients` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `logo` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `link` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` enum('client','partner','current','previous') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'client',
+  `status` tinyint DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `our_clients`
+--
+
+INSERT INTO `our_clients` (`id`, `name`, `logo`, `link`, `type`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Company Profile', 'images/1691669566-company-profile.png', 'https://facebook.com', 'current', 1, '2023-08-10 06:51:03', '2023-08-10 07:12:46'),
+(2, 'YouTube', 'images/1691669593-youtube.png', 'https://youtube.com', 'current', 1, '2023-08-10 07:13:13', '2023-08-10 07:13:13'),
+(4, 'YouTube', 'images/1691669644-youtube.png', 'https://youtube.com', 'previous', 1, '2023-08-10 07:14:04', '2023-08-10 07:14:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `our_team_members`
+--
+
+DROP TABLE IF EXISTS `our_team_members`;
+CREATE TABLE IF NOT EXISTS `our_team_members` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `designation` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `our_team_members`
+--
+
+INSERT INTO `our_team_members` (`id`, `name`, `designation`, `image`, `url`, `created_at`, `updated_at`) VALUES
+(1, 'Barki', 'Programmer', 'images/1691671930-barki.png', 'https://facebook.com', '2023-08-10 07:30:21', '2023-08-10 07:52:10'),
+(2, 'Wali Ullah', 'Front End Dev', 'images/1691670643-wali-ullah.png', 'https://youtube.com', '2023-08-10 07:30:43', '2023-08-10 07:30:43'),
+(4, 'Suliman Barki', 'Laravel Dev', 'images/1691670665-suliman-barki.png', NULL, '2023-08-10 07:31:05', '2023-08-10 07:31:05');
 
 -- --------------------------------------------------------
 
@@ -237,7 +297,7 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_id`, `tokenable_type`, `n
 (5, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, 'f18c0793bbac481c502ceb98abb6e2870eb7650603899a67f9743c2404f97797', '[\"*\"]', NULL, NULL, '2023-08-09 06:12:01', '2023-08-09 06:12:01'),
 (6, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '991ddd8b477a2d5edc1a5f09a5c8d8762264e65fb55eb7e5fb438f72e388042f', '[\"*\"]', NULL, NULL, '2023-08-09 13:50:37', '2023-08-09 13:50:37'),
 (7, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '7b3d8f0638b077e0e8aff2f5802064be4a7c973536b9c6c98c17c793d1301df8', '[\"*\"]', '2023-08-09 13:51:22', NULL, '2023-08-09 13:51:09', '2023-08-09 13:51:22'),
-(8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-10 05:58:10', NULL, '2023-08-09 13:51:51', '2023-08-10 05:58:10');
+(8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-11 00:17:40', NULL, '2023-08-09 13:51:51', '2023-08-11 00:17:40');
 
 -- --------------------------------------------------------
 
@@ -265,6 +325,81 @@ CREATE TABLE IF NOT EXISTS `seo_tags` (
 
 INSERT INTO `seo_tags` (`id`, `page_name`, `seo_title`, `seo_description`, `icon`, `status`, `created_at`, `updated_at`) VALUES
 (2, 'home', 'Home Page', 'We create unique and powerful brand identities that help companies achieve their goals and stand out amoungst the competition.', 'images/1691643598-.png', 1, '2023-08-09 23:59:58', '2023-08-09 23:59:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+CREATE TABLE IF NOT EXISTS `services` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `breadcrumb_title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `service_title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `service_first_paragraph` text COLLATE utf8mb4_unicode_ci,
+  `service_second_paragraph` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `services`
+--
+
+INSERT INTO `services` (`id`, `breadcrumb_title`, `service_title`, `service_first_paragraph`, `service_second_paragraph`, `created_at`, `updated_at`) VALUES
+(1, 'Planning/Wireframing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 10:07:22', '2023-08-10 10:07:22'),
+(2, 'UI/UX Design', 'UI/UX Design', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 10:07:46', '2023-08-10 10:14:00'),
+(4, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 10:14:43', '2023-08-10 10:14:43'),
+(5, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:40:46', '2023-08-10 13:40:46'),
+(6, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:41:28', '2023-08-10 13:41:28'),
+(7, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:43:25', '2023-08-10 13:43:25'),
+(8, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:43:54', '2023-08-10 13:43:54'),
+(9, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
+(10, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-11 00:17:40', '2023-08-11 00:17:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service_deliverable_icons`
+--
+
+DROP TABLE IF EXISTS `service_deliverable_icons`;
+CREATE TABLE IF NOT EXISTS `service_deliverable_icons` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `service_id` bigint UNSIGNED NOT NULL,
+  `icon` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service_deliverable_lists`
+--
+
+DROP TABLE IF EXISTS `service_deliverable_lists`;
+CREATE TABLE IF NOT EXISTS `service_deliverable_lists` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `service_id` bigint UNSIGNED NOT NULL,
+  `bullet_point` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `service_deliverable_lists`
+--
+
+INSERT INTO `service_deliverable_lists` (`id`, `service_id`, `bullet_point`, `created_at`, `updated_at`) VALUES
+(1, 9, 'UI', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
+(2, 9, 'design', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
+(3, 9, 'development', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
+(4, 10, '', '2023-08-11 00:17:41', '2023-08-11 00:17:41');
 
 -- --------------------------------------------------------
 
@@ -339,7 +474,7 @@ CREATE TABLE IF NOT EXISTS `theme` (
 --
 
 INSERT INTO `theme` (`id`, `about_heroic_block_pre_title`, `about_heroic_block_title`, `about_cta_link`, `about_open_source_culture`, `services_heroic_block_pre_title`, `services_heroic_block_title`, `services_process_image`, `casestudy_heroic_block_pre_title`, `casestudy_heroic_block_title`, `created_at`, `updated_at`) VALUES
-(1, 'ABOUT DEVELOPEVER', 'We\'re an employee-first company of friendly, creative problem solvers.', 'https://de-website-official.vercel.app/about', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that.', NULL, NULL, NULL, NULL, NULL, NULL, '2023-08-10 05:40:20');
+(1, 'ABOUT DEVELOPEVER', 'We\'re an employee-first company of friendly, creative problem solvers.', 'https://de-website-official.vercel.app/about', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that.', 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691680757-service-process-imag.png', 'CASE STUDIES', 'Impact of Sustainable work under friendly environment', NULL, '2023-08-10 10:19:17');
 
 -- --------------------------------------------------------
 
