@@ -2,14 +2,15 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\SEOTagsController;
 use App\Http\Controllers\Admin\OurClientController;
 use App\Http\Controllers\Admin\OurTeamMembersController;
 use App\Http\Controllers\ApiAuthentication\Authentication;
 use App\Http\Controllers\Admin\OpenSourceCultureController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
+use App\Http\Controllers\Admin\PagesAPIController;
 use App\Http\Controllers\Admin\ServicesController;
+use App\Http\Controllers\Frontend\FrontApisController;
 
 Route::post('/signup', [Authentication::class,'sign_up']);
 Route::post('/login', [Authentication::class, 'login']);
@@ -17,14 +18,26 @@ Route::post('/login', [Authentication::class, 'login']);
 
 // open routes
 Route::prefix('frontend')->group(function() {
-    Route::get('/countries-list', [CommonController::class, 'countriesList']);
+    Route::get('/countries-list', [FrontApisController::class, 'countriesList']);
+    Route::get('/experties-and-offering', [FrontApisController::class, 'expertiesAndOffering']);
 });
 
 
 // admin routes
 Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('get-home-page-data', [PagesAPIController::class, 'getHomePageData']);
+    Route::post('update-home-page-data', [PagesAPIController::class, 'updateHomePageData']);
+
+    Route::get('get-about-page-data', [PagesAPIController::class, 'getAboutPageData']);
+    Route::post('update-about-page-data', [PagesAPIController::class, 'updateAboutPageData']);
+
+    Route::get('get-service-page-data', [PagesAPIController::class, 'getServicePageData']);
+    Route::post('update-service-page-data', [PagesAPIController::class, 'updateServicePageData']);
+
+    Route::get('get-case-study-page-data', [PagesAPIController::class, 'getCaseStudyPageData']);
+    Route::post('update-case-study-page-data', [PagesAPIController::class, 'updateCaseStudyPageData']);
+
     Route::resource('experties-offerings', ExpertiesAndOfferingsController::class);
-    Route::resource('seo-tags', SEOTagsController::class);
 
     Route::resource('open-source-cultures', OpenSourceCultureController::class);
     Route::resource('our-clients', OurClientController::class);
@@ -34,6 +47,8 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/get-theme-data', [CommonController::class, 'getThemeData']);
     Route::post('/update-theme-data', [CommonController::class, 'updateThemeData']);
+
+    // Route::resource('case-studies', )
 });
 
 

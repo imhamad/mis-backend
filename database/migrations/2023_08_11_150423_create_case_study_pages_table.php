@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('seo_tags', function (Blueprint $table) {
+        Schema::create('case_study_page', function (Blueprint $table) {
             $table->id();
-            $table->string('page_name')->unique();
-            $table->string('seo_title')->nullable();
-            $table->longText('seo_description')->nullable();
-            $table->string('icon')->nullable();
-            $table->tinyInteger('status')->default(1)->comment('1=Active, 0=Inactive');
+            $table->text('seo_title')->nullable();
+            $table->text('seo_meta_tags')->nullable();
+            $table->string('image')->nullable();
+
+            $table->text('casestudy_heroic_block_pre_title')->nullable();
+            $table->text('casestudy_heroic_block_title')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('s_e_o_tags');
+        Schema::dropIfExists('case_study_page');
     }
 };

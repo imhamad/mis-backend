@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 11, 2023 at 06:41 AM
+-- Generation Time: Aug 11, 2023 at 03:20 PM
 -- Server version: 8.0.31
 -- PHP Version: 7.4.33
 
@@ -20,6 +20,105 @@ SET time_zone = "+00:00";
 --
 -- Database: `detechnologies`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `about_page`
+--
+
+DROP TABLE IF EXISTS `about_page`;
+CREATE TABLE IF NOT EXISTS `about_page` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `seo_title` text COLLATE utf8mb4_unicode_ci,
+  `seo_meta_tags` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `about_heroic_block_pre_title` text COLLATE utf8mb4_unicode_ci,
+  `about_heroic_block_title` text COLLATE utf8mb4_unicode_ci,
+  `about_cta_link` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `about_open_source_culture` longtext COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `about_page`
+--
+
+INSERT INTO `about_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `about_heroic_block_pre_title`, `about_heroic_block_title`, `about_cta_link`, `about_open_source_culture`, `created_at`, `updated_at`) VALUES
+(1, 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691766138-about-page-image.png', 'ABOUT DEVELOPEVER', 'We\'re an employee-first company of friendly, creative problem solvers.', 'https://de-website-official.vercel.app/about', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy.\n\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that.', NULL, '2023-08-11 10:02:18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `case_studies`
+--
+
+DROP TABLE IF EXISTS `case_studies`;
+CREATE TABLE IF NOT EXISTS `case_studies` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `button_title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cta` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tags` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `about_the_client` longtext COLLATE utf8mb4_unicode_ci,
+  `industry_of_client` longtext COLLATE utf8mb4_unicode_ci,
+  `industry_of_client_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `challenge` longtext COLLATE utf8mb4_unicode_ci,
+  `value` longtext COLLATE utf8mb4_unicode_ci,
+  `project_credit` longtext COLLATE utf8mb4_unicode_ci,
+  `client_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_designation` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_review` longtext COLLATE utf8mb4_unicode_ci,
+  `client_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `case_study_page`
+--
+
+DROP TABLE IF EXISTS `case_study_page`;
+CREATE TABLE IF NOT EXISTS `case_study_page` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `seo_title` text COLLATE utf8mb4_unicode_ci,
+  `seo_meta_tags` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `casestudy_heroic_block_pre_title` text COLLATE utf8mb4_unicode_ci,
+  `casestudy_heroic_block_title` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `case_study_page`
+--
+
+INSERT INTO `case_study_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `casestudy_heroic_block_pre_title`, `casestudy_heroic_block_title`, `created_at`, `updated_at`) VALUES
+(1, 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691766735-case-study-page-image.png', 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', NULL, '2023-08-11 10:12:15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `case_study_services`
+--
+
+DROP TABLE IF EXISTS `case_study_services`;
+CREATE TABLE IF NOT EXISTS `case_study_services` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `service` text COLLATE utf8mb4_unicode_ci,
+  `url` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -116,6 +215,30 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `home_page`
+--
+
+DROP TABLE IF EXISTS `home_page`;
+CREATE TABLE IF NOT EXISTS `home_page` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `seo_title` text COLLATE utf8mb4_unicode_ci,
+  `seo_meta_tags` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `home_page`
+--
+
+INSERT INTO `home_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `created_at`, `updated_at`) VALUES
+(1, 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691764855-home-page-image.png', NULL, '2023-08-11 09:40:55');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -125,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -149,7 +272,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2023_08_10_121808_create_our_team_members_table', 8),
 (16, '2023_08_10_130010_create_services_table', 9),
 (17, '2023_08_10_181741_create_service_deliverable_lists_table', 10),
-(18, '2023_08_10_181954_create_service_deliverable_icons_table', 10);
+(18, '2023_08_10_181954_create_service_deliverable_icons_table', 10),
+(19, '2023_08_11_121510_create_case_studies_table', 11),
+(20, '2023_08_11_122436_create_case_study_services_table', 11),
+(21, '2023_08_11_132902_create_home_pages_table', 12),
+(22, '2023_08_11_144417_create_about_pages_table', 13),
+(23, '2023_08_11_145306_create_service_pages_table', 14),
+(24, '2023_08_11_150423_create_case_study_pages_table', 15);
 
 -- --------------------------------------------------------
 
@@ -283,7 +412,7 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `personal_access_tokens`
@@ -297,34 +426,8 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_id`, `tokenable_type`, `n
 (5, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, 'f18c0793bbac481c502ceb98abb6e2870eb7650603899a67f9743c2404f97797', '[\"*\"]', NULL, NULL, '2023-08-09 06:12:01', '2023-08-09 06:12:01'),
 (6, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '991ddd8b477a2d5edc1a5f09a5c8d8762264e65fb55eb7e5fb438f72e388042f', '[\"*\"]', NULL, NULL, '2023-08-09 13:50:37', '2023-08-09 13:50:37'),
 (7, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '7b3d8f0638b077e0e8aff2f5802064be4a7c973536b9c6c98c17c793d1301df8', '[\"*\"]', '2023-08-09 13:51:22', NULL, '2023-08-09 13:51:09', '2023-08-09 13:51:22'),
-(8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-11 00:17:40', NULL, '2023-08-09 13:51:51', '2023-08-11 00:17:40');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `seo_tags`
---
-
-DROP TABLE IF EXISTS `seo_tags`;
-CREATE TABLE IF NOT EXISTS `seo_tags` (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `page_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `seo_title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `seo_description` longtext COLLATE utf8mb4_unicode_ci,
-  `icon` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` tinyint NOT NULL DEFAULT '1' COMMENT '1=Active, 0=Inactive',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `seo_tags_page_name_unique` (`page_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `seo_tags`
---
-
-INSERT INTO `seo_tags` (`id`, `page_name`, `seo_title`, `seo_description`, `icon`, `status`, `created_at`, `updated_at`) VALUES
-(2, 'home', 'Home Page', 'We create unique and powerful brand identities that help companies achieve their goals and stand out amoungst the competition.', 'images/1691643598-.png', 1, '2023-08-09 23:59:58', '2023-08-09 23:59:58');
+(8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-11 00:17:40', NULL, '2023-08-09 13:51:51', '2023-08-11 00:17:40'),
+(9, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '6113f7ab4e0f54e722ce4ad34aa24662200b16933574303233f54bad76406290', '[\"*\"]', '2023-08-11 10:12:15', NULL, '2023-08-11 04:27:05', '2023-08-11 10:12:15');
 
 -- --------------------------------------------------------
 
@@ -342,7 +445,7 @@ CREATE TABLE IF NOT EXISTS `services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `services`
@@ -357,7 +460,8 @@ INSERT INTO `services` (`id`, `breadcrumb_title`, `service_title`, `service_firs
 (7, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:43:25', '2023-08-10 13:43:25'),
 (8, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:43:54', '2023-08-10 13:43:54'),
 (9, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
-(10, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-11 00:17:40', '2023-08-11 00:17:40');
+(10, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-11 00:17:40', '2023-08-11 00:17:40'),
+(11, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-11 04:27:11', '2023-08-11 04:27:11');
 
 -- --------------------------------------------------------
 
@@ -389,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `service_deliverable_lists` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `service_deliverable_lists`
@@ -399,7 +503,35 @@ INSERT INTO `service_deliverable_lists` (`id`, `service_id`, `bullet_point`, `cr
 (1, 9, 'UI', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
 (2, 9, 'design', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
 (3, 9, 'development', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
-(4, 10, '', '2023-08-11 00:17:41', '2023-08-11 00:17:41');
+(4, 10, '', '2023-08-11 00:17:41', '2023-08-11 00:17:41'),
+(5, 11, '', '2023-08-11 04:27:11', '2023-08-11 04:27:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service_page`
+--
+
+DROP TABLE IF EXISTS `service_page`;
+CREATE TABLE IF NOT EXISTS `service_page` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `seo_title` text COLLATE utf8mb4_unicode_ci,
+  `seo_meta_tags` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `services_heroic_block_pre_title` text COLLATE utf8mb4_unicode_ci,
+  `services_heroic_block_title` text COLLATE utf8mb4_unicode_ci,
+  `services_process_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `service_page`
+--
+
+INSERT INTO `service_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `services_heroic_block_pre_title`, `services_heroic_block_title`, `services_process_image`, `created_at`, `updated_at`) VALUES
+(1, 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691766154-service-page-image.png', 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691766154-service-page-process-image.png', NULL, '2023-08-11 10:02:34');
 
 -- --------------------------------------------------------
 

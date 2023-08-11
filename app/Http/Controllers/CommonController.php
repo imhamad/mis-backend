@@ -28,14 +28,6 @@ class CommonController extends Controller
         ]);
     }
 
-    // countriesList
-    public function countriesList()
-    {
-        $countries = \App\Models\Country::where('status', 1)->select('id AS value', 'name AS label')->get();
-
-        return response()->json($countries);
-    }
-
     // getThemeData
     public function getThemeData()
     {
