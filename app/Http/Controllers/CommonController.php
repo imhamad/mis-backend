@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\ApiAuthentication;
+namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Theme;
 
 class CommonController extends Controller

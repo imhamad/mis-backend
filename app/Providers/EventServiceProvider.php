@@ -31,35 +31,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        // code for elastic search has been disabled
-        // Prompt::created(function ($prompt) {
-        //     // code to connect to elastic search locally
-        //     // $client = ClientBuilder::create()
-        //     //     ->setHosts([env('ELASTICSEARCH_HOST')])
-        //     //     ->build();
-
-        //     // code to connect to elastic search on elastic cloud
-        //     $client = ClientBuilder::create()
-        //         ->setElasticCloudId(env('ELASTICSEARCH_USER'))
-        //         ->setBasicAuthentication('elastic', env('ELASTICSEARCH_PASS'))
-        //         ->build();
-
-
-        //     $params = [
-        //         // 'index' => 'my_index',
-        //         'index' => 'chatchallet',
-        //         'id' => $prompt->id,
-        //         'body' => [
-        //             'prompt' => $prompt->prompt,
-        //             'chat_id' => $prompt->chat_id,
-        //             'user_id' => $prompt->user_id,
-        //         ],
-        //     ];
-
-
-        //     $client->index($params);
-        // });
     }
 
     /**

@@ -27,10 +27,5 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
-
-        // $settings = \App\Models\Setting::first();
-
-        // bind the settings with view
-        // view()->share('settings', $settings);
     }
 }

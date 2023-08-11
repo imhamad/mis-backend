@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\OurClientController;
 use App\Http\Controllers\Admin\OurTeamMembersController;
 use App\Http\Controllers\ApiAuthentication\Authentication;
 use App\Http\Controllers\Admin\OpenSourceCultureController;
-use App\Http\Controllers\ApiAuthentication\CommonController;
+use App\Http\Controllers\CommonController;
 use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 use App\Http\Controllers\Admin\ServicesController;
 
