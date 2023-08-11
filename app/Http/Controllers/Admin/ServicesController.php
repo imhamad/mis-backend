@@ -37,6 +37,22 @@ class ServicesController extends Controller
             'service_second_paragraph' => $request->service_second_paragraph,
         ]);
 
+        // $service_deliverable_icons = explode(',', $request->service_deliverable_icons);
+        $service_deliverable_lists = explode(',', $request->service_deliverable_lists);
+
+        // convert array to array of objects
+        // $service_deliverable_icons = array_map(function ($item) {
+        //     return ['icon' => $item];
+        // }, $service_deliverable_icons);
+
+        // convert array to array of objects
+        $service_deliverable_lists = array_map(function ($item) {
+            return ['bullet_point' => $item];
+        }, $service_deliverable_lists);
+
+        // $service->serviceDeliverableIcons()->createMany($service_deliverable_icons);
+        $service->serviceDeliverableLists()->createMany($service_deliverable_lists);
+
         return response()->json([
             'msg' => 'Service created successfully.',
             'data' => $service,

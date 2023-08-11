@@ -20,4 +20,14 @@ class Service extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function serviceDeliverableLists()
+    {
+        return $this->hasMany(ServiceDeliverableList::class);
+    }
+
+    public function serviceDeliverableIcons()
+    {
+        return $this->hasMany(ServiceDeliverableIcon::class);
+    }
 }
