@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CaseStudiesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\OurClientController;
@@ -48,7 +49,7 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/get-theme-data', [CommonController::class, 'getThemeData']);
     Route::post('/update-theme-data', [CommonController::class, 'updateThemeData']);
 
-    // Route::resource('case-studies', )
+    Route::resource('case-studies', CaseStudiesController::class);
 });
 
 

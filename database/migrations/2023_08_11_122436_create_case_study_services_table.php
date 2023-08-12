@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('case_study_services', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('case_study_id');
             $table->text('service')->nullable();
             $table->string('url')->nullable();
             $table->timestamps();

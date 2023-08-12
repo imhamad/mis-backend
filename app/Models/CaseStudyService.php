@@ -12,6 +12,7 @@ class CaseStudyService extends Model
     protected $fillable = [
         'service',
         'url',
+        'case_study_id',
     ];
 
     public function caseStudy()

@@ -10,10 +10,13 @@ class CaseStudy extends Model
     use HasFactory;
 
     protected $fillable = [
+        'seo_title',
+        'seo_meta_tags',
+        'image',
         'title',
         'button_title',
         'cta',
-        'image',
+        'case_study_image',
         'tags',
         'about_the_client',
         'industry_of_client',
