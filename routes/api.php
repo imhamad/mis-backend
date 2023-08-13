@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CaseStudiesController;
+use App\Http\Controllers\Admin\CaseStudySlidersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\OurClientController;
@@ -19,8 +20,12 @@ Route::post('/login', [Authentication::class, 'login']);
 
 // open routes
 Route::prefix('frontend')->group(function() {
-    Route::get('/countries-list', [FrontApisController::class, 'countriesList']);
-    Route::get('/experties-and-offering', [FrontApisController::class, 'expertiesAndOffering']);
+    Route::get('/home-page', [FrontApisController::class, 'homePage']);
+    Route::get('/about-page', [FrontApisController::class, 'aboutPage']);
+    Route::get('/service-page', [FrontApisController::class, 'servicePage']);
+    Route::get('/case-study-page', [FrontApisController::class, 'caseStudyPage']);
+    Route::get('/case-study-search', [FrontApisController::class, 'caseStudySearch']);
+    Route::get('/case-study/{slug}', [FrontApisController::class, 'caseStudy']);
 });
 
 
@@ -50,6 +55,7 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/update-theme-data', [CommonController::class, 'updateThemeData']);
 
     Route::resource('case-studies', CaseStudiesController::class);
+    Route::resource('case-study-sliders', CaseStudySlidersController::class);
 });
 
 

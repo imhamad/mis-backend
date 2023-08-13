@@ -15,6 +15,7 @@ class HomePage extends Model
         'seo_title',
         'seo_meta_tags',
         'image',
+        'countries',
     ];
 
     protected $hidden = [
@@ -22,4 +23,11 @@ class HomePage extends Model
         'updated_at',
         'id'
     ];
+
+
+    // countries are stored as comma separated values in database, so we need to convert it into array
+    public function getCountriesList() 
+    {
+        return explode(',', $this->countries);
+    }
 }

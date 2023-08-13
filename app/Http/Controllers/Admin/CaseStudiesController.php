@@ -65,6 +65,7 @@ class CaseStudiesController extends Controller
             'image' => $image,
 
             'title' => $request->title,
+            'slug' => $request->title,
             'button_title' => $request->button_title,
             'cta' => $request->cta,
             'case_study_image' => $caseStudyImage,
@@ -149,6 +150,7 @@ class CaseStudiesController extends Controller
             'image' => $image,
 
             'title' => $request->title,
+            'slug' => $request->title,
             'button_title' => $request->button_title,
             'cta' => $request->cta,
             'case_study_image' => $caseStudyImage,

@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('home_page', function (Blueprint $table) {
-            $table->id();
-            $table->text('seo_title')->nullable();
-            $table->text('seo_meta_tags')->nullable();
-            $table->string('image')->nullable();
-            $table->text('countries')->nullable();
-            $table->timestamps();
+        Schema::table('case_studies', function (Blueprint $table) {
+            $table->string('slug')->after('title')->nullable();
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('home_pages');
+        Schema::table('case_studies', function (Blueprint $table) {
+            $table->dropColumn('slug');
+        });
     }
 };

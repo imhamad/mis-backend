@@ -19,12 +19,13 @@ class PagesAPIController extends Controller
     public function updateHomePageData(Request $request) {
         $homePageData = \App\Models\HomePage::first();
         
-        $image = $request->image ? imageUploader($request->image, 'home page image') : $homePageData->image;
+        $image = $request->has('image') ? imageUploader($request->image, 'home page image') : $homePageData->image;
 
         $homePageData->update([
             'seo_title' => $request->seo_title ? $request->seo_title : $homePageData->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags ? $request->seo_meta_tags : $homePageData->seo_meta_tags,
             'image' => $image,
+            'countries' => $request->countries ? $request->countries : $homePageData->countries,
         ]);
 
         return response()->json([

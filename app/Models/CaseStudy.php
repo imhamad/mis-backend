@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CaseStudy extends Model
 {
@@ -14,6 +15,7 @@ class CaseStudy extends Model
         'seo_meta_tags',
         'image',
         'title',
+        'slug',
         'button_title',
         'cta',
         'case_study_image',
@@ -34,6 +36,11 @@ class CaseStudy extends Model
         'tags' => 'array',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function getTagsAttribute($value)
     {
         return json_decode($value);
@@ -47,5 +54,16 @@ class CaseStudy extends Model
     public function caseStudyServices()
     {
         return $this->hasMany(CaseStudyService::class);
+    }
+
+    // set slug attribute by making the title attribute
+    public function setSlugAttribute($value)
+    {
+        $this->attributes['slug'] = Str::slug($this->attributes['title']);
+    }
+
+    public function caseStudySliders()
+    {
+        return $this->hasMany(CaseStudySlider::class);
     }
 }
