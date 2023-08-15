@@ -56,6 +56,10 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
 
     Route::resource('case-studies', CaseStudiesController::class);
     Route::resource('case-study-sliders', CaseStudySlidersController::class);
+
+    Route::prefix('dropdown')->group(function() {
+        Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);
+    });
 });
 
 

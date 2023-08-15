@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 11, 2023 at 03:20 PM
+-- Generation Time: Aug 13, 2023 at 11:19 AM
 -- Server version: 8.0.31
 -- PHP Version: 7.4.33
 
@@ -58,11 +58,15 @@ INSERT INTO `about_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `about_he
 DROP TABLE IF EXISTS `case_studies`;
 CREATE TABLE IF NOT EXISTS `case_studies` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `seo_title` text COLLATE utf8mb4_unicode_ci,
+  `seo_meta_tags` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `button_title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cta` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `tags` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `case_study_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `tags` text COLLATE utf8mb4_unicode_ci,
   `about_the_client` longtext COLLATE utf8mb4_unicode_ci,
   `industry_of_client` longtext COLLATE utf8mb4_unicode_ci,
   `industry_of_client_image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -76,7 +80,16 @@ CREATE TABLE IF NOT EXISTS `case_studies` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `case_studies`
+--
+
+INSERT INTO `case_studies` (`id`, `seo_title`, `seo_meta_tags`, `image`, `title`, `slug`, `button_title`, `cta`, `case_study_image`, `tags`, `about_the_client`, `industry_of_client`, `industry_of_client_image`, `challenge`, `value`, `project_credit`, `client_name`, `client_designation`, `client_review`, `client_image`, `created_at`, `updated_at`) VALUES
+(5, 'Your SEO Title', 'Your SEO Meta Tags', 'images/1691914068-sharing-image.png', 'Your Case Study Title', 'your-case-study-title', 'Your Button Title', 'Your Call to Action Text', 'images/1691914068-your-case-study-title.png', '\"Tag1, Tag2, Tag3\"', 'About the Client Text', 'Industry of the Client', 'images/1691914068-industry-of-client.png', 'Challenge Text', 'Value Text', 'Project Credit Text', 'Client\'s Name', 'Client\'s Designation', 'Client\'s Review Text', 'images/1691914068-client-image.png', '2023-08-13 03:07:48', '2023-08-13 03:07:48'),
+(6, 'Your SEO Title', 'Your SEO Meta Tags', 'images/1691918808-sharing-image.png', 'Perfect counter', 'perfect-counter', 'Your Button Title', 'Your Call to Action Text', 'images/1691918808-perfect-counter.png', '\"react\"', 'About the Client Text', 'Industry of the Client', 'images/1691918808-industry-of-client.png', 'Challenge Text', 'Value Text', 'Project Credit Text', 'Client\'s Name', 'Client\'s Designation', 'Client\'s Review Text', 'images/1691918808-client-image.png', '2023-08-13 04:26:48', '2023-08-13 04:26:48'),
+(7, 'Your SEO Title', 'Your SEO Meta Tags', 'images/1691918864-sharing-image.png', 'Salty Lemon Social', 'salty-lemon-social', 'Your Button Title', 'Your Call to Action Text', 'images/1691918864-salty-lemon-social.png', '\"next\"', 'About the Client Text', 'Industry of the Client', 'images/1691918864-industry-of-client.png', 'Challenge Text', 'Value Text', 'Project Credit Text', 'Client\'s Name', 'Client\'s Designation', 'Client\'s Review Text', 'images/1691918864-client-image.png', '2023-08-13 04:27:44', '2023-08-13 04:27:44');
 
 -- --------------------------------------------------------
 
@@ -113,12 +126,57 @@ INSERT INTO `case_study_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `cas
 DROP TABLE IF EXISTS `case_study_services`;
 CREATE TABLE IF NOT EXISTS `case_study_services` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `case_study_id` bigint UNSIGNED NOT NULL,
   `service` text COLLATE utf8mb4_unicode_ci,
   `url` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `case_study_services`
+--
+
+INSERT INTO `case_study_services` (`id`, `case_study_id`, `service`, `url`, `created_at`, `updated_at`) VALUES
+(1, 3, 'Service 1', 'https://youtube.com', '2023-08-12 00:46:41', '2023-08-12 00:46:41'),
+(2, 3, 'Service 2', 'https://youtube.com', '2023-08-12 00:46:42', '2023-08-12 00:46:42'),
+(3, 4, 'Service 1', 'https://youtube.com', '2023-08-12 00:48:05', '2023-08-12 00:48:05'),
+(4, 4, 'Service 2', 'https://youtube.com', '2023-08-12 00:48:05', '2023-08-12 00:48:05'),
+(5, 5, 'Service 1', 'https://youtube.com', '2023-08-13 03:07:48', '2023-08-13 03:07:48'),
+(6, 5, 'Service 2', 'https://youtube.com', '2023-08-13 03:07:48', '2023-08-13 03:07:48'),
+(7, 6, 'Service 1', 'https://youtube.com', '2023-08-13 04:26:48', '2023-08-13 04:26:48'),
+(8, 6, 'Service 2', 'https://youtube.com', '2023-08-13 04:26:48', '2023-08-13 04:26:48'),
+(9, 7, 'Service 1', 'https://youtube.com', '2023-08-13 04:27:44', '2023-08-13 04:27:44'),
+(10, 7, 'Service 2', 'https://youtube.com', '2023-08-13 04:27:44', '2023-08-13 04:27:44');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `case_study_sliders`
+--
+
+DROP TABLE IF EXISTS `case_study_sliders`;
+CREATE TABLE IF NOT EXISTS `case_study_sliders` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `case_study_id` bigint UNSIGNED NOT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `descriptive_title` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cta` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `case_study_sliders`
+--
+
+INSERT INTO `case_study_sliders` (`id`, `case_study_id`, `title`, `descriptive_title`, `image`, `cta`, `created_at`, `updated_at`) VALUES
+(1, 5, 'Drupal 9 Based Website', 'Build amazing Website', 'images/1691924473-drupal-9-based-website.png', 'call-to-action', '2023-08-13 06:01:13', '2023-08-13 06:01:13'),
+(2, 5, 'Laravel Website with Vuejs', 'Build amazing Website', 'images/1691924906-laravel-website-with-vuejs.png', 'call-to-action', '2023-08-13 06:01:40', '2023-08-13 06:08:26'),
+(3, 5, 'Laravel Website', 'Build amazing Website', 'images/1691924920-laravel-website.png', 'call-to-action', '2023-08-13 06:08:40', '2023-08-13 06:08:40');
 
 -- --------------------------------------------------------
 
@@ -224,6 +282,7 @@ CREATE TABLE IF NOT EXISTS `home_page` (
   `seo_title` text COLLATE utf8mb4_unicode_ci,
   `seo_meta_tags` text COLLATE utf8mb4_unicode_ci,
   `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `countries` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -233,8 +292,8 @@ CREATE TABLE IF NOT EXISTS `home_page` (
 -- Dumping data for table `home_page`
 --
 
-INSERT INTO `home_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `created_at`, `updated_at`) VALUES
-(1, 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691764855-home-page-image.png', NULL, '2023-08-11 09:40:55');
+INSERT INTO `home_page` (`id`, `seo_title`, `seo_meta_tags`, `image`, `countries`, `created_at`, `updated_at`) VALUES
+(1, 'SERVICE | CUSTOM DEVELOPMENT', 'Sustainable websites that captivate your audience by leveraging modern tech-stack', 'images/1691895946-home-page-image.png', 'Pakistan,United States,United Kingdom,China', NULL, '2023-08-12 22:05:46');
 
 -- --------------------------------------------------------
 
@@ -248,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -273,12 +332,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2023_08_10_130010_create_services_table', 9),
 (17, '2023_08_10_181741_create_service_deliverable_lists_table', 10),
 (18, '2023_08_10_181954_create_service_deliverable_icons_table', 10),
-(19, '2023_08_11_121510_create_case_studies_table', 11),
-(20, '2023_08_11_122436_create_case_study_services_table', 11),
-(21, '2023_08_11_132902_create_home_pages_table', 12),
 (22, '2023_08_11_144417_create_about_pages_table', 13),
 (23, '2023_08_11_145306_create_service_pages_table', 14),
-(24, '2023_08_11_150423_create_case_study_pages_table', 15);
+(24, '2023_08_11_150423_create_case_study_pages_table', 15),
+(25, '2023_08_11_121510_create_case_studies_table', 16),
+(26, '2023_08_11_122436_create_case_study_services_table', 17),
+(28, '2023_08_11_132902_create_home_pages_table', 18),
+(29, '2023_08_13_075143_add_col_to_case_studies_table', 19),
+(30, '2023_08_13_104636_create_case_study_sliders_table', 20);
 
 -- --------------------------------------------------------
 
@@ -412,7 +473,7 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `personal_access_tokens`
@@ -427,7 +488,9 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_id`, `tokenable_type`, `n
 (6, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '991ddd8b477a2d5edc1a5f09a5c8d8762264e65fb55eb7e5fb438f72e388042f', '[\"*\"]', NULL, NULL, '2023-08-09 13:50:37', '2023-08-09 13:50:37'),
 (7, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '7b3d8f0638b077e0e8aff2f5802064be4a7c973536b9c6c98c17c793d1301df8', '[\"*\"]', '2023-08-09 13:51:22', NULL, '2023-08-09 13:51:09', '2023-08-09 13:51:22'),
 (8, '4aee638f-fc7d-49e2-82fe-79b2448147aa', 'App\\Models\\User', '4aee638f-fc7d-49e2-82fe-79b2448147aa', NULL, 'e2f2605e85609dd3b88185918cdd9186b07fec8b7607b5251e4e343cf9773786', '[\"*\"]', '2023-08-11 00:17:40', NULL, '2023-08-09 13:51:51', '2023-08-11 00:17:40'),
-(9, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '6113f7ab4e0f54e722ce4ad34aa24662200b16933574303233f54bad76406290', '[\"*\"]', '2023-08-11 10:12:15', NULL, '2023-08-11 04:27:05', '2023-08-11 10:12:15');
+(9, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '6113f7ab4e0f54e722ce4ad34aa24662200b16933574303233f54bad76406290', '[\"*\"]', '2023-08-11 10:12:15', NULL, '2023-08-11 04:27:05', '2023-08-11 10:12:15'),
+(10, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '34310b53c0bbfa0c28abffd253b92ad5314707d6c524e4aff4b96da8c254864c', '[\"*\"]', '2023-08-12 00:48:05', NULL, '2023-08-12 00:40:49', '2023-08-12 00:48:05'),
+(11, '47f958da-2189-46ee-81b5-b6696c069435', 'App\\Models\\User', '47f958da-2189-46ee-81b5-b6696c069435', NULL, '41f239a108130289b0f7efc7247d20468d30487b9981a70053b05950c14d9fbd', '[\"*\"]', '2023-08-13 06:09:55', NULL, '2023-08-12 22:00:57', '2023-08-13 06:09:55');
 
 -- --------------------------------------------------------
 
@@ -454,14 +517,7 @@ CREATE TABLE IF NOT EXISTS `services` (
 INSERT INTO `services` (`id`, `breadcrumb_title`, `service_title`, `service_first_paragraph`, `service_second_paragraph`, `created_at`, `updated_at`) VALUES
 (1, 'Planning/Wireframing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 10:07:22', '2023-08-10 10:07:22'),
 (2, 'UI/UX Design', 'UI/UX Design', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 10:07:46', '2023-08-10 10:14:00'),
-(4, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 10:14:43', '2023-08-10 10:14:43'),
-(5, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:40:46', '2023-08-10 13:40:46'),
-(6, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:41:28', '2023-08-10 13:41:28'),
-(7, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:43:25', '2023-08-10 13:43:25'),
-(8, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:43:54', '2023-08-10 13:43:54'),
-(9, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
-(10, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-11 00:17:40', '2023-08-11 00:17:40'),
-(11, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-11 04:27:11', '2023-08-11 04:27:11');
+(4, 'Designing', 'Planning', 'Give your customers a web product that effectively solves their problems through intuitive navigation and clear content design.', 'Our design team will dive deep into your audience’s wants and needs and employ their know-how of different design systems to deliver a professional web design service and create an interface that puts your customers front and center.', '2023-08-10 10:14:43', '2023-08-10 10:14:43');
 
 -- --------------------------------------------------------
 
@@ -477,7 +533,17 @@ CREATE TABLE IF NOT EXISTS `service_deliverable_icons` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `service_deliverable_icons`
+--
+
+INSERT INTO `service_deliverable_icons` (`id`, `service_id`, `icon`, `created_at`, `updated_at`) VALUES
+(1, 1, 'images/1691669566-company-profile.png', NULL, NULL),
+(2, 1, 'images/1691669566-company-profile.png', NULL, NULL),
+(3, 4, 'images/1691669566-company-profile.png', NULL, NULL),
+(4, 4, 'images/1691669566-company-profile.png', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -500,11 +566,11 @@ CREATE TABLE IF NOT EXISTS `service_deliverable_lists` (
 --
 
 INSERT INTO `service_deliverable_lists` (`id`, `service_id`, `bullet_point`, `created_at`, `updated_at`) VALUES
-(1, 9, 'UI', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
-(2, 9, 'design', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
-(3, 9, 'development', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
-(4, 10, '', '2023-08-11 00:17:41', '2023-08-11 00:17:41'),
-(5, 11, '', '2023-08-11 04:27:11', '2023-08-11 04:27:11');
+(1, 1, 'UI', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
+(2, 1, 'design', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
+(3, 1, 'development', '2023-08-10 13:44:05', '2023-08-10 13:44:05'),
+(4, 2, '', '2023-08-11 00:17:41', '2023-08-11 00:17:41'),
+(5, 2, '', '2023-08-11 04:27:11', '2023-08-11 04:27:11');
 
 -- --------------------------------------------------------
 

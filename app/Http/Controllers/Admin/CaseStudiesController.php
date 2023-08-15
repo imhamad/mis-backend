@@ -10,9 +10,17 @@ use Illuminate\Support\Facades\Validator;
 
 class CaseStudiesController extends Controller
 {
-    public function index()
+    public function index(Request $request) : JsonResponse
     {
-        return view('admin.case-studies.index');
+        $caseStudies = CaseStudy::where('title', 'LIKE', "%{$request->search}%")
+            ->select('id', 'title', 'slug', 'case_study_image', 'button_title', 'cta')
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
+        $caseStudies->each(function ($caseStudy) {
+            $caseStudy->case_study_image = url($caseStudy->case_study_image);
+        });
+        return response()->json($caseStudies, 200);
     }
 
     public function store(Request $request) : JsonResponse

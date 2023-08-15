@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OurTeamMember;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Models\Theme;
@@ -63,5 +64,13 @@ class CommonController extends Controller
         return response()->json([
             'msg' => 'Theme data updated successfully.'
         ]);
+    }
+
+    // getTeamMembersDropdown
+    public function getTeamMembersDropdown()
+    {
+        $teamMembers = OurTeamMember::select('id as value', 'name as label')->get();
+
+        return response()->json($teamMembers);
     }
 }
