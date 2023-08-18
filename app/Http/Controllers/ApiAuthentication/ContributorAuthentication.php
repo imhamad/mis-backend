@@ -7,14 +7,14 @@ use  App\Models\User;
 use App\Traits\shortCode;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Mail\RecoverAccountEmail;
 use App\Http\Controllers\Controller;
+use App\Mail\RecoverAccountEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 
-class Authentication extends Controller
+class ContributorAuthentication extends Controller
 {
     use shortCode;
 
@@ -35,6 +35,7 @@ class Authentication extends Controller
             'password' => Hash::make($request->password),
             'user_code' => $this->runCode(),  // Generate and assign a user code
             'user_uuid' => Str::uuid(),  // Generate and assign a UUID
+            'user_type' => 'contributor'
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -148,6 +149,10 @@ class Authentication extends Controller
 
         return response($response, 200);
     }
+
+
+
+
 
 
     public function change_password(Request $request)

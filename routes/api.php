@@ -12,14 +12,13 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 use App\Http\Controllers\Admin\PagesAPIController;
 use App\Http\Controllers\Admin\ServicesController;
+use App\Http\Controllers\ApiAuthentication\ContributorAuthentication;
 use App\Http\Controllers\Frontend\FrontApisController;
 
-Route::post('/signup', [Authentication::class,'sign_up']);
-Route::post('/login', [Authentication::class, 'login']);
 
 
 // open routes
-Route::prefix('frontend')->group(function() {
+Route::prefix('frontend')->group(function () {
     Route::get('/home-page', [FrontApisController::class, 'homePage']);
     Route::get('/about-page', [FrontApisController::class, 'aboutPage']);
     Route::get('/service-page', [FrontApisController::class, 'servicePage']);
@@ -29,8 +28,23 @@ Route::prefix('frontend')->group(function() {
 });
 
 
+
 // admin routes
-Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
+// authentication routes
+Route::post('/login', [Authentication::class, 'login']);
+
+Route::middleware(['auth:sanctum', 'check_admin'])->group(function () {
+    Route::get('/get-profile', [Authentication::class, 'get_profile'])->name('get-profile');
+    Route::post('/update-profile', [Authentication::class, 'update_profile']);
+    Route::post('/logout', [Authentication::class, 'logout']);
+    Route::post('/change-password', [Authentication::class, 'change_password']);
+    Route::post('/forgot-password', [Authentication::class, 'forgot_password']);
+    Route::post('/verify-recover-account-otp', [Authentication::class, 'verify_recover_account_otp']);
+    Route::post('/update-password-after-verify-recover-account-otp', [Authentication::class, 'update_password_after_verify_recover_account_otp']);
+});
+
+// dashboard routes
+Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(function () {
     Route::get('get-home-page-data', [PagesAPIController::class, 'getHomePageData']);
     Route::post('update-home-page-data', [PagesAPIController::class, 'updateHomePageData']);
 
@@ -57,15 +71,28 @@ Route::prefix('admin')->middleware(['auth:sanctum'])->group(function () {
     Route::resource('case-studies', CaseStudiesController::class);
     Route::resource('case-study-sliders', CaseStudySlidersController::class);
 
-    Route::prefix('dropdown')->group(function() {
+    Route::prefix('dropdown')->group(function () {
         Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);
     });
 });
 
 
 // contributor routes
-Route::prefix('contributor')->group(function() {
+Route::prefix('contributor')->group(function () {
+    // authentication routes
+    Route::post('/signup', [ContributorAuthentication::class, 'sign_up']);
+    Route::post('/login', [ContributorAuthentication::class, 'login']);
 
+    // dashboard routes
+    Route::group(["middleware" => "auth:sanctum"], function () {
+        Route::get('/get-profile', [ContributorAuthentication::class, 'get_profile'])->name('get-profile');
+        Route::post('/update-profile', [ContributorAuthentication::class, 'update_profile']);
+        Route::post('/logout', [ContributorAuthentication::class, 'logout']);
+        Route::post('/change-password', [ContributorAuthentication::class, 'change_password']);
+        Route::post('/forgot-password', [ContributorAuthentication::class, 'forgot_password']);
+        Route::post('/verify-recover-account-otp', [ContributorAuthentication::class, 'verify_recover_account_otp']);
+        Route::post('/update-password-after-verify-recover-account-otp', [ContributorAuthentication::class, 'update_password_after_verify_recover_account_otp']);
+    });
 });
 
 Route::group(["middleware" => "auth:sanctum"], function () {
