@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ServiceDeliverableIcon;
 use Illuminate\Support\Facades\Validator;
 
 class ServicesController extends Controller
@@ -22,8 +23,11 @@ class ServicesController extends Controller
         $validator = Validator::make($request->all(), [
             'breadcrumb_title' => 'required',
             'service_title' => 'required',
-            'service_first_paragraph' => 'required',
-            'service_second_paragraph' => 'required',
+            'description' => 'required',
+            'background_color' => 'required',
+            'direction' => 'required|in:ltr,rtl',
+        ], [
+            'direction.in' => 'Direction must be ltr or rtl.',
         ]);
 
         if ($validator->fails()) {
@@ -33,25 +37,26 @@ class ServicesController extends Controller
         $service = Service::create([
             'breadcrumb_title' => $request->breadcrumb_title,
             'service_title' => $request->service_title,
-            'service_first_paragraph' => $request->service_first_paragraph,
-            'service_second_paragraph' => $request->service_second_paragraph,
+            'description' => $request->description,
+            'background_color' => $request->background_color,
+            'direction' => $request->direction,
         ]);
 
-        // $service_deliverable_icons = explode(',', $request->service_deliverable_icons);
         $service_deliverable_lists = explode(',', $request->service_deliverable_lists);
 
-        // convert array to array of objects
-        // $service_deliverable_icons = array_map(function ($item) {
-        //     return ['icon' => $item];
-        // }, $service_deliverable_icons);
 
         // convert array to array of objects
         $service_deliverable_lists = array_map(function ($item) {
             return ['bullet_point' => $item];
         }, $service_deliverable_lists);
-
-        // $service->serviceDeliverableIcons()->createMany($service_deliverable_icons);
         $service->serviceDeliverableLists()->createMany($service_deliverable_lists);
+
+        foreach ($request->service_deliverable_icons as $item) {
+            ServiceDeliverableIcon::create([
+                'service_id' => $service->id,
+                'icon' => imageUploader($item, 'service-deliverable-icon')
+            ]);
+        }
 
         return response()->json([
             'msg' => 'Service created successfully.',
@@ -61,7 +66,17 @@ class ServicesController extends Controller
 
     public function show($id)
     {
-        $service = Service::find($id);
+        $service = Service::with('serviceDeliverableIcons')->find($id);
+
+        $service->deliverable_lists = $service->serviceDeliverableListCommanSeparated();
+        $service->deliverable_icons = $service->serviceDeliverableIconsArray();
+
+        unset($service->serviceDeliverableLists, $service->serviceDeliverableIcons);
+
+        $service->service_deliverable_lists = $service->deliverable_lists;
+        $service->service_deliverable_icons = $service->deliverable_icons;
+
+        unset($service->deliverable_lists, $service->deliverable_icons);
 
         if (!$service) {
             return response()->json([
@@ -77,8 +92,9 @@ class ServicesController extends Controller
         $validator = Validator::make($request->all(), [
             'breadcrumb_title' => 'required',
             'service_title' => 'required',
-            'service_first_paragraph' => 'required',
-            'service_second_paragraph' => 'required',
+            'description' => 'required',
+            'background_color' => 'required',
+            'direction' => 'required|in:ltr,rtl',
         ]);
 
         if ($validator->fails()) {
@@ -96,9 +112,33 @@ class ServicesController extends Controller
         $service->update([
             'breadcrumb_title' => $request->breadcrumb_title ?? $service->breadcrumb_title,
             'service_title' => $request->service_title ?? $service->service_title,
-            'service_first_paragraph' => $request->service_first_paragraph ?? $service->service_first_paragraph,
-            'service_second_paragraph' => $request->service_second_paragraph ?? $service->service_second_paragraph,
+            'description' => $request->description ?? $service->description,
+            'background_color' => $request->background_color ?? $service->background_color,
+            'direction' => $request->direction ?? $service->direction,
         ]);
+
+        if ($request->service_deliverable_lists) {
+            $service_deliverable_lists = explode(',', $request->service_deliverable_lists);
+
+            // convert array to array of objects
+            $service_deliverable_lists = array_map(function ($item) {
+                return ['bullet_point' => $item];
+            }, $service_deliverable_lists);
+
+            $service->serviceDeliverableLists()->delete();
+            $service->serviceDeliverableLists()->createMany($service_deliverable_lists);
+        }
+
+        if ($request->service_deliverable_icons) {
+            $service->serviceDeliverableIcons()->delete();
+
+            foreach ($request->service_deliverable_icons as $item) {
+                ServiceDeliverableIcon::create([
+                    'service_id' => $service->id,
+                    'icon' => imageUploader($item, 'service-deliverable-icon')
+                ]);
+            }
+        }
 
         return response()->json([
             'msg' => 'Service updated successfully.',

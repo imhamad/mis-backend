@@ -12,8 +12,9 @@ class Service extends Model
     protected $fillable = [
         'breadcrumb_title',
         'service_title',
-        'service_first_paragraph',
-        'service_second_paragraph',
+        'description',
+        'background_color',
+        'direction',
     ];
 
     protected $hidden = [
@@ -29,5 +30,17 @@ class Service extends Model
     public function serviceDeliverableIcons()
     {
         return $this->hasMany(ServiceDeliverableIcon::class);
+    }
+
+    public function serviceDeliverableListCommanSeparated()
+    {
+        return $this->serviceDeliverableLists->pluck('bullet_point')->implode(',');
+    }
+
+    public function serviceDeliverableIconsArray()
+    {
+        return $this->serviceDeliverableIcons->map(function ($item) {
+            return url($item->icon);
+        });
     }
 }

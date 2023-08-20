@@ -12,7 +12,9 @@ class OurClientController extends Controller
     public function index(Request $request)
     {
         $ourclients = OurClient::where('name', 'LIKE', "%{$request->search}%")
-            ->where('type', $request->type)
+            ->when($request->type, function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
             ->paginate(10)
             ->through(function ($ourclient) {
                 // attach the image url

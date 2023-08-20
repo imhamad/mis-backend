@@ -29,7 +29,7 @@ if (!function_exists('imageUploader')) {
     function imageUploader($image, $slug)
     {
         $iconData = $image;
-        $iconName = time() . '-' . Str::slug($slug) . '.png';
+        $iconName = time() . rand(111, 999) . '-' . Str::slug($slug) . '.png';
         $iconDirectory = 'images';
 
         $url = saveBase64Image($iconData, $iconDirectory, $iconName);

@@ -12,7 +12,12 @@ class OurTeamMembersController extends Controller
     public function index(Request $request)
     {
         $teamMembers = OurTeamMember::where('name', 'LIKE', "%{$request->search}%")
-            ->paginate(10);
+            ->paginate(10)->through(function ($teamMember) {
+                // attach the image url
+                $teamMember->image = url($teamMember->image);
+
+                return $teamMember;
+            });
 
         return response()->json($teamMembers, 200);
     }

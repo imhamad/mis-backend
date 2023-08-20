@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('breadcrumb_title')->nullable();
             $table->string('service_title')->nullable();
-            $table->text('service_first_paragraph')->nullable();
-            $table->text('service_second_paragraph')->nullable();
+            $table->text('description')->nullable();
+            $table->string('background_color')->nullable();
+            $table->enum('direction', ['ltr', 'rtl'])->default('ltr');
             $table->timestamps();
         });
     }
