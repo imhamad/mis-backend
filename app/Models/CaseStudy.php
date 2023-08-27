@@ -66,4 +66,9 @@ class CaseStudy extends Model
     {
         return $this->hasMany(CaseStudySlider::class);
     }
+
+    public function caseStudyMembers()
+    {
+        return $this->hasMany(CaseStudyMember::class);
+    }
 }

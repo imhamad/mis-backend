@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class CaseStudiesController extends Controller
 {
-    public function index(Request $request) : JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $caseStudies = CaseStudy::where('title', 'LIKE', "%{$request->search}%")
-            ->select('id', 'title', 'slug', 'case_study_image', 'button_title', 'cta')
+            ->select('id', 'title', 'slug', 'case_study_image', 'button_title', 'cta', 'tags')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -23,7 +23,7 @@ class CaseStudiesController extends Controller
         return response()->json($caseStudies, 200);
     }
 
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'seo_title' => 'required',
@@ -92,21 +92,34 @@ class CaseStudiesController extends Controller
 
         if ($request->services)
             $caseStudy->caseStudyServices()->createMany($request->services);
-        
-        
+
+        if ($request->case_study_members)
+            $caseStudy->caseStudyMembers()->createMany($request->case_study_members);
+
+
         return response()->json([
             'msg' => 'Case study created successfully.',
             'data' => $caseStudy,
         ], 201);
     }
 
-    public function edit($id) : JsonResponse
+    public function edit($id): JsonResponse
     {
         $caseStudy = CaseStudy::with('caseStudyServices')->find($id);
         return response()->json($caseStudy, 200);
     }
 
-    public function update(Request $request, $id) : JsonResponse
+    public function show($id): JsonResponse
+    {
+        $caseStudy = CaseStudy::with('caseStudyServices')->find($id);
+        $caseStudy->image = url($caseStudy->image);
+        $caseStudy->case_study_image = url($caseStudy->case_study_image);
+        $caseStudy->industry_of_client_image = url($caseStudy->industry_of_client_image);
+        $caseStudy->client_image = url($caseStudy->client_image);
+        return response()->json($caseStudy, 200);
+    }
+
+    public function update(Request $request, $id): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'seo_title' => 'required',
@@ -180,14 +193,18 @@ class CaseStudiesController extends Controller
             $caseStudy->caseStudyServices()->createMany($request->services);
         }
 
+        if ($request->case_study_members) {
+            $caseStudy->caseStudyMembers()->delete();
+            $caseStudy->caseStudyMembers()->createMany($request->case_study_members);
+        }
+
         return response()->json([
             'msg' => 'Case study updated successfully.',
             'data' => $caseStudy,
         ], 200);
-
     }
 
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $caseStudy = CaseStudy::find($id);
         $caseStudy->caseStudyServices()->delete();

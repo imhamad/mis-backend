@@ -69,7 +69,7 @@ class CommonController extends Controller
     // getTeamMembersDropdown
     public function getTeamMembersDropdown()
     {
-        $teamMembers = OurTeamMember::select('id as value', 'name as label')->get();
+        $teamMembers = OurTeamMember::selectRaw('id as value, CONCAT(name, " - ", designation) as label')->get();
 
         return response()->json($teamMembers);
     }
