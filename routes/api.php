@@ -13,6 +13,9 @@ use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 use App\Http\Controllers\Admin\PagesAPIController;
 use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\ApiAuthentication\ContributorAuthentication;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorsController;
+use App\Http\Controllers\Contributor\BlogsController;
 use App\Http\Controllers\Frontend\FrontApisController;
 
 
@@ -71,8 +74,14 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
     Route::resource('case-studies', CaseStudiesController::class);
     Route::resource('case-study-sliders', CaseStudySlidersController::class);
 
+    // configurations
+    Route::resource('categories', CategoryController::class);
+    Route::resource('colors', ColorsController::class);
+
     Route::prefix('dropdown')->group(function () {
         Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);
+        Route::get('/categories', [CommonController::class, 'getCategoriesDropdown']);
+        Route::get('/colors', [CommonController::class, 'getColorsDropdown']);
     });
 });
 
@@ -92,6 +101,8 @@ Route::prefix('contributor')->group(function () {
         Route::post('/forgot-password', [ContributorAuthentication::class, 'forgot_password']);
         Route::post('/verify-recover-account-otp', [ContributorAuthentication::class, 'verify_recover_account_otp']);
         Route::post('/update-password-after-verify-recover-account-otp', [ContributorAuthentication::class, 'update_password_after_verify_recover_account_otp']);
+
+        Route::resource('blogs', BlogsController::class);
     });
 });
 

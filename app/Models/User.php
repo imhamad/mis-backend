@@ -18,6 +18,10 @@ class User extends Authenticatable
         'user_code',
         'user_uuid',
         'user_type',
+        'description',
+        'linkedin_url',
+        'first_name',
+        'last_name',
     ];
 
     protected $hidden = [

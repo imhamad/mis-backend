@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OurTeamMember;
-use App\Models\Setting;
-use Illuminate\Http\Request;
+use App\Models\BackgroundColor;
 use App\Models\Theme;
+use App\Models\Setting;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Models\OurTeamMember;
 
 class CommonController extends Controller
 {
@@ -72,5 +74,21 @@ class CommonController extends Controller
         $teamMembers = OurTeamMember::selectRaw('id as value, CONCAT(name, " - ", designation) as label')->get();
 
         return response()->json($teamMembers);
+    }
+
+    // getCategoriesDropdown
+    public function getCategoriesDropdown()
+    {
+        $categories = Category::selectRaw('id as value, title as label')->get();
+
+        return response()->json($categories);
+    }
+
+    // getColorsDropdown
+    public function getColorsDropdown()
+    {
+        $colors = BackgroundColor::selectRaw('color_code as value, color_name as label')->get();
+
+        return response()->json($colors);
     }
 }

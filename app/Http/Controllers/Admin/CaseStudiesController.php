@@ -39,7 +39,7 @@ class CaseStudiesController extends Controller
             'industry_of_client_image' => 'required',
             'challenge' => 'required',
             'value' => 'required',
-            'project_credit' => 'required',
+            // 'project_credit' => 'required',
             'client_name' => 'required',
             'client_designation' => 'required',
             'client_review' => 'required',
@@ -93,9 +93,13 @@ class CaseStudiesController extends Controller
         if ($request->services)
             $caseStudy->caseStudyServices()->createMany($request->services);
 
-        if ($request->case_study_members)
-            $caseStudy->caseStudyMembers()->createMany($request->case_study_members);
-
+        if ($request->project_credits) {
+            foreach ($request->project_credits as $member) {
+                $caseStudy->caseStudyMembers()->create([
+                    'member_id' => $member
+                ]);
+            }
+        }
 
         return response()->json([
             'msg' => 'Case study created successfully.',
@@ -116,6 +120,10 @@ class CaseStudiesController extends Controller
         $caseStudy->case_study_image = url($caseStudy->case_study_image);
         $caseStudy->industry_of_client_image = url($caseStudy->industry_of_client_image);
         $caseStudy->client_image = url($caseStudy->client_image);
+
+        $caseStudyMembers = $caseStudy->caseStudyMembers->pluck('member_id');
+        $caseStudy->project_credits = $caseStudyMembers;
+
         return response()->json($caseStudy, 200);
     }
 
@@ -124,22 +132,22 @@ class CaseStudiesController extends Controller
         $validator = Validator::make($request->all(), [
             'seo_title' => 'required',
             'seo_meta_tags' => 'required',
-            'image' => 'required',
+            // 'image' => 'required',
             'title' => 'required',
             'button_title' => 'required',
             'cta' => 'required',
-            'case_study_image' => 'required',
+            // 'case_study_image' => 'required',
             'tags' => 'required',
             'about_the_client' => 'required',
             'industry_of_client' => 'required',
-            'industry_of_client_image' => 'required',
+            // 'industry_of_client_image' => 'required',
             'challenge' => 'required',
             'value' => 'required',
-            'project_credit' => 'required',
+            // 'project_credit' => 'required',
             'client_name' => 'required',
             'client_designation' => 'required',
             'client_review' => 'required',
-            'client_image' => 'required',
+            // 'client_image' => 'required',
             'services' => 'required',
         ]);
 
@@ -193,9 +201,13 @@ class CaseStudiesController extends Controller
             $caseStudy->caseStudyServices()->createMany($request->services);
         }
 
-        if ($request->case_study_members) {
+        if ($request->project_credits) {
             $caseStudy->caseStudyMembers()->delete();
-            $caseStudy->caseStudyMembers()->createMany($request->case_study_members);
+            foreach ($request->project_credits as $member) {
+                $caseStudy->caseStudyMembers()->create([
+                    'member_id' => $member
+                ]);
+            }
         }
 
         return response()->json([

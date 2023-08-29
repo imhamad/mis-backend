@@ -23,19 +23,26 @@ class ContributorAuthentication extends Controller
     {
         // Validate the incoming request data
         $request->validate([
-            "name" => "required",
+            "first_name" => "required",
+            "last_name" => "required",
             "email" => "required|email|unique:users",
-            "password" => "required|confirmed"
+            "password" => "required|confirmed",
+            "description" => "required",
+            "linkedin_url" => "required|url",
         ]);
 
         // Create a new user with validated data
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'user_code' => $this->runCode(),  // Generate and assign a user code
             'user_uuid' => Str::uuid(),  // Generate and assign a UUID
-            'user_type' => 'contributor'
+            'user_type' => 'contributor',
+            'description' => $request->description,
+            'linkedin_url' => $request->linkedin_url,
+            'name' => $request->first_name . ' ' . $request->last_name,
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -86,6 +93,10 @@ class ContributorAuthentication extends Controller
             return response()->json([
                 "name" => $user->name,
                 "email" => $user->email,
+                "first_name" => $user->first_name,
+                "last_name" => $user->last_name,
+                "description" => $user->description,
+                "linkedin_url" => $user->linkedin_url,
             ]);
         } else {
             return response()->json([
@@ -101,7 +112,11 @@ class ContributorAuthentication extends Controller
 
         if ($user) {
             $user->update([
-                'name' => $request->name,
+                'name' => $request->first_name . ' ' . $request->last_name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'description' => $request->description,
+                'linkedin_url' => $request->linkedin_url,
             ]);
 
             return response()->json([
@@ -142,7 +157,8 @@ class ContributorAuthentication extends Controller
         $response = [
             'token' => $accessToken,
             'user_id' => $user->id,
-            'name' => $user->name,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
             'email' => $user->email,
             'user_type' => $user_type,
         ];
