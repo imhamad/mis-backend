@@ -39,7 +39,6 @@ class CaseStudiesController extends Controller
             'industry_of_client_image' => 'required',
             'challenge' => 'required',
             'value' => 'required',
-            // 'project_credit' => 'required',
             'client_name' => 'required',
             'client_designation' => 'required',
             'client_review' => 'required',
@@ -83,7 +82,6 @@ class CaseStudiesController extends Controller
             'industry_of_client_image' => $industryOfClientImage,
             'challenge' => $request->challenge,
             'value' => $request->value,
-            'project_credit' => $request->project_credit,
             'client_name' => $request->client_name,
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
@@ -95,7 +93,7 @@ class CaseStudiesController extends Controller
 
         if ($request->project_credits) {
             foreach ($request->project_credits as $member) {
-                $caseStudy->caseStudyMembers()->create([
+                $caseStudy->caseStudyCredits()->create([
                     'member_id' => $member
                 ]);
             }
@@ -121,8 +119,8 @@ class CaseStudiesController extends Controller
         $caseStudy->industry_of_client_image = url($caseStudy->industry_of_client_image);
         $caseStudy->client_image = url($caseStudy->client_image);
 
-        $caseStudyMembers = $caseStudy->caseStudyMembers->pluck('member_id');
-        $caseStudy->project_credits = $caseStudyMembers;
+        $project_credits = $caseStudy->caseStudyCredits->pluck('member_id');
+        $caseStudy->project_credits = $project_credits;
 
         return response()->json($caseStudy, 200);
     }
@@ -156,6 +154,10 @@ class CaseStudiesController extends Controller
         }
 
         $caseStudy = CaseStudy::find($id);
+
+        if (!$caseStudy) {
+            return response()->json(['msgErr' => 'Case study not found.'], 404);
+        }
 
         $image = $caseStudy->image;
         if ($request->image)
@@ -202,9 +204,9 @@ class CaseStudiesController extends Controller
         }
 
         if ($request->project_credits) {
-            $caseStudy->caseStudyMembers()->delete();
+            $caseStudy->caseStudyCredits()->delete();
             foreach ($request->project_credits as $member) {
-                $caseStudy->caseStudyMembers()->create([
+                $caseStudy->caseStudyCredits()->create([
                     'member_id' => $member
                 ]);
             }

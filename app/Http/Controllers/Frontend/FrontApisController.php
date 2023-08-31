@@ -228,6 +228,16 @@ class FrontApisController extends Controller
             return $item;
         });
 
+        // retrieve case study credits
+        $case_study->caseStudyCredits->map(function ($item) {
+            $ourTeamMember = \App\Models\OurTeamMember::find($item->member_id);
+
+            $item->name = $ourTeamMember->name;
+            $item->designation = $ourTeamMember->designation;
+            unset($item->case_study_id, $item->id, $item->member_id);
+            return $item;
+        });
+
         // Process and format tags
         $tags = explode(',', $case_study->tags);
         $tags = array_map('trim', $tags);
