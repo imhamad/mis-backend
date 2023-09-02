@@ -30,6 +30,7 @@ return new class extends Migration
             $table->longText('challenge')->nullable();
             $table->longText('value')->nullable();
             $table->longText('project_credit')->nullable();
+            $table->integer('category_id')->nullable();
 
             // client rivew
             $table->string('client_name')->nullable();

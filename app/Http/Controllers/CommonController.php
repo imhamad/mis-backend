@@ -77,9 +77,9 @@ class CommonController extends Controller
     }
 
     // getCategoriesDropdown
-    public function getCategoriesDropdown()
+    public function getCategoriesDropdown(Request $request)
     {
-        $categories = Category::selectRaw('id as value, title as label')->get();
+        $categories = Category::where('type', $request->type)->selectRaw('id as value, title as label')->get();
 
         return response()->json($categories);
     }

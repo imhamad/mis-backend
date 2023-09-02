@@ -238,11 +238,18 @@ class FrontApisController extends Controller
             return $item;
         });
 
+        $case_study->project_credits = $case_study->caseStudyCredits;
+
+        unset($case_study->project_credit, $case_study->caseStudyCredits);
+
         // Process and format tags
         $tags = explode(',', $case_study->tags);
         $tags = array_map('trim', $tags);
 
         $case_study->tags = $tags;
+
+        // case study of clients
+        $case_study->industry_of_client = explode(',', $case_study->industry_of_client);
 
         // Retrieve related case studies based on title similarity
         $related_case_studies = \App\Models\CaseStudy::select('id', 'title', 'case_study_image', 'tags', 'slug')
@@ -251,20 +258,20 @@ class FrontApisController extends Controller
             ->get();
 
         // Process and transform related case study data
-        $related_case_studies = $related_case_studies->map(function ($item) {
-            $item->case_study_image = url($item->case_study_image);
+        // $related_case_studies = $related_case_studies->map(function ($item) {
+        //     $item->case_study_image = url($item->case_study_image);
 
-            $tags = explode(',', $item->tags);
-            $tags = array_map('trim', $tags);
+        //     $tags = explode(',', $item->tags);
+        //     $tags = array_map('trim', $tags);
 
-            $item->tags = $tags;
-            return $item;
-        });
+        //     $item->tags = $tags;
+        //     return $item;
+        // });
 
         // Return a JSON response with the case study details and related data
         return response()->json([
             'data' => $case_study,
-            'related_case_studies' => $related_case_studies,
+            // 'related_case_studies' => $related_case_studies,
         ]);
     }
 }

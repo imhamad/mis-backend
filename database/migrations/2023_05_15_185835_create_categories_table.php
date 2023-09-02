@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique()->nullable();
             $table->string('description')->nullable();
+            $table->enum('type', ['case-study', 'blog'])->default('blog');
             $table->timestamps();
         });
     }

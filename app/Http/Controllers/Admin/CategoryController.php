@@ -13,6 +13,7 @@ class CategoryController extends Controller
     public function index(Request  $request)
     {
         $categories = Category::where('title', 'LIKE', "%{$request->search}%")
+            ->where('type', $request->type)
             ->paginate(10)
             ->through(function ($category) {
                 return $category;
@@ -25,6 +26,7 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:categories',
+            'type' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -35,6 +37,7 @@ class CategoryController extends Controller
             'title' => $request->title,
             'slug' => Str::slug($request->title),
             'description' => $request->description,
+            'type' => $request->type,
         ]);
 
         return response()->json([
@@ -63,9 +66,9 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:categories,title,' . $id,
+            'type' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -84,6 +87,7 @@ class CategoryController extends Controller
             'title' => $request->title,
             'slug' => Str::slug($request->title),
             'description' => $request->description,
+            'type' => $request->type,
         ]);
 
         return response()->json([

@@ -26,6 +26,7 @@ class CaseStudy extends Model
         'challenge',
         'value',
         'project_credit',
+        'category_id',
         'client_name',
         'client_designation',
         'client_review',
