@@ -15,6 +15,7 @@ class CaseStudy extends Model
         'seo_meta_tags',
         'image',
         'title',
+        'pre_title',
         'slug',
         'button_title',
         'cta',

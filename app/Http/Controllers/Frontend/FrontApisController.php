@@ -148,20 +148,9 @@ class FrontApisController extends Controller
         // Convert the image URL to an absolute URL using the "url" helper function
         $case_study_page->image = url($case_study_page->image);
 
-        // Retrieve tags from CaseStudy models and process them
-        $tags = \App\Models\CaseStudy::select('tags')->get()->map(function ($item) {
-            // Explode the comma-separated tags into an array
-            $tags = explode(',', $item->tags);
-            // Trim each tag to remove any extra whitespace
-            $tags = array_map('trim', $tags);
-
-            return $tags;
-        })->flatten()->unique();
-
         // Return a JSON response with the processed data
         return response()->json([
             'data' => $case_study_page,
-            'tags' => $tags,
         ]);
     }
 
@@ -171,17 +160,11 @@ class FrontApisController extends Controller
     public function caseStudySearch(Request $request)
     {
         // Extract tags from the request and create an array
-        $tags = explode(',', $request->tags);
+        $categories = explode(',', $request->categories);
 
         // Retrieve case study data based on search and tag criteria
         $case_studies = \App\Models\CaseStudy::select('id', 'title', 'case_study_image', 'tags', 'slug')
-            ->when($request->tags, function ($query) use ($tags) {
-                return $query->where(function ($query) use ($tags) {
-                    foreach ($tags as $tag) {
-                        $query->orWhere('tags', 'like', '%' . $tag . '%');
-                    }
-                });
-            })
+            ->whereIn('category_id', $categories)
             ->where('title', 'like', '%' . $request->search . '%')
             ->latest()
             ->limit(6)
@@ -238,15 +221,18 @@ class FrontApisController extends Controller
             return $item;
         });
 
+        $category = \App\Models\Category::find($case_study->category_id);
+        $case_study->category = $category ? $category->title : '';
+
         $case_study->project_credits = $case_study->caseStudyCredits;
 
-        unset($case_study->project_credit, $case_study->caseStudyCredits);
+        unset($case_study->project_credit, $case_study->caseStudyCredits, $case_study->category_id);
 
         // Process and format tags
-        $tags = explode(',', $case_study->tags);
-        $tags = array_map('trim', $tags);
+        // $tags = explode(',', $case_study->tags);
+        // $tags = array_map('trim', $tags);
 
-        $case_study->tags = $tags;
+        // $case_study->tags = $tags;
 
         // case study of clients
         $case_study->industry_of_client = explode(',', $case_study->industry_of_client);

@@ -30,6 +30,7 @@ class CaseStudiesController extends Controller
             'seo_meta_tags' => 'required',
             'image' => 'required',
             'title' => 'required',
+            'pre_title' => 'required',
             'button_title' => 'required',
             'cta' => 'required',
             'case_study_image' => 'required',
@@ -71,7 +72,7 @@ class CaseStudiesController extends Controller
             'seo_title' => $request->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags,
             'image' => $image,
-
+            'pre_title' => $request->pre_title,
             'title' => $request->title,
             'slug' => $request->title,
             'button_title' => $request->button_title,
@@ -132,7 +133,7 @@ class CaseStudiesController extends Controller
         $validator = Validator::make($request->all(), [
             'seo_title' => 'required',
             'seo_meta_tags' => 'required',
-            // 'image' => 'required',
+            'pre_title' => 'required',
             'title' => 'required',
             'button_title' => 'required',
             'cta' => 'required',
@@ -182,7 +183,7 @@ class CaseStudiesController extends Controller
             'seo_title' => $request->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags,
             'image' => $image,
-
+            'pre_title' => $request->pre_title,
             'title' => $request->title,
             'slug' => $request->title,
             'button_title' => $request->button_title,

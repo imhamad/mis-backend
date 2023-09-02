@@ -28,6 +28,12 @@ Route::prefix('frontend')->group(function () {
     Route::get('/case-study-page', [FrontApisController::class, 'caseStudyPage']);
     Route::get('/case-study-search', [FrontApisController::class, 'caseStudySearch']);
     Route::get('/case-study/{slug}', [FrontApisController::class, 'caseStudy']);
+
+    // drop downs
+    Route::prefix('dropdown')->group(function () {
+        Route::get('/categories', [CommonController::class, 'getCategoriesDropdown']);
+        Route::get('/colors', [CommonController::class, 'getColorsDropdown']);
+    });
 });
 
 
