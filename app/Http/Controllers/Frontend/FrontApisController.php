@@ -163,7 +163,7 @@ class FrontApisController extends Controller
         $categories = explode(',', $request->categories);
 
         // Retrieve case study data based on search and tag criteria
-        $case_studies = \App\Models\CaseStudy::select('id', 'title', 'case_study_image', 'tags', 'slug')
+        $case_studies = \App\Models\CaseStudy::select('id', 'title', 'case_study_image', 'slug', 'category_id')
             ->whereIn('category_id', $categories)
             ->where('title', 'like', '%' . $request->search . '%')
             ->latest()
@@ -175,11 +175,11 @@ class FrontApisController extends Controller
             // Convert image URLs to absolute URLs using the "url" helper function
             $item->case_study_image = url($item->case_study_image);
 
-            // Process and format tags
-            $tags = explode(',', $item->tags);
-            $tags = array_map('trim', $tags);
+            $category = \App\Models\Category::find($item->category_id);
+            $item->category = $category ? $category->title : '';
+            $item->category_slug = $category ? $category->slug : '';
 
-            $item->tags = $tags;
+            unset($item->category_id);
             return $item;
         });
 
