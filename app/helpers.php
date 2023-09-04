@@ -5,8 +5,15 @@ use Illuminate\Support\Str;
 if (!function_exists('saveBase64Image')) {
     function saveBase64Image($base64Data, $directory, $filename)
     {
-        // Remove the data URI scheme from the base64 string
-        $base64Data = preg_replace('/^data:image\/\w+;base64,/', '', $base64Data);
+        $mime_type = mime_content_type($base64Data);
+
+        if ($mime_type == 'image/svg+xml') {
+            $base64Data = preg_replace('/^data:image\/svg\+xml;base64,/', '', $base64Data);
+            $filename = $filename . '.' . 'svg';
+        } else {
+            $base64Data = preg_replace('/^data:image\/\w+;base64,/', '', $base64Data);
+            $filename = $filename . '.' . 'png';
+        }
 
         // Decode the base64 string to binary
         $imageBinary = base64_decode($base64Data);
@@ -29,7 +36,7 @@ if (!function_exists('imageUploader')) {
     function imageUploader($image, $slug)
     {
         $iconData = $image;
-        $iconName = time() . rand(111, 999) . '-' . Str::slug($slug) . '.png';
+        $iconName = time() . rand(111, 999) . '-' . Str::slug($slug);
         $iconDirectory = 'images';
 
         $url = saveBase64Image($iconData, $iconDirectory, $iconName);

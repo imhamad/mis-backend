@@ -60,12 +60,7 @@ class ExpertiesAndOfferingsController extends Controller
 
         $image = '';
         if ($request->icon) {
-
-            $iconData = $request->icon;
-            $iconName = time() . '-' . Str::slug($request->title) . '.png';
-            $iconDirectory = 'images';
-
-            $image = saveBase64Image($iconData, $iconDirectory, $iconName);
+            $image = imageUploader($request->icon, $request->title);
         }
 
         $expertiesAndOfferings = ExpertiesAndOffering::create([
@@ -143,16 +138,6 @@ class ExpertiesAndOfferingsController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $image = null;
-        if ($request->icon) {
-
-            $iconData = $request->icon;
-            $iconName = time() . '-' . Str::slug($request->title) . '.png';
-            $iconDirectory = 'images';
-
-            $image = saveBase64Image($iconData, $iconDirectory, $iconName);
-        }
-
         $expertiesAndOfferings = ExpertiesAndOffering::find($id);
 
         if (!$expertiesAndOfferings) {
@@ -161,11 +146,21 @@ class ExpertiesAndOfferingsController extends Controller
             ], 404);
         }
 
-        $expertiesAndOfferings->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'icon' => $image ? $image : $expertiesAndOfferings->icon,
-        ]);
+        $image = $expertiesAndOfferings->icon;
+        if ($request->icon) {
+            $image = imageUploader($request->icon, $request->title);
+        }
+
+        if (!$expertiesAndOfferings) {
+            return response()->json([
+                'msgErr' => 'Experties and offering not found.',
+            ], 404);
+        }
+
+        $expertiesAndOfferings->title = $request->title;
+        $expertiesAndOfferings->description = $request->description;
+        $expertiesAndOfferings->icon = $image;
+        $expertiesAndOfferings->save();
 
         return response()->json([
             'msg' => 'Experties and offering updated successfully.',

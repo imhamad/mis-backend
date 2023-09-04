@@ -39,12 +39,7 @@ class OpenSourceCultureController extends Controller
 
         $image = '';
         if ($request->icon) {
-
-            $iconData = $request->icon;
-            $iconName = time() . '-' . Str::slug($request->title) . '.png';
-            $iconDirectory = 'images';
-
-            $image = saveBase64Image($iconData, $iconDirectory, $iconName);
+            $image = imageUploader($request->icon, $request->title);
         }
 
         $opensourceculture = OpenSourceCulture::create([
@@ -105,12 +100,7 @@ class OpenSourceCultureController extends Controller
 
         $image = null;
         if ($request->icon) {
-
-            $iconData = $request->icon;
-            $iconName = time() . '-' . Str::slug($request->title) . '.png';
-            $iconDirectory = 'images';
-
-            $image = saveBase64Image($iconData, $iconDirectory, $iconName);
+            $image = imageUploader($request->icon, $request->title);
         }
 
         $opensourceculture = OpenSourceCulture::find($id);
