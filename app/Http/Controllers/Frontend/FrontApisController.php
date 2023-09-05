@@ -164,7 +164,9 @@ class FrontApisController extends Controller
 
         // Retrieve case study data based on search and tag criteria
         $case_studies = \App\Models\CaseStudy::select('id', 'title', 'case_study_image', 'slug', 'category_id')
-            ->whereIn('category_id', $categories)
+            ->when($request->categories, function ($query, $categories) {
+                return $query->whereIn('category_id', explode(',', $categories));
+            })
             ->where('title', 'like', '%' . $request->search . '%')
             ->latest()
             ->limit(6)
