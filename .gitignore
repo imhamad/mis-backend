@@ -1,4 +1,5 @@
 .env
+vendor
 .env.backup
 .env.production
 .phpunit.result.cache
