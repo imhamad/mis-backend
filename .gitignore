@@ -16,3 +16,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+*/**/.DS_Store
+.DS_Store
+**/.DS_Store
+app/.DS_Store
+app/View/.DS_Store
+bootstrap/.DS_Store
