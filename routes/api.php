@@ -99,7 +99,7 @@ Route::prefix('contributor')->group(function () {
     Route::post('/login', [ContributorAuthentication::class, 'login']);
 
     // dashboard routes
-    Route::group(["middleware" => "auth:sanctum"], function () {
+    Route::middleware(["auth:sanctum", "check_contributor"])->group(function () {
         Route::get('/get-profile', [ContributorAuthentication::class, 'get_profile'])->name('get-profile');
         Route::post('/update-profile', [ContributorAuthentication::class, 'update_profile']);
         Route::post('/logout', [ContributorAuthentication::class, 'logout']);

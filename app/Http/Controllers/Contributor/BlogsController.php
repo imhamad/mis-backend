@@ -27,7 +27,7 @@ class BlogsController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required',
+            // 'image' => 'required',
             'category_id' => 'required',
         ]);
 
@@ -35,13 +35,13 @@ class BlogsController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $image = imageUploader($request->image, 'blog-image') ?? '';
+        // $image = imageUploader($request->image, 'blog-image') ?? '';
 
         $blog = Blog::create([
             'title' => $request->title,
             'slug' => str_replace(' ', '-', strtolower($request->title)),
             'description' => $request->description,
-            'image' => $image,
+            // 'image' => $image,
             'category_id' => $request->category_id,
             'user_id' => auth()->user()->id,
         ]);
@@ -85,17 +85,17 @@ class BlogsController extends Controller
             ], 404);
         }
 
-        $image = $blog->image;
-        if ($request->image) {
-            // You need to define your imageUploader function here
-            $image = imageUploader($request->image, 'blog-image');
-        }
+        // $image = $blog->image;
+        // if ($request->image) {
+        //     // You need to define your imageUploader function here
+        //     $image = imageUploader($request->image, 'blog-image');
+        // }
 
         $blog->update([
             'title' => $request->title ?? $blog->title,
             'slug' => str_replace(' ', '-', strtolower($request->title ?? $blog->title)),
             'description' => $request->description ?? $blog->description,
-            'image' => $image,
+            // 'image' => $image,
             'category_id' => $request->category_id ?? $blog->category_id,
         ]);
 
