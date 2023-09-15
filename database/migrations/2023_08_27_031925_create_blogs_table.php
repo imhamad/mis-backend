@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
-            $table->boolean('status')->default(1);
+            $table->integer('status')->comment('1 => pending, 2 => published, 3 => cancelled, 4 => draft')->default(1);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('tag_id')->nullable();

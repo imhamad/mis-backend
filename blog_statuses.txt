@@ -1,0 +1,4 @@
+1 => pending, 
+2 => published, 
+3 => cancelled, 
+4 => draft
