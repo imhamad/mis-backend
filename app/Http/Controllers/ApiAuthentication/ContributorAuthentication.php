@@ -26,7 +26,6 @@ class ContributorAuthentication extends Controller
             "first_name" => "required",
             "last_name" => "required",
             "email" => "required|email|unique:users",
-            "password" => "required|confirmed",
             "description" => "required",
             "linkedin_url" => "required|url",
         ]);
@@ -36,7 +35,7 @@ class ContributorAuthentication extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make(12345678),
             'user_code' => $this->runCode(),  // Generate and assign a user code
             'user_uuid' => Str::uuid(),  // Generate and assign a UUID
             'user_type' => 'contributor',
@@ -69,6 +68,11 @@ class ContributorAuthentication extends Controller
 
         // Find the user by email
         $user = User::where('email', $request->email)->first();
+
+        if ($user->status == 1) {
+            $validator->errors()->add('email', 'Your account is not active');
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         if ($user) {
             // Check if the provided password matches the hashed password in the database
