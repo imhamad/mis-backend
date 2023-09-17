@@ -12,6 +12,9 @@ class BlogsController extends Controller
     public function index(Request $request)
     {
         $blogs = Blog::where('title', 'LIKE', "%{$request->search}%")
+            ->when($request->status == 'draft', function ($query) {
+                return $query->where('status', 4);
+            })
             ->paginate(10)->through(function ($blog) {
                 // attach the image url
                 $blog->image = url($blog->image);
@@ -25,25 +28,23 @@ class BlogsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'description' => 'required',
-            // 'image' => 'required',
-            'category_id' => 'required',
+            'title' => $request->status == 'draft' ? '' : 'required',
+            'description' => $request->status == 'draft' ? '' : 'required',
+            'category_id' => $request->status == 'draft' ? '' : 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // $image = imageUploader($request->image, 'blog-image') ?? '';
 
         $blog = Blog::create([
             'title' => $request->title,
             'slug' => str_replace(' ', '-', strtolower($request->title)),
             'description' => $request->description,
-            // 'image' => $image,
             'category_id' => $request->category_id,
             'user_id' => auth()->user()->id,
+            'status' => trim($request->status) === 'draft' ? 4 : 1,
         ]);
 
         return response()->json([
@@ -85,18 +86,12 @@ class BlogsController extends Controller
             ], 404);
         }
 
-        // $image = $blog->image;
-        // if ($request->image) {
-        //     // You need to define your imageUploader function here
-        //     $image = imageUploader($request->image, 'blog-image');
-        // }
-
         $blog->update([
             'title' => $request->title ?? $blog->title,
             'slug' => str_replace(' ', '-', strtolower($request->title ?? $blog->title)),
             'description' => $request->description ?? $blog->description,
-            // 'image' => $image,
             'category_id' => $request->category_id ?? $blog->category_id,
+            'status' => trim($request->status) === 'draft' ? 4 : 1,
         ]);
 
         return response()->json([
