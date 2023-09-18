@@ -73,7 +73,7 @@ class BlogsController extends Controller
         ]);
 
         return response()->json([
-            'msg' => 'Blog created successfully.',
+            'msg' => 'Blog is in pending status and will be published after review.',
             'data' => $blog,
         ], 201);
     }
@@ -127,7 +127,7 @@ class BlogsController extends Controller
         ]);
 
         return response()->json([
-            'msg' => 'Blog updated successfully.',
+            'msg' => 'Blog is in pending status and will be published after review.',
             'data' => $blog,
         ], 201);
     }
