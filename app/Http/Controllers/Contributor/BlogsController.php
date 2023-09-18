@@ -88,6 +88,13 @@ class BlogsController extends Controller
             ], 404);
         }
 
+        $category = [
+            'value' => $blog->category->id ?? null,
+            'label' => $blog->category->title ?? null,
+        ];
+        unset($blog->category);
+        $blog->category = $category;
+
         return response()->json($blog, 200);
     }
 
