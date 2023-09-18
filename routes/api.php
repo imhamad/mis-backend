@@ -109,6 +109,8 @@ Route::prefix('contributor')->group(function () {
         Route::post('/update-password-after-verify-recover-account-otp', [ContributorAuthentication::class, 'update_password_after_verify_recover_account_otp']);
 
         Route::resource('blogs', BlogsController::class);
+
+        Route::get('/dashboard-statistics', [BlogsController::class, 'dashboard_statistics']);
     });
 });
 

@@ -26,6 +26,14 @@ class Blog extends Model
 
     public function category()
     {
-        return $this->belongsTo(BlogCategory::class, 'category_id');
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function scopeCurrentuser($query, $status = null)
+    {
+        if ($status == null) {
+            return $query->where('user_id', auth()->user()->id);
+        }
+        return $query->where('status', $status)->where('user_id', auth()->user()->id);
     }
 }

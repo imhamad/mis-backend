@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Contributor;
 
 use App\Models\Blog;
+use App\Enums\BlogStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -15,14 +16,37 @@ class BlogsController extends Controller
             ->when($request->status == 'draft', function ($query) {
                 return $query->where('status', 4);
             })
+            ->with('category')
             ->paginate(10)->through(function ($blog) {
-                // attach the image url
                 $blog->image = url($blog->image);
+                $category = $blog->category->title ?? null;
+                $blog->created_date = $blog->created_at->format('d M, Y');
+                $blog->status = BlogStatus::getStatusName($blog->status);
+
+                unset($blog->category);
+                $blog->category = $category;
 
                 return $blog;
             });
 
         return response()->json($blogs, 200);
+    }
+
+    // dashboard_statistics
+    public function dashboard_statistics()
+    {
+        $all_blogs = Blog::currentuser()->count();
+        $published_blogs = Blog::currentuser(BlogStatus::PUBLISHED)->count();
+        // Rejected Blogs
+        $rejected_blogs = Blog::currentuser(BlogStatus::REJECTED)->count();
+        $pending_blogs = Blog::currentuser(BlogStatus::PENDING)->count();
+
+        return response()->json([
+            'all_blogs' => $all_blogs,
+            'published_blogs' => $published_blogs,
+            'rejected_blogs' => $rejected_blogs,
+            'pending_blogs' => $pending_blogs,
+        ], 200);
     }
 
     public function store(Request $request)
@@ -53,9 +77,9 @@ class BlogsController extends Controller
         ], 201);
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::where('slug', $slug)->with('category')->first();
 
         if (!$blog) {
             return response()->json([
