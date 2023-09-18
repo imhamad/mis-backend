@@ -21,7 +21,7 @@ class BlogsController extends Controller
                 $blog->image = url($blog->image);
                 $category = $blog->category->title ?? null;
                 $blog->created_date = $blog->created_at->format('d M, Y');
-                $blog->status = BlogStatus::getStatusName($blog->status);
+                $blog->status_text = BlogStatus::getStatusName($blog->status);
 
                 unset($blog->category);
                 $blog->category = $category;
@@ -52,9 +52,9 @@ class BlogsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title' => $request->status == 'draft' ? '' : 'required',
+            'title' => 'required',
             'description' => $request->status == 'draft' ? '' : 'required',
-            'category_id' => $request->status == 'draft' ? '' : 'required',
+            'category_id' => 'required',
         ]);
 
         if ($validator->fails()) {
