@@ -47,7 +47,9 @@ class ContributorAuthentication extends Controller
         $user = User::where('email', $request->email)->first();
 
         // Return a response using the make_response method
-        return $this->make_response($user);
+        return response()->json([
+            'msg' => 'Your request has been submitted successfully. You will be notified through email once your account is approved.'
+        ], 200);
     }
 
     // Login Endpoint
