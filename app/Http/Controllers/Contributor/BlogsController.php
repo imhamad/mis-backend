@@ -25,6 +25,7 @@ class BlogsController extends Controller
 
                 unset($blog->category);
                 $blog->category = $category;
+                $blog->category_slug = str_replace(' ', '-', strtolower($category));
 
                 return $blog;
             });
