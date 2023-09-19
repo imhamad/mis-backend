@@ -1,22 +1,23 @@
 <?php
 
-use App\Http\Controllers\Admin\CaseStudiesController;
-use App\Http\Controllers\Admin\CaseStudySlidersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\OurClientController;
-use App\Http\Controllers\Admin\OurTeamMembersController;
-use App\Http\Controllers\ApiAuthentication\Authentication;
-use App\Http\Controllers\Admin\OpenSourceCultureController;
 use App\Http\Controllers\CommonController;
-use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
+use App\Http\Controllers\Admin\ColorsController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PagesAPIController;
 use App\Http\Controllers\Admin\ServicesController;
-use App\Http\Controllers\ApiAuthentication\ContributorAuthentication;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ColorsController;
+use App\Http\Controllers\Admin\OurClientController;
+use App\Http\Controllers\Admin\CaseStudiesController;
 use App\Http\Controllers\Contributor\BlogsController;
 use App\Http\Controllers\Frontend\FrontApisController;
+use App\Http\Controllers\Admin\OurTeamMembersController;
+use App\Http\Controllers\Admin\CaseStudySlidersController;
+use App\Http\Controllers\ApiAuthentication\Authentication;
+use App\Http\Controllers\Admin\OpenSourceCultureController;
+use App\Http\Controllers\Contributor\NotificationController;
+use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
+use App\Http\Controllers\ApiAuthentication\ContributorAuthentication;
 
 
 
@@ -111,6 +112,8 @@ Route::prefix('contributor')->group(function () {
         Route::resource('blogs', BlogsController::class);
 
         Route::get('/dashboard-statistics', [BlogsController::class, 'dashboard_statistics']);
+        Route::get('/dashboard-recent-blogs', [BlogsController::class, 'dashboard_recent_blogs']);
+        Route::get('/notifications', [NotificationController::class, 'index']);
     });
 });
 

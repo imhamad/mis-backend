@@ -20,7 +20,7 @@ class BlogsController extends Controller
             ->paginate(10)->through(function ($blog) {
                 $blog->image = url($blog->image);
                 $category = $blog->category->title ?? null;
-                $blog->created_date = $blog->created_at->format('d M, Y');
+                $blog->created_date = $blog->updated_at->format('d M, Y');
                 $blog->status_text = BlogStatus::getStatusName($blog->status);
 
                 unset($blog->category);
@@ -31,23 +31,6 @@ class BlogsController extends Controller
             });
 
         return response()->json($blogs, 200);
-    }
-
-    // dashboard_statistics
-    public function dashboard_statistics()
-    {
-        $all_blogs = Blog::currentuser()->count();
-        $published_blogs = Blog::currentuser(BlogStatus::PUBLISHED)->count();
-        // Rejected Blogs
-        $rejected_blogs = Blog::currentuser(BlogStatus::REJECTED)->count();
-        $pending_blogs = Blog::currentuser(BlogStatus::PENDING)->count();
-
-        return response()->json([
-            'all_blogs' => $all_blogs,
-            'published_blogs' => $published_blogs,
-            'rejected_blogs' => $rejected_blogs,
-            'pending_blogs' => $pending_blogs,
-        ], 200);
     }
 
     public function store(Request $request)
@@ -147,5 +130,47 @@ class BlogsController extends Controller
         return response()->json([
             'msg' => 'Blog deleted successfully.',
         ], 200);
+    }
+
+
+
+
+
+    // dashboard_statistics
+    public function dashboard_statistics()
+    {
+        $all_blogs = Blog::currentuser()->count();
+        $published_blogs = Blog::currentuser(BlogStatus::PUBLISHED)->count();
+        // Rejected Blogs
+        $rejected_blogs = Blog::currentuser(BlogStatus::REJECTED)->count();
+        $pending_blogs = Blog::currentuser(BlogStatus::PENDING)->count();
+
+        return response()->json([
+            'all_blogs' => $all_blogs,
+            'published_blogs' => $published_blogs,
+            'rejected_blogs' => $rejected_blogs,
+            'pending_blogs' => $pending_blogs,
+        ], 200);
+    }
+
+    // dashboard_recent_blogs
+    public function dashboard_recent_blogs()
+    {
+        $blogs = Blog::currentuser()
+            ->with('category')->orderBy('id', 'desc')->limit(3)->get()
+            ->map(function ($blog) {
+                $blog->image = url($blog->image);
+                $category = $blog->category->title ?? null;
+                $blog->created_date = $blog->updated_at->format('d/m/Y');
+                $blog->status_text = BlogStatus::getStatusName($blog->status);
+
+                unset($blog->category);
+                $blog->category = $category;
+                $blog->category_slug = str_replace(' ', '-', strtolower($category));
+
+                return $blog;
+            });
+
+        return response()->json($blogs, 200);
     }
 }

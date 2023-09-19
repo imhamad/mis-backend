@@ -37,4 +37,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(OTP::class, 'user_email', 'email');
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id');
+    }
 }
