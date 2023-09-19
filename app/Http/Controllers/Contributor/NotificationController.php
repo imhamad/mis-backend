@@ -14,11 +14,8 @@ class NotificationController extends Controller
             ->whereDate('created_at', '>=', now()->subDays(30))
             ->orderBy('created_at', 'desc')->get()
             ->map(function ($notification) {
-                // $notification->data = json_decode($notification->data);
                 $notification->created_date = $notification->created_at->format('d M, Y');
                 $notification->created_time = $notification->created_at->format('h:i A');
-                // $notification->created_time = $notification->created_at->format('h:i A');
-                // $notification->created_at = $notification->created_at->format('d M, Y h:i A');
                 return $notification;
             });
 
