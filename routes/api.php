@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\OpenSourceCultureController;
 use App\Http\Controllers\Contributor\NotificationController;
 use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 use App\Http\Controllers\ApiAuthentication\ContributorAuthentication;
+use App\Http\Controllers\Admin\BlogsController as AdminBlogsController;
 
 
 
@@ -84,6 +85,9 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
     // configurations
     Route::resource('categories', CategoryController::class);
     Route::resource('colors', ColorsController::class);
+
+    // blogs
+    Route::resource('blogs', AdminBlogsController::class, ['except' => ['store', 'destroy']]);
 
     Route::prefix('dropdown')->group(function () {
         Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);

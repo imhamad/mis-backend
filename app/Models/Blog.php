@@ -36,4 +36,9 @@ class Blog extends Model
         }
         return $query->where('status', $status)->where('user_id', auth()->user()->id);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(BlogReview::class);
+    }
 }
