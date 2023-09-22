@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Blog;
 use App\Enums\BlogStatus;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +24,7 @@ class BlogsController extends Controller
 
                 unset($blog->category);
                 $blog->category = $category;
-                $blog->category_slug = str_replace(' ', '-', strtolower($category));
+                $blog->category_slug = Str::slug($category);
 
                 return $blog;
             });
@@ -48,7 +49,7 @@ class BlogsController extends Controller
 
         unset($blog->category);
         $blog->category = $category;
-        $blog->category_slug = str_replace(' ', '-', strtolower($category));
+        $blog->category_slug = Str::slug($category);
         $blog->reviews = $blog->reviews()->with('user')->get();
 
         return response()->json($blog, 200);

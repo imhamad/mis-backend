@@ -41,4 +41,9 @@ class Blog extends Model
     {
         return $this->hasMany(BlogReview::class);
     }
+
+    public function fetchLastReview()
+    {
+        return $this->reviews()->orderBy('id', 'desc')->first()->review ?? null;
+    }
 }

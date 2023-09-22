@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Contributor;
 
 use App\Models\Blog;
 use App\Enums\BlogStatus;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +26,7 @@ class BlogsController extends Controller
 
                 unset($blog->category);
                 $blog->category = $category;
-                $blog->category_slug = str_replace(' ', '-', strtolower($category));
+                $blog->category_slug = Str::slug($category);
 
                 return $blog;
             });
@@ -48,7 +49,7 @@ class BlogsController extends Controller
 
         $blog = Blog::create([
             'title' => $request->title,
-            'slug' => str_replace(' ', '-', strtolower($request->title)),
+            'slug' => Str::slug($request->title),
             'description' => $request->description,
             'category_id' => $request->category_id,
             'user_id' => auth()->user()->id,
@@ -77,6 +78,7 @@ class BlogsController extends Controller
         ];
         unset($blog->category);
         $blog->category = $category;
+        $blog->reviews = $blog->fetchLastReview();
 
         return response()->json($blog, 200);
     }
@@ -103,7 +105,7 @@ class BlogsController extends Controller
 
         $blog->update([
             'title' => $request->title ?? $blog->title,
-            'slug' => str_replace(' ', '-', strtolower($request->title ?? $blog->title)),
+            'slug' => Str::slug($request->title ?? $blog->title),
             'description' => $request->description ?? $blog->description,
             'category_id' => $request->category_id ?? $blog->category_id,
             'status' => trim($request->status) === 'draft' ? 4 : 1,
@@ -166,7 +168,7 @@ class BlogsController extends Controller
 
                 unset($blog->category);
                 $blog->category = $category;
-                $blog->category_slug = str_replace(' ', '-', strtolower($category));
+                $blog->category_slug = Str::slug($category);
 
                 return $blog;
             });
