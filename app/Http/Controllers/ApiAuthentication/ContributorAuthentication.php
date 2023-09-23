@@ -103,6 +103,7 @@ class ContributorAuthentication extends Controller
                 "last_name" => $user->last_name,
                 "description" => $user->description,
                 "linkedin_url" => $user->linkedin_url,
+                "avatar" => $user->avatar ? url($user->avatar) : '',
             ]);
         } else {
             return response()->json([
@@ -117,12 +118,17 @@ class ContributorAuthentication extends Controller
         $user = $request->user();
 
         if ($user) {
+            $avatar = $user->avatar;
+            if ($request->avatar)
+                $avatar = imageUploader($request->avatar, $user->user_code);
+
             $user->update([
                 'name' => $request->first_name . ' ' . $request->last_name,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'description' => $request->description,
                 'linkedin_url' => $request->linkedin_url,
+                'avatar' => $avatar,
             ]);
 
             return response()->json([
@@ -167,6 +173,7 @@ class ContributorAuthentication extends Controller
             'last_name' => $user->last_name,
             'email' => $user->email,
             'user_type' => $user_type,
+            'avatar' => $user->avatar ? url($user->avatar) : '',
         ];
 
         return response($response, 200);

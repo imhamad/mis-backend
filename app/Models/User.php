@@ -22,6 +22,7 @@ class User extends Authenticatable
         'linkedin_url',
         'first_name',
         'last_name',
+        'avatar',
     ];
 
     protected $hidden = [

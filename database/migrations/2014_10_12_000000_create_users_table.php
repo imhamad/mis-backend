@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->bigInteger('user_code');
-            $table->string( 'user_uuid');
+            $table->string('user_uuid');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('avatar')->nullable();
             $table->string('user_type')->default('admin')->comment('admin, contributor');
             $table->rememberToken();
             $table->integer('status')->default(1);
