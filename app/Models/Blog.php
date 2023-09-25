@@ -16,7 +16,8 @@ class Blog extends Model
         'category_id',
         'user_id',
         'slug',
-        'status'
+        'status',
+        'summary',
     ];
 
     protected $hidden = [

@@ -40,12 +40,17 @@ class BlogsController extends Controller
             'title' => 'required',
             'description' => $request->status == 'draft' ? '' : 'required',
             'category_id' => 'required',
+            'image' => $request->status == 'draft' ? '' : 'required',
+            'summary' => $request->status == 'draft' ? '' : 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        $image = '';
+        if ($request->image)
+            $image = imageUploader($request->image, 'blogs');
 
         $blog = Blog::create([
             'title' => $request->title,
@@ -54,6 +59,8 @@ class BlogsController extends Controller
             'category_id' => $request->category_id,
             'user_id' => auth()->user()->id,
             'status' => trim($request->status) === 'draft' ? 4 : 1,
+            'image' => $image,
+            'summary' => $request->summary,
         ]);
 
         return response()->json([
@@ -79,6 +86,7 @@ class BlogsController extends Controller
         unset($blog->category);
         $blog->category = $category;
         $blog->reviews = $blog->fetchLastReview();
+        $blog->image = url($blog->image);
 
         return response()->json($blog, 200);
     }
@@ -89,6 +97,7 @@ class BlogsController extends Controller
             'title' => 'string',
             'description' => 'string',
             'category_id' => 'integer',
+            'summary' => 'string',
         ]);
 
         if ($validator->fails()) {
@@ -103,12 +112,18 @@ class BlogsController extends Controller
             ], 404);
         }
 
+        $image = $blog->image;
+        if ($request->image)
+            $image = imageUploader($request->image, 'blogs');
+
         $blog->update([
             'title' => $request->title ?? $blog->title,
             'slug' => Str::slug($request->title ?? $blog->title),
             'description' => $request->description ?? $blog->description,
             'category_id' => $request->category_id ?? $blog->category_id,
             'status' => trim($request->status) === 'draft' ? 4 : 1,
+            'image' => $image,
+            'summary' => $request->summary ?? $blog->summary,
         ]);
 
         return response()->json([
