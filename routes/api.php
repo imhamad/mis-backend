@@ -89,6 +89,9 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
     // blogs
     Route::resource('blogs', AdminBlogsController::class, ['except' => ['store', 'destroy']]);
 
+    Route::get('contributors-list', [CommonController::class, 'contributorsList']);
+    Route::get('contributor-details/{id}', [CommonController::class, 'contributorDetails']);
+
     Route::prefix('dropdown')->group(function () {
         Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);
         Route::get('/categories', [CommonController::class, 'getCategoriesDropdown']);
@@ -102,6 +105,9 @@ Route::prefix('contributor')->group(function () {
     // authentication routes
     Route::post('/signup', [ContributorAuthentication::class, 'sign_up']);
     Route::post('/login', [ContributorAuthentication::class, 'login']);
+    Route::post('/forgot-password', [ContributorAuthentication::class, 'forgot_password']);
+    Route::post('/verify-recover-account-otp', [ContributorAuthentication::class, 'verify_recover_account_otp']);
+    Route::post('/update-password-after-verify-recover-account-otp', [ContributorAuthentication::class, 'update_password_after_verify_recover_account_otp']);
 
     // dashboard routes
     Route::middleware(["auth:sanctum", "check_contributor"])->group(function () {
@@ -109,9 +115,6 @@ Route::prefix('contributor')->group(function () {
         Route::post('/update-profile', [ContributorAuthentication::class, 'update_profile']);
         Route::post('/logout', [ContributorAuthentication::class, 'logout']);
         Route::post('/change-password', [ContributorAuthentication::class, 'change_password']);
-        Route::post('/forgot-password', [ContributorAuthentication::class, 'forgot_password']);
-        Route::post('/verify-recover-account-otp', [ContributorAuthentication::class, 'verify_recover_account_otp']);
-        Route::post('/update-password-after-verify-recover-account-otp', [ContributorAuthentication::class, 'update_password_after_verify_recover_account_otp']);
 
         Route::resource('blogs', BlogsController::class);
 

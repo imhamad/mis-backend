@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BackgroundColor;
+use App\Models\User;
 use App\Models\Theme;
 use App\Models\Setting;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\OurTeamMember;
+use App\Models\BackgroundColor;
 
 class CommonController extends Controller
 {
@@ -90,5 +91,42 @@ class CommonController extends Controller
         $colors = BackgroundColor::selectRaw('color_code as value, color_name as label')->get();
 
         return response()->json($colors);
+    }
+
+    // contributorsList
+    public function contributorsList(Request $request)
+    {
+        $users = User::where('first_name', 'LIKE', "%{$request->search}%")
+            ->orWhere('last_name', 'LIKE', "%{$request->search}%")
+            ->where('user_type', 'contributor')
+            ->when($request->status == 'active', function ($query) {
+                return $query->where('status', 2);
+            })
+            ->when($request->status == 'inactive', function ($query) {
+                return $query->where('status', 1);
+            })
+            ->select('id', 'first_name', 'last_name', 'email', 'status', 'description', 'avatar')
+            ->paginate(10)->through(function ($user) {
+                $user->avatar = url($user->avatar);
+                $user->status = $user->status == 1 ? ['value' => $user->status, 'label' => 'Inactive'] : ['value' => $user->status, 'label' => 'Active'];
+
+                return $user;
+            });
+
+        return response()->json($users, 200);
+    }
+
+    // contributorDetails
+    public function contributorDetails($id)
+    {
+        $user = User::where('id', $id)->where('user_type', 'contributor')->first();
+
+        if (!$user)
+            return response()->json(['msg' => 'Contributor not found.'], 404);
+
+        $user->avatar = url($user->avatar);
+        $user->status = $user->status == 1 ? ['value' => $user->status, 'label' => 'Inactive'] : ['value' => $user->status, 'label' => 'Active'];
+
+        return response()->json($user, 200);
     }
 }

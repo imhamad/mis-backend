@@ -133,6 +133,7 @@ class ContributorAuthentication extends Controller
 
             return response()->json([
                 "msg" => "Profile has been updated successfully",
+                "data" => $this->make_response($user)->original
             ]);
         } else {
             return response()->json([
