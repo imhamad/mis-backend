@@ -119,12 +119,17 @@ class CommonController extends Controller
     // contributorDetails
     public function contributorDetails($id)
     {
-        $user = User::where('id', $id)->where('user_type', 'contributor')->first();
+        $user = User::where('id', $id)
+            ->where('user_type', 'contributor')
+            ->select('id', 'first_name', 'last_name', 'email', 'status', 'description', 'avatar', 'description', 'linkedin_url')
+            ->first();
 
         if (!$user)
             return response()->json(['msg' => 'Contributor not found.'], 404);
-
         $user->avatar = url($user->avatar);
+
+        $user->blogs = $user->blogs()->select('id', 'title', 'slug', 'status', 'created_at')->get();
+
         $user->status = $user->status == 1 ? ['value' => $user->status, 'label' => 'Inactive'] : ['value' => $user->status, 'label' => 'Active'];
 
         return response()->json($user, 200);
