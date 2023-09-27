@@ -269,12 +269,14 @@ class ContributorAuthentication extends Controller
 
         try {
             $check = OTP::where('user_email', $request->email)
-                ->where('otp_code', $request->otp)->first();
+                ->where('otp_code', $request->otp)
+                ->where('created_at', '>=', \Carbon\Carbon::now()->subMinutes(2))
+                ->first();
 
             if ($check) {
                 return response()->json(['msg' => 1, 'code' => $request->otp, 'email' => $request->email]);
             } else {
-                return 0;
+                return response()->json(['msgErr' => "Invalid code or code has been expired"]);
             }
         } catch (\Exception $exception) {
             return response()->json(['msgErr' => $exception->getMessage()]);
@@ -299,7 +301,6 @@ class ContributorAuthentication extends Controller
         try {
             $check = OTP::where('user_email', $request->email)
                 ->where('otp_code', $request->otp)
-                ->where('created_at', '>=', \Carbon\Carbon::now()->subMinutes(2))
                 ->first();
 
             if ($check) {
