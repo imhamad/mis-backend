@@ -298,7 +298,9 @@ class ContributorAuthentication extends Controller
 
         try {
             $check = OTP::where('user_email', $request->email)
-                ->where('otp_code', $request->otp)->first();
+                ->where('otp_code', $request->otp)
+                ->where('created_at', '>=', \Carbon\Carbon::now()->subMinutes(2))
+                ->first();
 
             if ($check) {
 
@@ -311,7 +313,7 @@ class ContributorAuthentication extends Controller
 
                 return response()->json(['msg' => 'Account password has been updated successfully']);
             } else {
-                return response()->json(['msgErr' => "Invalid code"]);
+                return response()->json(['msgErr' => "Invalid code or code has been expired"]);
             }
         } catch (\Exception $exception) {
             return response()->json(['msgErr' => $exception->getMessage()]);

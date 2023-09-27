@@ -17,6 +17,7 @@ class BlogsController extends Controller
             ->when($request->status == 'draft', function ($query) {
                 return $query->where('status', 4);
             })
+            ->where('user_id', auth()->user()->id)
             ->with('category')
             ->paginate(10)->through(function ($blog) {
                 $blog->image = url($blog->image);
