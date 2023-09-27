@@ -190,7 +190,7 @@ class ContributorAuthentication extends Controller
         $user = $request->user();
 
         $validator = Validator::make($request->all(), [
-            'password' => 'required|string|confirmed',
+            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/",
             'current_password' => 'required|string',
         ]);
 
@@ -276,7 +276,7 @@ class ContributorAuthentication extends Controller
     public function update_password_after_verify_recover_account_otp(Request $request)
     {
         $request->validate([
-            'password' => 'required|confirmed|min:6',
+            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/",
             'email' => 'required|email',
             'otp'  => 'required'
         ], [

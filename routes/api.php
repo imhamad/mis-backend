@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\OurClientController;
 use App\Http\Controllers\Admin\CaseStudiesController;
 use App\Http\Controllers\Contributor\BlogsController;
+use App\Http\Controllers\Admin\ContributorsController;
 use App\Http\Controllers\Frontend\FrontApisController;
 use App\Http\Controllers\Admin\OurTeamMembersController;
 use App\Http\Controllers\Admin\CaseStudySlidersController;
@@ -89,8 +90,9 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
     // blogs
     Route::resource('blogs', AdminBlogsController::class, ['except' => ['store', 'destroy']]);
 
-    Route::get('contributors-list', [CommonController::class, 'contributorsList']);
-    Route::get('contributor-details/{id}', [CommonController::class, 'contributorDetails']);
+    Route::get('contributors-list', [ContributorsController::class, 'contributorsList']);
+    Route::get('contributor-details/{id}', [ContributorsController::class, 'contributorDetails']);
+    Route::get('contributor-change-status/{id}', [ContributorsController::class, 'contributorChangeStatus']);
 
     Route::prefix('dropdown')->group(function () {
         Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);

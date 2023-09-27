@@ -25,7 +25,8 @@ class Authentication extends Controller
         $request->validate([
             "name" => "required",
             "email" => "required|email|unique:users",
-            "password" => "required|confirmed"
+            // password must contains at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character
+            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/",
         ]);
 
         // Create a new user with validated data
