@@ -190,8 +190,16 @@ class ContributorAuthentication extends Controller
         $user = $request->user();
 
         $validator = Validator::make($request->all(), [
-            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/",
             'current_password' => 'required|string',
+            "password" => "required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_!@#$%^&*()-+=]).*$/",
+            "password_confirmation" => "required|same:password",
+        ], [
+            'password.required' => 'This field is required',
+            'password.min' => 'Password must be at least 8 characters',
+            'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
+            'current_password.required' => 'This field is required',
+            'password_confirmation.required' => 'This field is required',
+            'password_confirmation.same' => 'Password does not match',
         ]);
 
         if ($validator->fails()) {
@@ -200,7 +208,7 @@ class ContributorAuthentication extends Controller
 
         if (!Hash::check($request->current_password, $user->password)) {
 
-            $validator->errors()->add('current_password', 'Password did not match');
+            $validator->errors()->add('current_password', 'Current password does not match');
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
@@ -276,7 +284,7 @@ class ContributorAuthentication extends Controller
     public function update_password_after_verify_recover_account_otp(Request $request)
     {
         $request->validate([
-            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/",
+            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_!@#$%^&*()-+=]).*$/",
             'email' => 'required|email',
             'otp'  => 'required'
         ], [

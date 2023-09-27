@@ -25,8 +25,7 @@ class Authentication extends Controller
         $request->validate([
             "name" => "required",
             "email" => "required|email|unique:users",
-            // password must contains at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character
-            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/",
+            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_!@#$%^&*()-+=]).*$/",
         ]);
 
         // Create a new user with validated data
@@ -156,8 +155,16 @@ class Authentication extends Controller
         $user = $request->user();
 
         $validator = Validator::make($request->all(), [
-            'password' => 'required|string|confirmed',
             'current_password' => 'required|string',
+            "password" => "required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_!@#$%^&*()-+=]).*$/",
+            "password_confirmation" => "required|same:password",
+        ], [
+            'password.required' => 'This field is required',
+            'password.min' => 'Password must be at least 8 characters',
+            'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
+            'current_password.required' => 'This field is required',
+            'password_confirmation.required' => 'This field is required',
+            'password_confirmation.same' => 'Password does not match',
         ]);
 
         if ($validator->fails()) {
@@ -242,7 +249,7 @@ class Authentication extends Controller
     public function update_password_after_verify_recover_account_otp(Request $request)
     {
         $request->validate([
-            'password' => 'required|confirmed|min:6',
+            "password" => "required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_!@#$%^&*()-+=]).*$/",
             'email' => 'required|email',
             'otp'  => 'required'
         ], [
