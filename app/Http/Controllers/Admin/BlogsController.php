@@ -17,6 +17,9 @@ class BlogsController extends Controller
             ->orderBy('id', 'desc')
             ->with('category')
             ->where('status', '!=', BlogStatus::DRAFT)
+            ->when($request->status, function ($query) use ($request) {
+                return $query->where('status', $request->status);
+            })
             ->paginate(10)->through(function ($blog) {
                 $blog->image = url($blog->image);
                 $category = $blog->category->title ?? null;
