@@ -44,3 +44,26 @@ if (!function_exists('imageUploader')) {
         return $url;
     }
 }
+
+if (!function_exists('generatePassword')) {
+    function generatePassword($length = 8)
+    {
+        $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        $numbers = '0123456789';
+        $specialChars = '!@#$%^&*()_+{}[]|:;<>,.?';
+
+        $allCharacters = $uppercase . $lowercase . $numbers . $specialChars;
+
+        // Shuffle the characters and get the first $length characters
+        $password = substr(str_shuffle($allCharacters), 0, $length);
+
+        // Ensure there is at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character
+        if (!preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/[0-9]/', $password) || !preg_match('/[' . preg_quote($specialChars, '/') . ']/', $password)) {
+            // If the generated password doesn't meet the criteria, recursively call the function again
+            return generatePassword($length);
+        }
+
+        return $password;
+    }
+}

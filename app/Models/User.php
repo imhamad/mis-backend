@@ -23,6 +23,8 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'avatar',
+        'status',
+        'request_status',
     ];
 
     protected $hidden = [
@@ -47,5 +49,14 @@ class User extends Authenticatable
     public function blogs()
     {
         return $this->hasMany(Blog::class, 'user_id', 'id');
+    }
+
+    public function send_notification($notification_title, $notification_description, $type)
+    {
+        $this->notifications()->create([
+            'notification_title' => $notification_title,
+            'notification_description' => $notification_description,
+            'type' => $type,
+        ]);
     }
 }

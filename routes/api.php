@@ -92,7 +92,10 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
 
     Route::get('contributors-list', [ContributorsController::class, 'contributorsList']);
     Route::get('contributor-details/{id}', [ContributorsController::class, 'contributorDetails']);
+    Route::get('contributor-blogs/{id}', [ContributorsController::class, 'contributorBlogs']);
     Route::get('contributor-change-status/{id}', [ContributorsController::class, 'contributorChangeStatus']);
+    Route::get('contributor-approve-reject-account/{id}', [ContributorsController::class, 'contributorApproveRejectAccount']);
+    Route::get('contributor-delete-request/{id}', [ContributorsController::class, 'contributorDeleteRequest']);
 
     Route::prefix('dropdown')->group(function () {
         Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);
