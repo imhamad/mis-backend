@@ -58,6 +58,8 @@ class OurTeamMembersController extends Controller
     {
         $teamMember = OurTeamMember::find($id);
 
+        $teamMember->image = url($teamMember->image);
+
         if (!$teamMember) {
             return response()->json([
                 'msgErr' => 'Team member not found.',
