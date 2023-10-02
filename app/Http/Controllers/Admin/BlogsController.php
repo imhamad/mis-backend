@@ -36,9 +36,9 @@ class BlogsController extends Controller
         return response()->json($blogs, 200);
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::where('slug', $slug)->first();
 
         if (!$blog) {
             return response()->json([
@@ -59,9 +59,9 @@ class BlogsController extends Controller
         return response()->json($blog, 200);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
-        $blog = Blog::find($id);
+        $blog = Blog::where('slug', $slug)->first();
 
         if (!$blog) {
             return response()->json([
