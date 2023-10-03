@@ -28,11 +28,12 @@ class ContributorsController extends Controller
             ->when($request->request_status, function ($query) use ($request) {
                 return $query->where('request_status', $request->request_status);
             })
-            ->select('id', 'first_name', 'last_name', 'email', 'status', 'description', 'avatar', 'request_status', 'linkedin_url')
+            ->select('id', 'first_name', 'last_name', 'email', 'status', 'description', 'avatar', 'request_status', 'linkedin_url', 'created_at')
             ->paginate(10)->through(function ($user) {
                 $user->avatar = url($user->avatar);
                 $user->status = $user->status == 1 ? ['value' => $user->status, 'label' => 'Inactive'] : ['value' => $user->status, 'label' => 'Active'];
                 $user->request_status = ucfirst($user->request_status);
+                $user->request_date = $user->created_at->format('d M, Y');
 
                 return $user;
             });
