@@ -54,7 +54,9 @@ class BlogsController extends Controller
         unset($blog->category);
         $blog->category = $category;
         $blog->category_slug = Str::slug($category);
-        $blog->reviews = $blog->reviews()->with('user')->get();
+        // $blog->reviews = $blog->reviews()->with('user')->get() ?? null;
+        $blog->author = $blog->user->first_name . ' ' . $blog->user->last_name ?? null;
+        unset($blog->user);
 
         return response()->json($blog, 200);
     }
