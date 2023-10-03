@@ -17,7 +17,6 @@ class ContributorsController extends Controller
     public function contributorsList(Request $request)
     {
         $users = User::where('first_name', 'LIKE', "%{$request->search}%")
-            ->orWhere('last_name', 'LIKE', "%{$request->search}%")
             ->where('user_type', 'contributor')
             ->when($request->status == 'active', function ($query) {
                 return $query->where('status', 2);
@@ -25,7 +24,7 @@ class ContributorsController extends Controller
             ->when($request->status == 'inactive', function ($query) {
                 return $query->where('status', 1);
             })
-            ->when($request->request_status, function ($query) use ($request) {
+            ->when(!empty($request->request_status), function ($query) use ($request) {
                 return $query->where('request_status', $request->request_status);
             })
             ->select('id', 'first_name', 'last_name', 'email', 'status', 'description', 'avatar', 'request_status', 'linkedin_url', 'created_at')
@@ -40,6 +39,7 @@ class ContributorsController extends Controller
 
         return response()->json($users, 200);
     }
+
 
     // contributorDetails
     public function contributorDetails($id)
