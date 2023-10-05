@@ -196,7 +196,7 @@ class ContributorAuthentication extends Controller
         ], [
             'password.required' => 'This field is required',
             'password.min' => 'Password must be at least 8 characters',
-            'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
+            'password.regex' => 'Correct password format: (Mixed Alphabet & number)',
             'current_password.required' => 'This field is required',
             'password_confirmation.required' => 'This field is required',
             'password_confirmation.same' => 'Password does not match',
