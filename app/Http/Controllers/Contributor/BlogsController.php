@@ -29,6 +29,12 @@ class BlogsController extends Controller
                 $blog->category = $category;
                 $blog->category_slug = Str::slug($category);
 
+                if ($blog->status == BlogStatus::PENDING) {
+                    $blog->review = $blog->fetchLastReview() ? true : false;
+                } else {
+                    $blog->review = false;
+                }
+
                 return $blog;
             });
 
