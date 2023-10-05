@@ -30,6 +30,12 @@ class BlogsController extends Controller
                 $blog->category = $category;
                 $blog->category_slug = Str::slug($category);
 
+                if ($blog->status == BlogStatus::PENDING) {
+                    $blog->review = $blog->fetchLastReview() ? true : false;
+                } else {
+                    $blog->review = false;
+                }
+
                 return $blog;
             });
 
@@ -54,7 +60,13 @@ class BlogsController extends Controller
         unset($blog->category);
         $blog->category = $category;
         $blog->category_slug = Str::slug($category);
-        // $blog->reviews = $blog->reviews()->with('user')->get() ?? null;
+
+        if ($blog->status == BlogStatus::PENDING) {
+            $blog->review = $blog->reviews()->get() ?? false;
+        } else {
+            $blog->review = false;
+        }
+
         $blog->author = $blog->user->first_name . ' ' . $blog->user->last_name ?? null;
         unset($blog->user);
 

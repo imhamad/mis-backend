@@ -82,6 +82,7 @@ class ContributorsController extends Controller
         $blogs = Blog::where('title', 'LIKE', "%{$request->search}%")
             ->orderBy('id', 'desc')
             ->with('category')
+            ->where('user_id', $user->id)
             ->where('status', '!=', BlogStatus::DRAFT)
             ->when($request->status, function ($query) use ($request) {
                 return $query->where('status', $request->status);
