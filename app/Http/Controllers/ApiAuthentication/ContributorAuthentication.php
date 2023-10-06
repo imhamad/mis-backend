@@ -6,9 +6,11 @@ use App\Models\OTP;
 use  App\Models\User;
 use App\Traits\shortCode;
 use Illuminate\Support\Str;
+use App\Models\Notification;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Mail\AccountCreation;
 use App\Mail\RecoverAccountEmail;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -45,6 +47,15 @@ class ContributorAuthentication extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
+
+        Mail::to($user->email)
+            ->send(new AccountCreation($user));
+
+        Notification::create([
+            'notification_title' => 'Account Request',
+            'notification_description' => 'There is a new account request.',
+            'type' => 'account_creation',
+        ]);
 
         // Return a response using the make_response method
         return response()->json([

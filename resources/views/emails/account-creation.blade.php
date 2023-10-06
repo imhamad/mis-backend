@@ -1,9 +1,7 @@
 <x-mail::message>
     # Dear {{ $user->first_name . ' ' . $user->last_name }},
 
-    Your account has been approved. Kindly login to your account using the mentioned password.
-
-    # Password: {{ $password }}
+    Your request has been submitted successfully. You will be notified through email once your account is approved.
 
     Thanks
     {{ config('app.name') }}
