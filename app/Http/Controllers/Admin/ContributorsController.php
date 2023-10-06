@@ -145,9 +145,13 @@ class ContributorsController extends Controller
 
             $user->send_notification('Account Approved', 'Your account has been approved by admin.', 'account_approved');
         } else if ($user->request_status == 'pending' && $request->status == 'rejected') {
-            $user->request_status = 'rejected';
-            $user->status = 1;
-            $user->save();
+            // $user->request_status = 'rejected';
+            // $user->status = 1;
+            // $user->save();
+
+            $user->delete();
+
+            return response()->json(['msg' => 'Contributor request rejected successfully.'], 200);
         } else {
             return response()->json(['msg' => 'Invalid request.'], 400);
         }
