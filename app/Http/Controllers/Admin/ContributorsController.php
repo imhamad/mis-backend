@@ -156,7 +156,7 @@ class ContributorsController extends Controller
             return response()->json(['msg' => 'Invalid request.'], 400);
         }
 
-        return response()->json(['msg' => 'Contributor status updated successfully.'], 200);
+        return response()->json(['msg' => 'Contributor request approved successfully.'], 200);
     }
 
     // contributorDeleteRequest

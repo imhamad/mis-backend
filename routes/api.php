@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PagesAPIController;
 use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\OurClientController;
 use App\Http\Controllers\Admin\CaseStudiesController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Contributor\BlogsController;
 use App\Http\Controllers\Admin\ContributorsController;
 use App\Http\Controllers\Frontend\FrontApisController;
@@ -89,6 +90,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
 
     // blogs
     Route::resource('blogs', AdminBlogsController::class, ['except' => ['store', 'destroy']]);
+    Route::resource('testimonials', TestimonialController::class);
 
     Route::get('contributors-list', [ContributorsController::class, 'contributorsList']);
     Route::get('contributor-details/{id}', [ContributorsController::class, 'contributorDetails']);
