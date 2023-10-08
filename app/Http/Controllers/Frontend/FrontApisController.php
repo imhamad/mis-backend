@@ -262,4 +262,21 @@ class FrontApisController extends Controller
             // 'related_case_studies' => $related_case_studies,
         ]);
     }
+
+    public function getTestimonials(Request $request)
+    {
+        $testimonials = \App\Models\Testimonial::get()->map(function ($item) {
+            $item->image = url($item->image);
+            return $item;
+        });
+
+        return response()->json($testimonials);
+    }
+
+    public function getRandomTestimonial(Request $request)
+    {
+        $testimonial = \App\Models\Testimonial::inRandomOrder()->first();
+        $testimonial->image = url($testimonial->image);
+        return response()->json($testimonial);
+    }
 }

@@ -32,6 +32,8 @@ Route::prefix('frontend')->group(function () {
     Route::get('/case-study-page', [FrontApisController::class, 'caseStudyPage']);
     Route::get('/case-study-search', [FrontApisController::class, 'caseStudySearch']);
     Route::get('/case-study/{slug}', [FrontApisController::class, 'caseStudy']);
+    Route::get('/get-testimonials', [FrontApisController::class, 'getTestimonials']);
+    Route::get('/get-random-testimonial', [FrontApisController::class, 'getRandomTestimonial']);
 
     // drop downs
     Route::prefix('dropdown')->group(function () {
