@@ -29,7 +29,7 @@ class TestimonialController extends Controller
             'designation' => 'required',
             'company' => 'required',
             'description' => 'required',
-            'type' => 'required|regex:/^.*(?=.*-page)/',
+            // 'type' => 'required|regex:/^.*(?=.*-page)/',
             'image' => 'required',
         ]);
 
@@ -46,7 +46,7 @@ class TestimonialController extends Controller
             'designation' => $request->designation,
             'company' => $request->company,
             'description' => $request->description,
-            'type' => $request->type,
+            // 'type' => $request->type,
             'image' => $image,
         ]);
 
@@ -78,7 +78,7 @@ class TestimonialController extends Controller
             'designation' => 'required',
             'company' => 'required',
             'description' => 'required',
-            'type' => 'required|regex:/^.*(?=.*-page)/',
+            // 'type' => 'required|regex:/^.*(?=.*-page)/',
         ]);
 
         if ($validator->fails()) {
@@ -103,7 +103,7 @@ class TestimonialController extends Controller
             'designation' => $request->designation ? $request->designation : $testimonial->designation,
             'company' => $request->company ? $request->company : $testimonial->company,
             'description' => $request->description ? $request->description : $testimonial->description,
-            'type' => $request->type ? $request->type : $testimonial->type,
+            // 'type' => $request->type ? $request->type : $testimonial->type,
             'image' => $image,
         ]);
 
