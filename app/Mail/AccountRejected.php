@@ -9,20 +9,21 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RecoverAccountEmail extends Mailable
+class AccountRejected extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $otp_code, $user_name;
-
-    public function __construct($otp_code, $user_name)
+    public $user;
+    public $password;
+    
+    public function __construct($user, $password = null)
     {
-        $this->otp_code = $otp_code;
-        $this->user_name = $user_name;
+        $this->user = $user;
+        $this->password = $password;
     }
 
     public function build()
     {
-        return $this->subject('🔐 Password Reset Request')->markdown('emails.recoveraccountemail');
+        return $this->subject('Account Rejected')->markdown('emails.account-rejected');
     }
 }

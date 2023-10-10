@@ -8,6 +8,7 @@ use App\Enums\BlogStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\AccountApproved;
+use App\Mail\AccountRejected;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 
@@ -148,6 +149,9 @@ class ContributorsController extends Controller
             // $user->request_status = 'rejected';
             // $user->status = 1;
             // $user->save();
+
+            Mail::to($user->email)
+                ->send(new AccountRejected($user));
 
             $user->delete();
 

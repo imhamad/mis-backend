@@ -15,48 +15,15 @@ class AccountApproved extends Mailable
 
     public $user;
     public $password;
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
+    
     public function __construct($user, $password = null)
     {
         $this->user = $user;
         $this->password = $password;
     }
 
-    /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
-     */
-    public function envelope()
+    public function build()
     {
-        return new Envelope(
-            subject: 'Account Approved',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        return new Content(
-            markdown: 'emails.account-approved',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-        return [];
+        return $this->subject('Your Contributor Account is Now Active!')->markdown('emails.account-approved');
     }
 }
