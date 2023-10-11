@@ -265,7 +265,10 @@ class FrontApisController extends Controller
 
     public function getTestimonials(Request $request)
     {
-        $testimonials = \App\Models\Testimonial::get()->map(function ($item) {
+        $testimonials = \App\Models\Testimonial::when($request->count, function ($query, $count) use ($request) {
+            return $query->limit($request->count);
+        })
+        ->get()->map(function ($item) {
             $item->image = url($item->image);
             return $item;
         });
