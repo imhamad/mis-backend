@@ -63,3 +63,7 @@ This project uses the version of PHP version (8.0) and Laravel framework (9.19).
   MAIL_ENCRYPTION=ssl
   MAIL_FROM_ADDRESS=notification@deknows.com
   MAIL_FROM_NAME="${APP_NAME}"
+
+## Keep in mind
+
+Never delete the public/images folder on the cpanel
