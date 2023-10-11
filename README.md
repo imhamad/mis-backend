@@ -59,7 +59,7 @@ This project uses the version of PHP version (8.0) and Laravel framework (9.19).
   MAIL_HOST=smtp.hostinger.com
   MAIL_PORT=465
   MAIL_USERNAME=notification@deknows.com
-  MAIL_PASSWORD=Dev@Doe123
+  MAIL_PASSWORD=********
   MAIL_ENCRYPTION=ssl
   MAIL_FROM_ADDRESS=notification@deknows.com
   MAIL_FROM_NAME="${APP_NAME}"
