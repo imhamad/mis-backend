@@ -217,8 +217,8 @@ class FrontApisController extends Controller
         $case_study->caseStudyCredits->map(function ($item) {
             $ourTeamMember = \App\Models\OurTeamMember::find($item->member_id);
 
-            $item->name = $ourTeamMember->name;
-            $item->designation = $ourTeamMember->designation;
+            $item->name = $ourTeamMember->name ?? '';
+            $item->designation = $ourTeamMember->designation ?? '';
             unset($item->case_study_id, $item->id, $item->member_id);
             return $item;
         });
@@ -268,10 +268,10 @@ class FrontApisController extends Controller
         $testimonials = \App\Models\Testimonial::when($request->count, function ($query, $count) use ($request) {
             return $query->limit($request->count);
         })
-        ->get()->map(function ($item) {
-            $item->image = url($item->image);
-            return $item;
-        });
+            ->get()->map(function ($item) {
+                $item->image = url($item->image);
+                return $item;
+            });
 
         return response()->json($testimonials);
     }
