@@ -130,6 +130,7 @@ Route::prefix('contributor')->group(function () {
         Route::get('/dashboard-statistics', [BlogsController::class, 'dashboard_statistics']);
         Route::get('/dashboard-recent-blogs', [BlogsController::class, 'dashboard_recent_blogs']);
         Route::get('/notifications', [NotificationController::class, 'index']);
+        Route::get('/notifications/read', [NotificationController::class, 'mark_read']);
     });
 });
 

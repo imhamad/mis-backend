@@ -59,4 +59,9 @@ class User extends Authenticatable
             'type' => $type,
         ]);
     }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications()->where('status', 'unread')->get();
+    }
 }
