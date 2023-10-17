@@ -14,6 +14,7 @@ use App\Http\Controllers\Contributor\BlogsController;
 use App\Http\Controllers\Admin\ContributorsController;
 use App\Http\Controllers\Frontend\FrontApisController;
 use App\Http\Controllers\Admin\OurTeamMembersController;
+use App\Http\Controllers\Admin\ServiceSectionsController;
 use App\Http\Controllers\Admin\CaseStudySlidersController;
 use App\Http\Controllers\ApiAuthentication\Authentication;
 use App\Http\Controllers\Admin\OpenSourceCultureController;
@@ -78,7 +79,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
     Route::resource('our-clients', OurClientController::class);
     Route::resource('our-team-members', OurTeamMembersController::class);
 
-    Route::resource('our-services', ServicesController::class);
+    Route::resource('services', ServicesController::class);
+    Route::resource('service-sections', ServiceSectionsController::class);
 
     Route::get('/get-theme-data', [CommonController::class, 'getThemeData']);
     Route::post('/update-theme-data', [CommonController::class, 'updateThemeData']);

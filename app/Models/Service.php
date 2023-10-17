@@ -10,11 +10,17 @@ class Service extends Model
     use HasFactory;
 
     protected $fillable = [
-        'breadcrumb_title',
+        'seo_title',
+        'seo_meta_tags',
+        'image',
+        'service_pre_title',
         'service_title',
-        'description',
-        'background_color',
-        'direction',
+        'service_description',
+        'service_icon',
+        'client_name',
+        'client_designation',
+        'client_review',
+        'client_image',
     ];
 
     protected $hidden = [
