@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('service_deliverable_icons', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('service_id');
+            $table->unsignedBigInteger('service_section_id');
             $table->string('icon')->nullable();
             $table->timestamps();
         });

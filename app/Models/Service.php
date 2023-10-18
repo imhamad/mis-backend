@@ -27,26 +27,4 @@ class Service extends Model
         'created_at',
         'updated_at',
     ];
-
-    public function serviceDeliverableLists()
-    {
-        return $this->hasMany(ServiceDeliverableList::class);
-    }
-
-    public function serviceDeliverableIcons()
-    {
-        return $this->hasMany(ServiceDeliverableIcon::class);
-    }
-
-    public function serviceDeliverableListCommanSeparated()
-    {
-        return $this->serviceDeliverableLists->pluck('bullet_point')->implode(',');
-    }
-
-    public function serviceDeliverableIconsArray()
-    {
-        return $this->serviceDeliverableIcons->map(function ($item) {
-            return url($item->icon);
-        });
-    }
 }

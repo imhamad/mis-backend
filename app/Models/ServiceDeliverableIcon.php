@@ -10,13 +10,13 @@ class ServiceDeliverableIcon extends Model
     use HasFactory;
 
     protected $fillable = [
-        'service_id',
+        'service_section_id',
         'icon',
     ];
 
-    public function service()
+    public function serviceSection()
     {
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(ServiceSection::class, 'service_section_id', 'id');
     }
 
     // hidden

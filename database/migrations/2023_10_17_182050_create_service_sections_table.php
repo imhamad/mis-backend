@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('service_sections', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->string('breadcrumb_title')->nullable();
+            $table->string('breadcrumb_slug')->nullable();
+            $table->text('service_title')->nullable();
+            $table->text('service_description')->nullable();
+            $table->string('service_background_color')->nullable();
+            $table->string('service_content_direction')->default('ltr');
             $table->timestamps();
         });
     }
