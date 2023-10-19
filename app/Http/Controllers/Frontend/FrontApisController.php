@@ -85,6 +85,11 @@ class FrontApisController extends Controller
     public function servicePage(Request $request, $slug)
     {
         $service = \App\Models\Service::where('slug', $slug)->first();
+
+        if (!$service) {
+            return response()->json(['msgErr' => 'Service not found'], 404);
+        }
+
         $service->service_icon = url($service->service_icon);
         $service->image = url($service->image);
         $service->client_image = url($service->client_image);
