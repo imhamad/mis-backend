@@ -11,10 +11,9 @@ class FrontApisController extends Controller
     // homePage
     public function homePage()
     {
-        // Retrieve expertise and offerings data with status as 1, in random order, and limit the result to 6
-        $experties = \App\Models\ExpertiesAndOffering::where('status', 1)->inRandomOrder()->limit(6)->get()->map(function ($item) {
+        $services = \App\Models\Service::inRandomOrder()->select('service_title', 'service_pre_title', 'service_description', 'service_icon', 'client_name', 'slug')->get()->map(function ($item) {
             // Convert the icon URL to an absolute URL using the "url" helper function
-            $item->icon = url($item->icon);
+            $item->service_icon = url($item->service_icon);
             return $item;
         });
 
@@ -26,7 +25,7 @@ class FrontApisController extends Controller
         return response()->json([
             'data' => $homePageData->only(['seo_title', 'seo_meta_tags', 'image']),  // Extract specified attributes from the $homePageData
             'countries' => $homePageData->getCountriesList(),  // Get a list of countries using the "getCountriesList" method
-            'experties_offerings' => $experties,  // Send the prepared $experties data
+            'services' => $services,
         ]);
     }
 
@@ -83,8 +82,41 @@ class FrontApisController extends Controller
 
 
     // servicePage
-    public function servicePage()
+    public function servicePage(Request $request, $slug)
     {
+        $service = \App\Models\Service::where('slug', $slug)->first();
+        $service->service_icon = url($service->service_icon);
+        $service->image = url($service->image);
+        $service->client_image = url($service->client_image);
+
+        $service_sections = \App\Models\ServiceSection::where('service_id', $service->id)->get()->map(function ($item) {
+            $delivable_list = \App\Models\ServiceDeliverableList::where('service_section_id', $item->id)->get()->map(function ($item) {
+                return $item->bullet_point;
+            });
+
+            $delivable_icons = \App\Models\ServiceDeliverableIcon::where('service_section_id', $item->id)->get()->map(function ($item) {
+                return url($item->icon);
+            });
+
+            $item->deliverables_list = $delivable_list;
+            $item->deliverables_icons = $delivable_icons;
+            return $item;
+        });
+
+        $service->service_sections = $service_sections;
+
+        $breadcrumb = [];
+        foreach ($service_sections as $section) {
+            $breadcrumb[] = [
+                'breadcrumb_title' => $section->breadcrumb_title,
+                'service_id' => '#' . Str::slug($section->breadcrumb_title),
+            ];
+        }
+
+        $service->breadcrumb = $breadcrumb;
+
+        return response()->json($service);
+
         // Retrieve the first record from the ServicePage model
         $service_page = \App\Models\ServicePage::first();
 
@@ -230,12 +262,6 @@ class FrontApisController extends Controller
 
         unset($case_study->project_credit, $case_study->caseStudyCredits, $case_study->category_id);
 
-        // Process and format tags
-        // $tags = explode(',', $case_study->tags);
-        // $tags = array_map('trim', $tags);
-
-        // $case_study->tags = $tags;
-
         // case study of clients
         $case_study->industry_of_client = explode(',', $case_study->industry_of_client);
 
@@ -244,17 +270,6 @@ class FrontApisController extends Controller
             ->where('id', '!=', $case_study->id)
             ->where('title', 'like', '%' . $case_study->title . '%')
             ->get();
-
-        // Process and transform related case study data
-        // $related_case_studies = $related_case_studies->map(function ($item) {
-        //     $item->case_study_image = url($item->case_study_image);
-
-        //     $tags = explode(',', $item->tags);
-        //     $tags = array_map('trim', $tags);
-
-        //     $item->tags = $tags;
-        //     return $item;
-        // });
 
         // Return a JSON response with the case study details and related data
         return response()->json([
@@ -281,5 +296,15 @@ class FrontApisController extends Controller
         $testimonial = \App\Models\Testimonial::inRandomOrder()->first();
         $testimonial->image = url($testimonial->image);
         return response()->json($testimonial);
+    }
+
+    public function servicesDropdown()
+    {
+        $services = \App\Models\Service::select('service_pre_title', 'service_title', 'service_icon', 'id', 'service_icon', 'slug')->get()->map(function ($item) {
+            $item->service_icon = url($item->service_icon);
+            return $item;
+        });
+
+        return response()->json($services);
     }
 }

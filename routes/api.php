@@ -29,7 +29,7 @@ use App\Http\Controllers\Admin\BlogsController as AdminBlogsController;
 Route::prefix('frontend')->group(function () {
     Route::get('/home-page', [FrontApisController::class, 'homePage']);
     Route::get('/about-page', [FrontApisController::class, 'aboutPage']);
-    Route::get('/service-page', [FrontApisController::class, 'servicePage']);
+    Route::get('/service-page/{slug}', [FrontApisController::class, 'servicePage']);
     Route::get('/case-study-page', [FrontApisController::class, 'caseStudyPage']);
     Route::get('/case-study-search', [FrontApisController::class, 'caseStudySearch']);
     Route::get('/case-study/{slug}', [FrontApisController::class, 'caseStudy']);
@@ -40,6 +40,7 @@ Route::prefix('frontend')->group(function () {
     Route::prefix('dropdown')->group(function () {
         Route::get('/categories', [CommonController::class, 'getCategoriesDropdown']);
         Route::get('/colors', [CommonController::class, 'getColorsDropdown']);
+        Route::get('/services-dropdown', [FrontApisController::class, 'servicesDropdown']);
     });
 });
 
