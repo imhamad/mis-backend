@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Enums\BlogStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -331,61 +332,52 @@ class FrontApisController extends Controller
         $categories = explode(',', $request->categories);
 
         // Retrieve case study data based on search and tag criteria
-        $blogs = \App\Models\Blog::select('id', 'title', 'description', 'slug', 'category_id', 'user_id', 'slug', 'status', 'summary', 'created_at')
+        $blogs = \App\Models\Blog::select('id', 'title', 'description', 'slug', 'category_id', 'user_id', 'slug', 'status', 'summary', 'created_at', 'image')
             ->when($request->categories, function ($query, $categories) {
                 return $query->whereIn('category_id', explode(',', $categories));
             })
             ->where('title', 'like', '%' . $request->search . '%')
+            ->where('status', BlogStatus::PUBLISHED)
             ->latest()
-            ->limit(6)
-            ->get()()->map(function ($item) {
-                $item->image = url($item->image);
-                $item->created_time = date('M d, D', strtotime($item->created_at));
-                $created_by = $item->user ?? $item->user->first_name ?? '' . ' ' . $item->user ?? $item->user->last_name ?? '';
-                $item->created_by = $created_by;
-                $item->category_title = $item->category->title ?? '';
-                $item->category_slug = $item->category->slug ?? '';
+            ->paginate(10);
 
-                unset($item->category);
-                return $item;
-            });
+        // Modify the paginated data
+        $blogs->getCollection()->transform(function ($item) {
+            $item->image = url($item->image);
+            $item->created_time = date('M d, D', strtotime($item->created_at));
+            $created_by = ($item->user ? $item->user->first_name : '') . ' ' . ($item->user ? $item->user->last_name : '');
+            $item->created_by = $created_by;
+            $item->category_title = $item->category->title ?? '';
+            $item->category_slug = $item->category->slug ?? '';
 
-        return response()->json($blogs);
-
-        // Process and transform case study data
-        $case_studies = $case_studies->map(function ($item) {
-            // Convert image URLs to absolute URLs using the "url" helper function
-            $item->case_study_image = url($item->case_study_image);
-
-            $category = \App\Models\Category::find($item->category_id);
-            $item->category = $category ? $category->title : '';
-            $item->category_slug = $category ? $category->slug : '';
-
-            unset($item->category_id);
+            unset($item->category, $item->created_at, $item->user);
             return $item;
         });
 
-        // Return a JSON response with the processed case study data
-        return response()->json($case_studies);
+        return response()->json($blogs);
     }
 
-    public function getBlogs(Request $request)
+    public function getBlog($slug)
     {
-        $blogs = \App\Models\Blog::when($request->count, function ($query, $count) use ($request) {
-            return $query->limit($request->count);
-        })
-            ->get()->map(function ($item) {
-                $item->image = url($item->image);
-                $item->created_time = date('M d, D', strtotime($item->created_at));
-                $created_by = $item->user ?? $item->user->first_name ?? '' . ' ' . $item->user ?? $item->user->last_name ?? '';
-                $item->created_by = $created_by;
-                $item->category_title = $item->category->title ?? '';
-                $item->category_slug = $item->category->slug ?? '';
+        $blog = \App\Models\Blog::where('slug', '=', $slug)
+            ->first();
 
-                unset($item->category);
-                return $item;
-            });
+        if (!$blog) {
+            return response()->json([
+                'msgErr' => 'Blog not found',
+            ]);
+        }
 
-        return response()->json($blogs);
+        $blog->image = url($blog->image);
+        $blog->created_time = date('M d, D', strtotime($blog->created_at));
+        $created_by = $blog->user ? $blog->user->first_name : '';
+        $created_by .= ' ' . ($blog->user ? $blog->user->last_name : '');
+        $blog->created_by = $created_by;
+        $blog->category_title = $blog->category->title ?? '';
+        $blog->category_slug = $blog->category->slug ?? '';
+
+        unset($blog->category, $blog->user);
+
+        return response()->json($blog);
     }
 }

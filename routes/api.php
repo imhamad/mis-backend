@@ -38,7 +38,7 @@ Route::prefix('frontend')->group(function () {
 
     Route::get('/blog-page', [FrontApisController::class, 'blogPage']);
     Route::get('/blog-search', [FrontApisController::class, 'blogSearch']);
-    // Route::get('/blog/{slug}', [AdminBlogsController::class, ''
+    Route::get('/blog/{slug}', [FrontApisController::class, 'getBlog']);
 
     // drop downs
     Route::prefix('dropdown')->group(function () {
