@@ -140,30 +140,31 @@ class PagesAPIController extends Controller
     // ----------------- Blog Page -----------------
     public function getBlogPageData()
     {
-        $caseStudyPageData = \App\Models\CaseStudyPage::first();
+        $blogPage = \App\Models\BlogPage::first();
 
-        $caseStudyPageData->image = url($caseStudyPageData->image);
+        $blogPage->image = url($blogPage->image);
 
-        return response()->json($caseStudyPageData);
+        return response()->json($blogPage);
     }
 
     public function updateBlogPageData(Request $request)
     {
-        $caseStudyPageData = \App\Models\CaseStudyPage::first();
+        $blogPageData = \App\Models\BlogPage::first();
 
-        $image = $request->image ? imageUploader($request->image, 'case study page image') : $caseStudyPageData->image;
+        $image = $request->image ? imageUploader($request->image, 'blog page image') : $blogPageData->image;
 
-        $caseStudyPageData->update([
-            'seo_title' => $request->seo_title ? $request->seo_title : $caseStudyPageData->seo_title,
-            'seo_meta_tags' => $request->seo_meta_tags ? $request->seo_meta_tags : $caseStudyPageData->seo_meta_tags,
+        $blogPageData->update([
+            'seo_title' => $request->seo_title ? $request->seo_title : $blogPageData->seo_title,
+            'seo_meta_tags' => $request->seo_meta_tags ? $request->seo_meta_tags : $blogPageData->seo_meta_tags,
             'image' => $image,
-            'casestudy_heroic_block_pre_title' => $request->casestudy_heroic_block_pre_title ? $request->casestudy_heroic_block_pre_title : $caseStudyPageData->casestudy_heroic_block_pre_title,
-            'casestudy_heroic_block_title' => $request->casestudy_heroic_block_title ? $request->casestudy_heroic_block_title : $caseStudyPageData->casestudy_heroic_block_title,
+            'pre_title' => $request->pre_title ? $request->pre_title : $blogPageData->pre_title,
+            'title' => $request->title ? $request->title : $blogPageData->title,
+            'description' => $request->description ? $request->description : $blogPageData->description,
         ]);
 
         return response()->json([
-            'msg' => 'Case study page data updated successfully',
-            'data' => $caseStudyPageData
+            'msg' => 'Blog page data updated successfully',
+            'data' => $blogPageData
         ]);
     }
 }
