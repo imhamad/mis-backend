@@ -313,6 +313,62 @@ class FrontApisController extends Controller
         return response()->json($services);
     }
 
+    public function blogPage()
+    {
+        // Retrieve the first record from the CaseStudyPage model
+        $blog_page_data = \App\Models\BlogPage::first();
+
+        // Convert the image URL to an absolute URL using the "url" helper function
+        $blog_page_data->image = url($blog_page_data->image);
+
+        // Return a JSON response with the processed data
+        return response()->json($blog_page_data);
+    }
+
+    public function blogSearch(Request $request)
+    {
+        // Extract tags from the request and create an array
+        $categories = explode(',', $request->categories);
+
+        // Retrieve case study data based on search and tag criteria
+        $blogs = \App\Models\Blog::select('id', 'title', 'description', 'slug', 'category_id', 'user_id', 'slug', 'status', 'summary', 'created_at')
+            ->when($request->categories, function ($query, $categories) {
+                return $query->whereIn('category_id', explode(',', $categories));
+            })
+            ->where('title', 'like', '%' . $request->search . '%')
+            ->latest()
+            ->limit(6)
+            ->get()()->map(function ($item) {
+                $item->image = url($item->image);
+                $item->created_time = date('M d, D', strtotime($item->created_at));
+                $created_by = $item->user ?? $item->user->first_name ?? '' . ' ' . $item->user ?? $item->user->last_name ?? '';
+                $item->created_by = $created_by;
+                $item->category_title = $item->category->title ?? '';
+                $item->category_slug = $item->category->slug ?? '';
+
+                unset($item->category);
+                return $item;
+            });
+
+        return response()->json($blogs);
+
+        // Process and transform case study data
+        $case_studies = $case_studies->map(function ($item) {
+            // Convert image URLs to absolute URLs using the "url" helper function
+            $item->case_study_image = url($item->case_study_image);
+
+            $category = \App\Models\Category::find($item->category_id);
+            $item->category = $category ? $category->title : '';
+            $item->category_slug = $category ? $category->slug : '';
+
+            unset($item->category_id);
+            return $item;
+        });
+
+        // Return a JSON response with the processed case study data
+        return response()->json($case_studies);
+    }
+
     public function getBlogs(Request $request)
     {
         $blogs = \App\Models\Blog::when($request->count, function ($query, $count) use ($request) {

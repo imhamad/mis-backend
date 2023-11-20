@@ -36,7 +36,8 @@ Route::prefix('frontend')->group(function () {
     Route::get('/get-testimonials', [FrontApisController::class, 'getTestimonials']);
     Route::get('/get-random-testimonial', [FrontApisController::class, 'getRandomTestimonial']);
 
-    Route::get('/get-blogs', [FrontApisController::class, 'getBlogs']);
+    Route::get('/blog-page', [FrontApisController::class, 'blogPage']);
+    Route::get('/blog-search', [FrontApisController::class, 'blogSearch']);
     // Route::get('/blog/{slug}', [AdminBlogsController::class, ''
 
     // drop downs
