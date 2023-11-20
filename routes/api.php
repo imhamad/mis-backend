@@ -36,6 +36,9 @@ Route::prefix('frontend')->group(function () {
     Route::get('/get-testimonials', [FrontApisController::class, 'getTestimonials']);
     Route::get('/get-random-testimonial', [FrontApisController::class, 'getRandomTestimonial']);
 
+    Route::get('/get-blogs', [FrontApisController::class, 'getBlogs']);
+    // Route::get('/blog/{slug}', [AdminBlogsController::class, ''
+
     // drop downs
     Route::prefix('dropdown')->group(function () {
         Route::get('/categories', [CommonController::class, 'getCategoriesDropdown']);
@@ -73,6 +76,9 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
 
     Route::get('get-case-study-page-data', [PagesAPIController::class, 'getCaseStudyPageData']);
     Route::post('update-case-study-page-data', [PagesAPIController::class, 'updateCaseStudyPageData']);
+
+    Route::get('get-blog-page-data', [PagesAPIController::class, 'getBlogPageData']);
+    Route::post('update-blog-page-data', [PagesAPIController::class, 'updateBlogPageData']);
 
     Route::resource('experties-offerings', ExpertiesAndOfferingsController::class);
 

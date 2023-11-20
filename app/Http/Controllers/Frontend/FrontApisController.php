@@ -312,4 +312,24 @@ class FrontApisController extends Controller
 
         return response()->json($services);
     }
+
+    public function getBlogs(Request $request)
+    {
+        $blogs = \App\Models\Blog::when($request->count, function ($query, $count) use ($request) {
+            return $query->limit($request->count);
+        })
+            ->get()->map(function ($item) {
+                $item->image = url($item->image);
+                $item->created_time = date('M d, D', strtotime($item->created_at));
+                $created_by = $item->user ?? $item->user->first_name ?? '' . ' ' . $item->user ?? $item->user->last_name ?? '';
+                $item->created_by = $created_by;
+                $item->category_title = $item->category->title ?? '';
+                $item->category_slug = $item->category->slug ?? '';
+
+                unset($item->category);
+                return $item;
+            });
+
+        return response()->json($blogs);
+    }
 }

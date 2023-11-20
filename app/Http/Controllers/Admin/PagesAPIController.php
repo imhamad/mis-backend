@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 class PagesAPIController extends Controller
 {
     // ----------------- Home Page -----------------
-    public function getHomePageData() {
+    public function getHomePageData()
+    {
         $homePageData = \App\Models\HomePage::first();
 
         $homePageData->image = url($homePageData->image);
@@ -16,9 +17,10 @@ class PagesAPIController extends Controller
         return response()->json($homePageData);
     }
 
-    public function updateHomePageData(Request $request) {
+    public function updateHomePageData(Request $request)
+    {
         $homePageData = \App\Models\HomePage::first();
-        
+
         $image = $request->has('image') ? imageUploader($request->image, 'home page image') : $homePageData->image;
 
         $homePageData->update([
@@ -37,7 +39,8 @@ class PagesAPIController extends Controller
 
 
     // ----------------- About Page -----------------
-    public function getAboutPageData() {
+    public function getAboutPageData()
+    {
         $aboutPageData = \App\Models\AboutPage::first();
 
         $aboutPageData->image = url($aboutPageData->image);
@@ -45,7 +48,8 @@ class PagesAPIController extends Controller
         return response()->json($aboutPageData);
     }
 
-    public function updateAboutPageData(Request $request) {
+    public function updateAboutPageData(Request $request)
+    {
         $aboutPageData = \App\Models\AboutPage::first();
 
         $image = $request->image ? imageUploader($request->image, 'about page image') : $aboutPageData->image;
@@ -69,7 +73,8 @@ class PagesAPIController extends Controller
 
 
     // ----------------- Service Page -----------------
-    public function getServicePageData() {
+    public function getServicePageData()
+    {
         $servicePageData = \App\Models\ServicePage::first();
 
         $servicePageData->image = url($servicePageData->image);
@@ -78,7 +83,8 @@ class PagesAPIController extends Controller
         return response()->json($servicePageData);
     }
 
-    public function updateServicePageData(Request $request) {
+    public function updateServicePageData(Request $request)
+    {
         $servicePageData = \App\Models\ServicePage::first();
 
         $image = $request->image ? imageUploader($request->image, 'service page image') : $servicePageData->image;
@@ -98,11 +104,12 @@ class PagesAPIController extends Controller
             'data' => $servicePageData
         ]);
     }
-    
+
 
 
     // ----------------- Case Study Page -----------------
-    public function getCaseStudyPageData() {
+    public function getCaseStudyPageData()
+    {
         $caseStudyPageData = \App\Models\CaseStudyPage::first();
 
         $caseStudyPageData->image = url($caseStudyPageData->image);
@@ -110,7 +117,38 @@ class PagesAPIController extends Controller
         return response()->json($caseStudyPageData);
     }
 
-    public function updateCaseStudyPageData(Request $request) {
+    public function updateCaseStudyPageData(Request $request)
+    {
+        $caseStudyPageData = \App\Models\CaseStudyPage::first();
+
+        $image = $request->image ? imageUploader($request->image, 'case study page image') : $caseStudyPageData->image;
+
+        $caseStudyPageData->update([
+            'seo_title' => $request->seo_title ? $request->seo_title : $caseStudyPageData->seo_title,
+            'seo_meta_tags' => $request->seo_meta_tags ? $request->seo_meta_tags : $caseStudyPageData->seo_meta_tags,
+            'image' => $image,
+            'casestudy_heroic_block_pre_title' => $request->casestudy_heroic_block_pre_title ? $request->casestudy_heroic_block_pre_title : $caseStudyPageData->casestudy_heroic_block_pre_title,
+            'casestudy_heroic_block_title' => $request->casestudy_heroic_block_title ? $request->casestudy_heroic_block_title : $caseStudyPageData->casestudy_heroic_block_title,
+        ]);
+
+        return response()->json([
+            'msg' => 'Case study page data updated successfully',
+            'data' => $caseStudyPageData
+        ]);
+    }
+
+    // ----------------- Blog Page -----------------
+    public function getBlogPageData()
+    {
+        $caseStudyPageData = \App\Models\CaseStudyPage::first();
+
+        $caseStudyPageData->image = url($caseStudyPageData->image);
+
+        return response()->json($caseStudyPageData);
+    }
+
+    public function updateBlogPageData(Request $request)
+    {
         $caseStudyPageData = \App\Models\CaseStudyPage::first();
 
         $image = $request->image ? imageUploader($request->image, 'case study page image') : $caseStudyPageData->image;
