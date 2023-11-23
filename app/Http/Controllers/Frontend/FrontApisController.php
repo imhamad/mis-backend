@@ -316,8 +316,14 @@ class FrontApisController extends Controller
 
     public function blogPage()
     {
-        // Retrieve the first record from the CaseStudyPage model
-        $blog_page_data = \App\Models\BlogPage::first();
+        // Retrieve the first record from the BlogPage model or create one if not found
+        $blog_page_data = \App\Models\BlogPage::firstOrCreate([
+            "seo_title" => 'SERVICE | CUSTOM DEVELOPMENT',
+            "seo_meta_tags" => 'Sustainable websites that captivate your audience by leveraging modern tech-stack',
+            "pre_title" => 'SERVICE | CUSTOM DEVELOPMENT',
+            "title" => 'Sustainable websites that captivate your audience by leveraging modern tech-stack',
+            "description" => 'Sustainable websites that captivate your audience by leveraging modern tech-stack Sustainable websites that captivate your audience by leveraging modern tech-stack'
+        ]);
 
         // Convert the image URL to an absolute URL using the "url" helper function
         $blog_page_data->image = url($blog_page_data->image);
@@ -333,8 +339,8 @@ class FrontApisController extends Controller
 
         // Retrieve case study data based on search and tag criteria
         $blogs = \App\Models\Blog::select('id', 'title', 'description', 'slug', 'category_id', 'user_id', 'slug', 'status', 'summary', 'created_at', 'image')
-            ->when($request->categories, function ($query, $categories) {
-                return $query->whereIn('category_id', explode(',', $categories));
+            ->when($request->categories, function ($query) use ($categories) {
+                return $query->whereIn('category_id', $categories);
             })
             ->where('title', 'like', '%' . $request->search . '%')
             ->where('status', BlogStatus::PUBLISHED)
@@ -359,8 +365,7 @@ class FrontApisController extends Controller
 
     public function getBlog($slug)
     {
-        $blog = \App\Models\Blog::where('slug', '=', $slug)
-            ->first();
+        $blog = \App\Models\Blog::onSlug($slug)->first();
 
         if (!$blog) {
             return response()->json([

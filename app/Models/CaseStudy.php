@@ -32,6 +32,7 @@ class CaseStudy extends Model
         'client_designation',
         'client_review',
         'client_image',
+        'video'
     ];
 
     protected $casts = [

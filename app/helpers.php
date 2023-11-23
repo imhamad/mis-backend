@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 
 if (!function_exists('saveBase64Image')) {
     function saveBase64Image($base64Data, $directory, $filename)
@@ -67,3 +69,40 @@ if (!function_exists('generatePassword')) {
         return $password;
     }
 }
+
+if (!function_exists('saveUploadedVideo')) {
+    function saveUploadedVideo($videoFile, $directory, $filename)
+    {
+        // Determine the destination path within the public folder
+        $destinationPath = public_path($directory);
+
+        // Move the uploaded file to the destination path with the specified filename
+        $videoFile->move($destinationPath, $filename);
+
+        // Construct the URL path without the domain
+        $urlPath = $directory . '/' . $filename;
+
+        // Return the URL of the saved video (without the domain) along with the file extension
+        return $urlPath;
+    }
+}
+
+
+if (!function_exists('videoUploader')) {
+    function videoUploader($video, $slug)
+    {
+        $extension = $video->getClientOriginalExtension();
+
+        // Generate a unique filename
+        $videoName = time() . rand(111, 999) . '-' . Str::slug($slug) . '.' . $extension;
+
+        // Specify the public folder for storing videos
+        $videoDirectory = 'videos';
+
+        // Call the saveUploadedVideo function to save the uploaded video
+        $url = saveUploadedVideo($video, $videoDirectory, $videoName);
+
+        return $url;
+    }
+}
+

@@ -13,17 +13,18 @@ class CaseStudiesController extends Controller
     public function index(Request $request): JsonResponse
     {
         $caseStudies = CaseStudy::where('title', 'LIKE', "%{$request->search}%")
-            ->select('id', 'title', 'slug', 'case_study_image', 'button_title', 'cta', 'tags')
+            ->select('id', 'title', 'slug', 'case_study_image', 'button_title', 'cta', 'tags', 'video')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
         $caseStudies->each(function ($caseStudy) {
             $caseStudy->case_study_image = url($caseStudy->case_study_image);
+            $caseStudy->video = url($caseStudy->video);
         });
         return response()->json($caseStudies, 200);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'seo_title' => 'required',
@@ -46,6 +47,7 @@ class CaseStudiesController extends Controller
             'client_review' => 'required',
             'client_image' => 'required',
             'services' => 'required',
+            'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:20000'
         ]);
 
         if ($validator->fails()) {
@@ -68,6 +70,11 @@ class CaseStudiesController extends Controller
         if ($request->client_image)
             $clientImage = imageUploader($request->client_image, 'client-image');
 
+        $video = '';
+        if ($request->file('video')) {
+            $video = videoUploader($request->file('video'), 'client-video');
+        }
+
         $caseStudy = CaseStudy::create([
             'seo_title' => $request->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags,
@@ -89,6 +96,7 @@ class CaseStudiesController extends Controller
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
             'client_image' => $clientImage,
+            'video' => $video,
         ]);
 
         if ($request->services)
@@ -121,6 +129,7 @@ class CaseStudiesController extends Controller
         $caseStudy->case_study_image = url($caseStudy->case_study_image);
         $caseStudy->industry_of_client_image = url($caseStudy->industry_of_client_image);
         $caseStudy->client_image = url($caseStudy->client_image);
+        $caseStudy->video = url($caseStudy->video);
 
         $project_credits = $caseStudy->caseStudyCredits->pluck('member_id');
         $caseStudy->project_credits = $project_credits;
@@ -151,6 +160,7 @@ class CaseStudiesController extends Controller
             'client_review' => 'required',
             // 'client_image' => 'required',
             'services' => 'required',
+            'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:20000'
         ]);
 
         if ($validator->fails()) {
@@ -179,6 +189,11 @@ class CaseStudiesController extends Controller
         if ($request->client_image)
             $clientImage = imageUploader($request->client_image, 'client-image');
 
+        $video = $caseStudy->video;
+        if ($request->file('video')) {
+            $video = videoUploader($request->file('video'), 'client-video');
+        }
+
         $caseStudy->update([
             'seo_title' => $request->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags,
@@ -201,6 +216,7 @@ class CaseStudiesController extends Controller
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
             'client_image' => $clientImage,
+            'video' => $video
         ]);
 
         if ($request->services) {

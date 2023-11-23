@@ -52,4 +52,9 @@ class Blog extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public static function onSlug($slug)
+    {
+        return self::where('slug', $slug);
+    }
 }
