@@ -389,7 +389,7 @@ class FrontApisController extends Controller
             $item->category_title = $item->category->title ?? '';
             $item->category_slug = $item->category->slug ?? '';
 
-            unset($item->category, $item->created_at, $item->user);
+            unset($item->category, $item->created_at, $item->user, $item->created_at, $item->updated_at);
             return $item;
         });
 
@@ -402,7 +402,7 @@ class FrontApisController extends Controller
             'contirbution' => \App\Models\Blog::where('user_id', $blog->user_id)->where('id', '!=', $blog->id)->limit(8)->select('title', 'slug')->get()
         ];
 
-        unset($blog->category, $blog->user);
+        unset($blog->category, $blog->user, $blog->created_at, $blog->updated_at);
 
         return response()->json($blog);
     }
