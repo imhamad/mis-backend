@@ -381,6 +381,27 @@ class FrontApisController extends Controller
         $blog->category_title = $blog->category->title ?? '';
         $blog->category_slug = $blog->category->slug ?? '';
 
+        $blog->related_blogs = \App\Models\Blog::where('category_id', $blog->category_id)->where('id', '!=', $blog->id)->limit(4)->get()->map(function ($item) {
+            $item->image = url($item->image);
+            $item->created_time = date('M d, D', strtotime($item->created_at));
+            $created_by = ($item->user ? $item->user->first_name : '') . ' ' . ($item->user ? $item->user->last_name : '');
+            $item->created_by = $created_by;
+            $item->category_title = $item->category->title ?? '';
+            $item->category_slug = $item->category->slug ?? '';
+
+            unset($item->category, $item->created_at, $item->user);
+            return $item;
+        });
+
+        $blog->author = [
+            'full_name' => $blog->user->first_name . ' ' . $blog->user->last_name,
+            'avatar' => url($blog->user->avatar),
+            'linkedin_url' => $blog->user->linkedin_url,
+            'description' => $blog->user->description ?? '',
+            // contribution = user's more blogs
+            'contirbution' => \App\Models\Blog::where('user_id', $blog->user_id)->where('id', '!=', $blog->id)->limit(8)->select('title', 'slug')->get()
+        ];
+
         unset($blog->category, $blog->user);
 
         return response()->json($blog);
