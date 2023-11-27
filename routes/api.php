@@ -22,6 +22,7 @@ use App\Http\Controllers\Contributor\NotificationController;
 use App\Http\Controllers\Admin\ExpertiesAndOfferingsController;
 use App\Http\Controllers\ApiAuthentication\ContributorAuthentication;
 use App\Http\Controllers\Admin\BlogsController as AdminBlogsController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 
 
 
@@ -110,6 +111,9 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
     Route::get('contributor-change-status/{id}', [ContributorsController::class, 'contributorChangeStatus']);
     Route::get('contributor-approve-reject-account/{id}', [ContributorsController::class, 'contributorApproveRejectAccount']);
     Route::get('contributor-delete-request/{id}', [ContributorsController::class, 'contributorDeleteRequest']);
+
+    Route::get('/notifications', [AdminNotificationController::class, 'index']);
+    Route::get('/notifications/read', [AdminNotificationController::class, 'mark_read']);
 
     Route::prefix('dropdown')->group(function () {
         Route::get('/team-members', [CommonController::class, 'getTeamMembersDropdown']);

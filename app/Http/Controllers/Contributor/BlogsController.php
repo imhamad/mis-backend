@@ -28,6 +28,7 @@ class BlogsController extends Controller
                 unset($blog->category);
                 $blog->category = $category;
                 $blog->category_slug = Str::slug($category);
+                $blog->powered_by_logo = url($blog->powered_by_logo);
 
                 if ($blog->status == BlogStatus::PENDING) {
                     $blog->review = $blog->fetchLastReview() ? true : false;
@@ -49,6 +50,7 @@ class BlogsController extends Controller
             'category_id' => 'required',
             'image' => $request->status == 'draft' ? '' : 'required',
             'summary' => $request->status == 'draft' ? '' : 'required',
+            'read_time' => $request->status == 'draft' ? '' : 'required',
         ]);
 
         if ($validator->fails()) {
@@ -59,6 +61,10 @@ class BlogsController extends Controller
         if ($request->image)
             $image = imageUploader($request->image, 'blogs');
 
+        $powered_by_logo = '';
+        if ($request->powered_by_logo)
+            $powered_by_logo = imageUploader($request->powered_by_logo, 'blogs');
+
         $blog = Blog::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
@@ -68,6 +74,8 @@ class BlogsController extends Controller
             'status' => trim($request->status) === 'draft' ? 4 : 1,
             'image' => $image,
             'summary' => $request->summary,
+            'read_time' => $request->read_time,
+            'powered_by_logo' => $powered_by_logo,
         ]);
 
         return response()->json([
@@ -94,6 +102,7 @@ class BlogsController extends Controller
         $blog->category = $category;
         $blog->reviews = $blog->fetchLastReview();
         $blog->image = url($blog->image);
+        $blog->powered_by_logo = url($blog->powered_by_logo);
 
         return response()->json($blog, 200);
     }
@@ -105,6 +114,7 @@ class BlogsController extends Controller
             'description' => 'string',
             'category_id' => 'integer',
             'summary' => 'string',
+            'read_time' => 'integer',
         ]);
 
         if ($validator->fails()) {
@@ -123,6 +133,10 @@ class BlogsController extends Controller
         if ($request->image)
             $image = imageUploader($request->image, 'blogs');
 
+        $powered_by_logo = $blog->powered_by_logo;
+        if ($request->powered_by_logo)
+            $powered_by_logo = imageUploader($request->powered_by_logo, 'powered_by_logo');
+
         $blog->update([
             'title' => $request->title ?? $blog->title,
             'slug' => Str::slug($request->title ?? $blog->title),
@@ -131,6 +145,8 @@ class BlogsController extends Controller
             'status' => trim($request->status) === 'draft' ? 4 : 1,
             'image' => $image,
             'summary' => $request->summary ?? $blog->summary,
+            'read_time' => $request->read_time ?? $blog->read_time,
+            'powered_by_logo' => $powered_by_logo,
         ]);
 
         return response()->json([

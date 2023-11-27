@@ -18,6 +18,8 @@ class Blog extends Model
         'slug',
         'status',
         'summary',
+        'read_time',
+        'powered_by_logo',
     ];
 
     protected $hidden = [
