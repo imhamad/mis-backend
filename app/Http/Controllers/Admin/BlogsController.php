@@ -23,6 +23,7 @@ class BlogsController extends Controller
             })
             ->paginate(10)->through(function ($blog) {
                 $blog->image = url($blog->image);
+                $blog->powered_by_logo = url($blog->powered_by_logo);
                 $category = $blog->category->title ?? null;
                 $blog->created_date = $blog->updated_at->format('d M, Y');
                 $blog->status_text = BlogStatus::getStatusName($blog->status);
@@ -54,6 +55,7 @@ class BlogsController extends Controller
         }
 
         $blog->image = url($blog->image);
+        $blog->powered_by_logo = url($blog->powered_by_logo);
         $category = $blog->category->title ?? null;
         $blog->created_date = $blog->updated_at->format('d M, Y');
         $blog->status_text = BlogStatus::getStatusName($blog->status);
@@ -142,6 +144,7 @@ class BlogsController extends Controller
                 $category = $blog->category->title ?? null;
                 $blog->created_date = $blog->updated_at->format('d/m/Y');
                 $blog->status_text = BlogStatus::getStatusName($blog->status);
+                $blog->powered_by_logo = url($blog->powered_by_logo);
 
                 unset($blog->category, $blog->created_at, $blog->updated_at);
                 $blog->category = $category;
