@@ -6,6 +6,7 @@ use App\Enums\BlogStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 
 class FrontApisController extends Controller
 {
@@ -350,6 +351,7 @@ class FrontApisController extends Controller
         // Modify the paginated data
         $blogs->getCollection()->transform(function ($item) {
             $item->image = url($item->image);
+            $item->powered_by_logo = url($item->powered_logo);
             $item->created_time = date('M d, D', strtotime($item->created_at));
             $created_by = ($item->user ? $item->user->first_name : '') . ' ' . ($item->user ? $item->user->last_name : '');
             $item->created_by = $created_by;
@@ -374,6 +376,7 @@ class FrontApisController extends Controller
         }
 
         $blog->image = url($blog->image);
+        $blog->powered_by_logo = url($blog->powered_by_logo);
         $blog->created_time = date('M d, D', strtotime($blog->created_at));
         $created_by = $blog->user ? $blog->user->first_name : '';
         $created_by .= ' ' . ($blog->user ? $blog->user->last_name : '');
@@ -388,7 +391,7 @@ class FrontApisController extends Controller
             $item->created_by = $created_by;
             $item->category_title = $item->category->title ?? '';
             $item->category_slug = $item->category->slug ?? '';
-            $item->powered_by_logo = url($item->powered_by_logo);
+            $item->powered_by_logo = url($item->powered_by_logo); 
 
             unset($item->category, $item->created_at, $item->user, $item->created_at, $item->updated_at);
             return $item;
