@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Blog;
+use App\Models\User;
 use App\Enums\BlogStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -106,5 +107,49 @@ class BlogsController extends Controller
         return response()->json([
             'msg' => 'Blog updated successfully.',
         ], 201);
+    }
+
+    public function dashboard_statistics()
+    {
+        $all_blogs = Blog::count();
+        $request_blogs = Blog::withStatus(BlogStatus::PENDING)->count();
+        $published_blogs = Blog::withStatus(BlogStatus::PUBLISHED)->count();
+        // Rejected Blogs
+        $cancel_blogs = Blog::withStatus(BlogStatus::REJECTED)->count();
+
+        $total_contributors = User::where('user_type', 'contributor')->count();
+        $waiting_contributors = User::where('user_type', 'contributor')->where('request_status', 'pending')->count();
+        $approved_contributors = User::where('user_type', 'contributor')->where('request_status', 'approved')->count();
+
+        return response()->json([
+            'all_blogs' => $all_blogs,
+            'published_blogs' => $published_blogs,
+            'cancel_blogs' => $cancel_blogs,
+            'request_blogs' => $request_blogs,
+            'total_contributors' => $total_contributors,
+            'waiting_contributors' => $waiting_contributors,
+            'approved_contributors' => $approved_contributors,
+        ], 200);
+    }
+
+    // dashboard_recent_blogs
+    public function dashboard_recent_blogs()
+    {
+        $blogs = Blog::withStatus(BlogStatus::PUBLISHED)
+            ->with('category')->orderBy('id', 'desc')->limit(6)->get()
+            ->map(function ($blog) {
+                $blog->image = url($blog->image);
+                $category = $blog->category->title ?? null;
+                $blog->created_date = $blog->updated_at->format('d/m/Y');
+                $blog->status_text = BlogStatus::getStatusName($blog->status);
+
+                unset($blog->category, $blog->created_at, $blog->updated_at);
+                $blog->category = $category;
+                $blog->category_slug = Str::slug($category);
+
+                return $blog;
+            });
+
+        return response()->json($blogs, 200);
     }
 }

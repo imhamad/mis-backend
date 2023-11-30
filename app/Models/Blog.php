@@ -40,6 +40,11 @@ class Blog extends Model
         return $query->where('status', $status)->where('user_id', auth()->user()->id);
     }
 
+    public function scopeWithStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
     public function reviews()
     {
         return $this->hasMany(BlogReview::class);

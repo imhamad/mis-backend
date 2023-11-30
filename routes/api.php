@@ -55,18 +55,22 @@ Route::prefix('frontend')->group(function () {
 // authentication routes
 Route::post('/login', [Authentication::class, 'login']);
 
+Route::post('/forgot-password', [Authentication::class, 'forgot_password']);
+Route::post('/verify-recover-account-otp', [Authentication::class, 'verify_recover_account_otp']);
+Route::post('/update-password-after-verify-recover-account-otp', [Authentication::class, 'update_password_after_verify_recover_account_otp']);
+
 Route::middleware(['auth:sanctum', 'check_admin'])->group(function () {
     Route::get('/get-profile', [Authentication::class, 'get_profile'])->name('get-profile');
     Route::post('/update-profile', [Authentication::class, 'update_profile']);
     Route::post('/logout', [Authentication::class, 'logout']);
     Route::post('/change-password', [Authentication::class, 'change_password']);
-    Route::post('/forgot-password', [Authentication::class, 'forgot_password']);
-    Route::post('/verify-recover-account-otp', [Authentication::class, 'verify_recover_account_otp']);
-    Route::post('/update-password-after-verify-recover-account-otp', [Authentication::class, 'update_password_after_verify_recover_account_otp']);
 });
 
 // dashboard routes
 Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(function () {
+    Route::get('/dashboard-statistics', [AdminBlogsController::class, 'dashboard_statistics']);
+    Route::get('/dashboard-recent-blogs', [AdminBlogsController::class, 'dashboard_recent_blogs']);
+
     Route::get('get-home-page-data', [PagesAPIController::class, 'getHomePageData']);
     Route::post('update-home-page-data', [PagesAPIController::class, 'updateHomePageData']);
 

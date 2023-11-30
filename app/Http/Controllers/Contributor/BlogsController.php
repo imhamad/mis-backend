@@ -63,7 +63,7 @@ class BlogsController extends Controller
 
         $powered_by_logo = '';
         if ($request->powered_by_logo)
-            $powered_by_logo = imageUploader($request->powered_by_logo, 'blogs');
+            $powered_by_logo = imageUploader($request->powered_by_logo, 'powered_logo');
 
         $blog = Blog::create([
             'title' => $request->title,
@@ -135,7 +135,7 @@ class BlogsController extends Controller
 
         $powered_by_logo = $blog->powered_by_logo;
         if ($request->powered_by_logo)
-            $powered_by_logo = imageUploader($request->powered_by_logo, 'powered_by_logo');
+            $powered_by_logo = imageUploader($request->powered_by_logo, 'powered_logo');
 
         $blog->update([
             'title' => $request->title ?? $blog->title,
