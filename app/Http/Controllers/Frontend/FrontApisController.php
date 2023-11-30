@@ -388,6 +388,7 @@ class FrontApisController extends Controller
             $item->created_by = $created_by;
             $item->category_title = $item->category->title ?? '';
             $item->category_slug = $item->category->slug ?? '';
+            $item->powered_by_logo = url($item->powered_by_logo);
 
             unset($item->category, $item->created_at, $item->user, $item->created_at, $item->updated_at);
             return $item;
