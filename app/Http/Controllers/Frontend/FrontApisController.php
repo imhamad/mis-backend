@@ -339,7 +339,7 @@ class FrontApisController extends Controller
         $categories = explode(',', $request->categories);
 
         // Retrieve case study data based on search and tag criteria
-        $blogs = \App\Models\Blog::select('id', 'title', 'description', 'slug', 'category_id', 'user_id', 'slug', 'status', 'summary', 'created_at', 'image')
+        $blogs = \App\Models\Blog::select('id', 'title', 'description', 'slug', 'category_id', 'user_id', 'slug', 'status', 'summary', 'updated_at', 'image')
             ->when($request->categories, function ($query) use ($categories) {
                 return $query->whereIn('category_id', $categories);
             })
@@ -352,13 +352,13 @@ class FrontApisController extends Controller
         $blogs->getCollection()->transform(function ($item) {
             $item->image = url($item->image);
             $item->powered_by_logo = url($item->powered_logo);
-            $item->created_time = date('M d, D', strtotime($item->created_at));
+            $item->created_time = date('M d, D', strtotime($item->updated_at));
             $created_by = ($item->user ? $item->user->first_name : '') . ' ' . ($item->user ? $item->user->last_name : '');
             $item->created_by = $created_by;
             $item->category_title = $item->category->title ?? '';
             $item->category_slug = $item->category->slug ?? '';
 
-            unset($item->category, $item->created_at, $item->user);
+            unset($item->category, $item->updated_at, $item->user);
             return $item;
         });
 
@@ -377,7 +377,7 @@ class FrontApisController extends Controller
 
         $blog->image = url($blog->image);
         $blog->powered_by_logo = url($blog->powered_by_logo);
-        $blog->created_time = date('M d, D', strtotime($blog->created_at));
+        $blog->created_time = date('M d, D', strtotime($blog->updated_at));
         $created_by = $blog->user ? $blog->user->first_name : '';
         $created_by .= ' ' . ($blog->user ? $blog->user->last_name : '');
         $blog->created_by = $created_by;
@@ -386,7 +386,7 @@ class FrontApisController extends Controller
 
         $blog->related_blogs = \App\Models\Blog::where('category_id', $blog->category_id)->where('id', '!=', $blog->id)->limit(4)->get()->map(function ($item) {
             $item->image = url($item->image);
-            $item->created_time = date('M d, D', strtotime($item->created_at));
+            $item->created_time = date('M d, D', strtotime($item->updated_at));
             $created_by = ($item->user ? $item->user->first_name : '') . ' ' . ($item->user ? $item->user->last_name : '');
             $item->created_by = $created_by;
             $item->category_title = $item->category->title ?? '';
