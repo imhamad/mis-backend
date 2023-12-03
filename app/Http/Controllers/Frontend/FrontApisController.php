@@ -318,13 +318,7 @@ class FrontApisController extends Controller
     public function blogPage()
     {
         // Retrieve the first record from the BlogPage model or create one if not found
-        $blog_page_data = \App\Models\BlogPage::firstOrCreate([
-            "seo_title" => 'SERVICE | CUSTOM DEVELOPMENT',
-            "seo_meta_tags" => 'Sustainable websites that captivate your audience by leveraging modern tech-stack',
-            "pre_title" => 'SERVICE | CUSTOM DEVELOPMENT',
-            "title" => 'Sustainable websites that captivate your audience by leveraging modern tech-stack',
-            "description" => 'Sustainable websites that captivate your audience by leveraging modern tech-stack Sustainable websites that captivate your audience by leveraging modern tech-stack'
-        ]);
+        $blog_page_data = \App\Models\BlogPage::first();
 
         // Convert the image URL to an absolute URL using the "url" helper function
         $blog_page_data->image = url($blog_page_data->image);
@@ -403,7 +397,12 @@ class FrontApisController extends Controller
             'linkedin_url' => $blog->user->linkedin_url,
             'description' => $blog->user->description ?? '',
             // contribution = user's more blogs
-            'contirbution' => \App\Models\Blog::where('user_id', $blog->user_id)->where('id', '!=', $blog->id)->limit(8)->select('title', 'slug')->get()
+            'contirbution' => \App\Models\Blog::with('category')->where('user_id', $blog->user_id)->where('id', '!=', $blog->id)->limit(8)->get()->map(function ($item) {
+                $item->category_title = $item->category->title ?? '';
+                $item->category_slug = $item->category->slug ?? '';
+                unset($item->category, $item->description);
+                return $item;
+            }),
         ];
 
         unset($blog->category, $blog->user, $blog->created_at, $blog->updated_at);
