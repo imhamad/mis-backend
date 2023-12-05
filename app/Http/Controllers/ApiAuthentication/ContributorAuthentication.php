@@ -241,7 +241,7 @@ class ContributorAuthentication extends Controller
         }
 
         try {
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->where('user_type', 'contributor')->first();
 
             if ($user) {
                 $user->otp()->delete();

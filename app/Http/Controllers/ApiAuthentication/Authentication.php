@@ -195,7 +195,7 @@ class Authentication extends Controller
         }
 
         try {
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->where('user_type', 'admin')->first();
 
             if ($user) {
                 $user->otp()->delete();
