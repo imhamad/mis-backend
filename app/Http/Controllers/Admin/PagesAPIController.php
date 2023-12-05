@@ -21,13 +21,15 @@ class PagesAPIController extends Controller
     {
         $homePageData = \App\Models\HomePage::first();
 
-        $image = $request->has('image') ? imageUploader($request->image, 'home page image') : $homePageData->image;
+        $image = $request->image ? imageUploader($request->image, 'home page image') : $homePageData->image;
 
         $homePageData->update([
             'seo_title' => $request->seo_title ? $request->seo_title : $homePageData->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags ? $request->seo_meta_tags : $homePageData->seo_meta_tags,
             'image' => $image,
             'countries' => $request->countries ? $request->countries : $homePageData->countries,
+            'keywords' => $request->keywords ? $request->keywords : $homePageData->keywords,
+            'og_url' => $request->og_url ? $request->og_url : $homePageData->og_url,
         ]);
 
         return response()->json([
@@ -62,6 +64,8 @@ class PagesAPIController extends Controller
             'about_heroic_block_title' => $request->about_heroic_block_title ? $request->about_heroic_block_title : $aboutPageData->about_heroic_block_title,
             'about_cta_link' => $request->about_cta_link ? $request->about_cta_link : $aboutPageData->about_cta_link,
             'about_open_source_culture' => $request->about_open_source_culture ? $request->about_open_source_culture : $aboutPageData->about_open_source_culture,
+            'keywords' => $request->keywords ? $request->keywords : $aboutPageData->keywords,
+            'og_url' => $request->og_url ? $request->og_url : $aboutPageData->og_url,
         ]);
 
         return response()->json([
@@ -97,6 +101,8 @@ class PagesAPIController extends Controller
             'services_heroic_block_pre_title' => $request->services_heroic_block_pre_title ? $request->services_heroic_block_pre_title : $servicePageData->services_heroic_block_pre_title,
             'services_heroic_block_title' => $request->services_heroic_block_title ? $request->services_heroic_block_title : $servicePageData->services_heroic_block_title,
             'services_process_image' => $services_process_image,
+            'keywords' => $request->keywords ? $request->keywords : $servicePageData->keywords,
+            'og_url' => $request->og_url ? $request->og_url : $servicePageData->og_url,
         ]);
 
         return response()->json([
@@ -129,6 +135,8 @@ class PagesAPIController extends Controller
             'image' => $image,
             'casestudy_heroic_block_pre_title' => $request->casestudy_heroic_block_pre_title ? $request->casestudy_heroic_block_pre_title : $caseStudyPageData->casestudy_heroic_block_pre_title,
             'casestudy_heroic_block_title' => $request->casestudy_heroic_block_title ? $request->casestudy_heroic_block_title : $caseStudyPageData->casestudy_heroic_block_title,
+            'keywords' => $request->keywords ? $request->keywords : $caseStudyPageData->keywords,
+            'og_url' => $request->og_url ? $request->og_url : $caseStudyPageData->og_url,
         ]);
 
         return response()->json([
@@ -160,6 +168,8 @@ class PagesAPIController extends Controller
             'pre_title' => $request->pre_title ? $request->pre_title : $blogPageData->pre_title,
             'title' => $request->title ? $request->title : $blogPageData->title,
             'description' => $request->description ? $request->description : $blogPageData->description,
+            'keywords' => $request->keywords ? $request->keywords : $blogPageData->keywords,
+            'og_url' => $request->og_url ? $request->og_url : $blogPageData->og_url,
         ]);
 
         return response()->json([

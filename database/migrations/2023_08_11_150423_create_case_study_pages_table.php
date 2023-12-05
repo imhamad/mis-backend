@@ -21,6 +21,9 @@ return new class extends Migration
 
             $table->text('casestudy_heroic_block_pre_title')->nullable();
             $table->text('casestudy_heroic_block_title')->nullable();
+
+            $table->text('keywords')->nullable();
+            $table->text('og_url')->nullable();
             $table->timestamps();
         });
     }

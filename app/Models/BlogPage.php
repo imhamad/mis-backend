@@ -15,7 +15,9 @@ class BlogPage extends Model
         "image",
         "pre_title",
         "title",
-        "description"
+        "description",
+        "keywords",
+        "og_url",
     ];
 
     // hidden fields
@@ -24,5 +26,4 @@ class BlogPage extends Model
         'updated_at',
         'id'
     ];
-
 }

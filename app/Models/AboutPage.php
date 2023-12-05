@@ -19,6 +19,8 @@ class AboutPage extends Model
         'about_heroic_block_title',
         'about_cta_link',
         'about_open_source_culture',
+        'keywords',
+        'og_url',
     ];
 
     // hidden fields

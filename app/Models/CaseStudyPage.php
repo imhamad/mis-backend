@@ -17,6 +17,8 @@ class CaseStudyPage extends Model
         'image',
         'casestudy_heroic_block_pre_title',
         'casestudy_heroic_block_title',
+        'keywords',
+        'og_url',
     ];
 
     // hidden fields

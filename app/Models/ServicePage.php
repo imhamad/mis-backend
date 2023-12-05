@@ -18,6 +18,8 @@ class ServicePage extends Model
         'services_heroic_block_pre_title',
         'services_heroic_block_title',
         'services_process_image',
+        'keywords',
+        'og_url',
     ];
 
     // hidden fields

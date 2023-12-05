@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('seo_meta_tags')->nullable();
             $table->string('image')->nullable();
             $table->text('countries')->nullable();
+            $table->text('keywords')->nullable();
+            $table->text('og_url')->nullable();
             $table->timestamps();
         });
     }

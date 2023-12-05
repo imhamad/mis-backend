@@ -22,6 +22,9 @@ return new class extends Migration
             $table->text('services_heroic_block_pre_title')->nullable();
             $table->text('services_heroic_block_title')->nullable();
             $table->string('services_process_image')->nullable();
+
+            $table->text('keywords')->nullable();
+            $table->text('og_url')->nullable();
             $table->timestamps();
         });
     }

@@ -23,6 +23,9 @@ return new class extends Migration
             $table->text('about_heroic_block_title')->nullable();
             $table->string('about_cta_link')->nullable();
             $table->longText('about_open_source_culture')->nullable();
+
+            $table->text('keywords')->nullable();
+            $table->text('og_url')->nullable();
             $table->timestamps();
         });
     }

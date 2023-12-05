@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -20,6 +21,8 @@ return new class extends Migration {
             $table->text('pre_title')->nullable();
             $table->text('title')->nullable();
             $table->text('description')->nullable();
+            $table->text('keywords')->nullable();
+            $table->text('og_url')->nullable();
             $table->timestamps();
         });
     }
