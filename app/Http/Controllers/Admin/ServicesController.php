@@ -17,6 +17,7 @@ class ServicesController extends Controller
                 $service->image = url($service->image);
                 $service->service_icon = url($service->service_icon);
                 $service->client_image = url($service->client_image);
+                $service->process_image = url($service->process_image);
                 return $service;
             });
 
@@ -42,6 +43,7 @@ class ServicesController extends Controller
         $service_image = $request->image ? imageUploader($request->image, 'service-image') : '';
         $service_icon = $request->service_icon ? imageUploader($request->service_icon, 'service-icon') : '';
         $client_image = $request->client_image ? imageUploader($request->client_image, 'client-image') : '';
+        $process_image = $request->process_image ? imageUploader($request->process_image, 'process-image') : '';
 
         $service = Service::create([
             'seo_title' => $request->seo_title,
@@ -55,6 +57,9 @@ class ServicesController extends Controller
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
             'client_image' => $client_image,
+            'keywords' => $request->keywords,
+            'og_url' => $request->og_url,
+            'process_image' => $process_image,
         ]);
 
         return response()->json([
@@ -76,6 +81,7 @@ class ServicesController extends Controller
         $service->image = url($service->image);
         $service->service_icon = url($service->service_icon);
         $service->client_image = url($service->client_image);
+        $service->process_image = url($service->process_image);
 
         return response()->json($service, 200);
     }
@@ -105,6 +111,7 @@ class ServicesController extends Controller
         $service_image = $request->image ? imageUploader($request->image, 'service-image') : $service->image;
         $service_icon = $request->service_icon ? imageUploader($request->service_icon, 'service-icon') : $service->service_icon;
         $client_image = $request->client_image ? imageUploader($request->client_image, 'client-image') : $service->client_image;
+        $process_image = $request->process_image ? imageUploader($request->process_image, 'process-image') : $service->process_image;
 
         $service->update([
             'seo_title' => $request->seo_title,
@@ -118,6 +125,9 @@ class ServicesController extends Controller
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
             'client_image' => $client_image,
+            'keywords' => $request->keywords,
+            'og_url' => $request->og_url,
+            'process_image' => $process_image,
         ]);
 
         return response()->json([

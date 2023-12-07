@@ -28,6 +28,10 @@ return new class extends Migration
             $table->string('client_designation')->nullable();
             $table->text('client_review')->nullable();
             $table->string('client_image')->nullable();
+
+            $table->text('keywords')->nullable();
+            $table->text('og_url')->nullable();
+            $table->string('process_image')->nullable();
             $table->timestamps();
         });
     }

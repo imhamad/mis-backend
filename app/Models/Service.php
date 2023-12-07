@@ -23,6 +23,9 @@ class Service extends Model
         'client_designation',
         'client_review',
         'client_image',
+        'keywords',
+        'og_url',
+        'process_image',
     ];
 
     protected $hidden = [
