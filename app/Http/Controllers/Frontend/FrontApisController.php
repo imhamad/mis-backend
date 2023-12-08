@@ -25,7 +25,7 @@ class FrontApisController extends Controller
 
         // Return a JSON response with specific data
         return response()->json([
-            'data' => $homePageData->only(['seo_title', 'seo_meta_tags', 'image']),  // Extract specified attributes from the $homePageData
+            'data' => $homePageData->only(['seo_title', 'seo_meta_tags', 'image', 'keywords', 'og_url']),  // Extract specified attributes from the $homePageData
             'countries' => $homePageData->getCountriesList(),  // Get a list of countries using the "getCountriesList" method
             'services' => $services,
         ]);
@@ -95,6 +95,7 @@ class FrontApisController extends Controller
         $service->service_icon = url($service->service_icon);
         $service->image = url($service->image);
         $service->client_image = url($service->client_image);
+        $service->process_image = url($service->process_image);
 
         $service_sections = \App\Models\ServiceSection::where('service_id', $service->id)->get()->map(function ($item) {
             $delivable_list = \App\Models\ServiceDeliverableList::where('service_section_id', $item->id)->get()->map(function ($item) {
@@ -385,7 +386,7 @@ class FrontApisController extends Controller
             $item->created_by = $created_by;
             $item->category_title = $item->category->title ?? '';
             $item->category_slug = $item->category->slug ?? '';
-            $item->powered_by_logo = url($item->powered_by_logo); 
+            $item->powered_by_logo = url($item->powered_by_logo);
 
             unset($item->category, $item->user, $item->created_at, $item->updated_at);
             return $item;

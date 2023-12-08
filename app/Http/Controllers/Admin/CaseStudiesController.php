@@ -97,6 +97,7 @@ class CaseStudiesController extends Controller
             'client_review' => $request->client_review,
             'client_image' => $clientImage,
             'video' => $video,
+            'keywords' => $request->keywords
         ]);
 
         if ($request->services)
@@ -216,7 +217,8 @@ class CaseStudiesController extends Controller
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
             'client_image' => $clientImage,
-            'video' => $video
+            'video' => $video,
+            'keywords' => $request->keywords
         ]);
 
         if ($request->services) {
