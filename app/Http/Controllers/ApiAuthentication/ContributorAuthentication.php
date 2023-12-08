@@ -30,6 +30,9 @@ class ContributorAuthentication extends Controller
             "email" => "required|email|unique:users",
             "description" => "required",
             "linkedin_url" => "required|url",
+        ], [
+            'linkedin_url.required' => 'This field is required',
+            'linkedin_url.url' => 'Please include a complete URL e.g https://www.linkedin.com/in/john-doe/',
         ]);
 
         // Create a new user with validated data
