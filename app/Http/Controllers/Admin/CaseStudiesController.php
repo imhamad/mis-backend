@@ -47,8 +47,7 @@ class CaseStudiesController extends Controller
             'client_designation' => 'required',
             'client_review' => 'required',
             'client_image' => 'required',
-            // 'services' => 'required',
-            'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:20000'
+            'services' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -71,11 +70,6 @@ class CaseStudiesController extends Controller
         if ($request->client_image)
             $clientImage = imageUploader($request->client_image, 'client-image');
 
-        $video = '';
-        if ($request->file('video')) {
-            $video = videoUploader($request->file('video'), 'client-video');
-        }
-
         $caseStudy = CaseStudy::create([
             'seo_title' => $request->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags,
@@ -97,19 +91,12 @@ class CaseStudiesController extends Controller
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
             'client_image' => $clientImage,
-            'video' => $video,
+            'video' => $request->video,
             'keywords' => $request->keywords
         ]);
 
-        // if ($request->services) {
-        //     foreach ($request->services as $service => $key) {
-        //         CaseStudyService::create([
-        //             'service' => $request->services[$key],
-        //             'url' => $request->service_url[$key],
-        //             'case_study_id' => $caseStudy->id
-        //         ]);
-        //     }
-        // }
+        if ($request->services)
+            $caseStudy->caseStudyServices()->createMany($request->services);
 
         if ($request->project_credits) {
             foreach ($request->project_credits as $member) {
@@ -169,7 +156,6 @@ class CaseStudiesController extends Controller
             'client_review' => 'required',
             // 'client_image' => 'required',
             // 'services' => 'required',
-            'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:20000'
         ]);
 
         if ($validator->fails()) {
@@ -198,11 +184,6 @@ class CaseStudiesController extends Controller
         if ($request->client_image)
             $clientImage = imageUploader($request->client_image, 'client-image');
 
-        $video = $caseStudy->video;
-        if ($request->file('video')) {
-            $video = videoUploader($request->file('video'), 'client-video');
-        }
-
         $caseStudy->update([
             'seo_title' => $request->seo_title,
             'seo_meta_tags' => $request->seo_meta_tags,
@@ -225,20 +206,14 @@ class CaseStudiesController extends Controller
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
             'client_image' => $clientImage,
-            'video' => $video,
+            'video' => $request->video,
             'keywords' => $request->keywords
         ]);
 
-        // if ($request->services) {
-        //     $caseStudy->caseStudyServices()->delete();
-        //     foreach ($request->services as $service => $key) {
-        //         CaseStudyService::create([
-        //             'service' => $request->services[$key],
-        //             'url' => $request->service_url[$key],
-        //             'case_study_id' => $caseStudy->id
-        //         ]);
-        //     }
-        // }
+        if ($request->services) {
+            $caseStudy->caseStudyServices()->delete();
+            $caseStudy->caseStudyServices()->createMany($request->services);
+        }
 
         if ($request->project_credits) {
             $caseStudy->caseStudyCredits()->delete();
