@@ -104,8 +104,8 @@ class CaseStudiesController extends Controller
         if ($request->services) {
             foreach ($request->services as $service => $key) {
                 CaseStudyService::create([
-                    'service' => $request->services[$service],
-                    'url' => $request->service_url[$service],
+                    'service' => $request->services[$key],
+                    'url' => $request->service_url[$key],
                     'case_study_id' => $caseStudy->id
                 ]);
             }
@@ -233,8 +233,8 @@ class CaseStudiesController extends Controller
             $caseStudy->caseStudyServices()->delete();
             foreach ($request->services as $service => $key) {
                 CaseStudyService::create([
-                    'service' => $request->services[$service],
-                    'url' => $request->service_url[$service],
+                    'service' => $request->services[$key],
+                    'url' => $request->service_url[$key],
                     'case_study_id' => $caseStudy->id
                 ]);
             }
