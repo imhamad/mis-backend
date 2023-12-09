@@ -6,6 +6,7 @@ use App\Models\CaseStudy;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Models\CaseStudyService;
 use Illuminate\Support\Facades\Validator;
 
 class CaseStudiesController extends Controller
@@ -100,8 +101,15 @@ class CaseStudiesController extends Controller
             'keywords' => $request->keywords
         ]);
 
-        if ($request->services)
-            $caseStudy->caseStudyServices()->createMany($request->services);
+        if ($request->services) {
+            foreach ($request->services as $service => $key) {
+                CaseStudyService::create([
+                    'service' => $request->services[$service],
+                    'url' => $request->service_url[$service],
+                    'case_study_id' => $caseStudy->id
+                ]);
+            }
+        }
 
         if ($request->project_credits) {
             foreach ($request->project_credits as $member) {

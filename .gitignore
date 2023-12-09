@@ -24,3 +24,4 @@ yarn-error.log
 app/.DS_Store
 app/View/.DS_Store
 bootstrap/.DS_Store
+/public/videos
