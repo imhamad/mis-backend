@@ -47,7 +47,7 @@ class CaseStudiesController extends Controller
             'client_designation' => 'required',
             'client_review' => 'required',
             'client_image' => 'required',
-            'services' => 'required',
+            // 'services' => 'required',
             'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:20000'
         ]);
 
@@ -101,15 +101,15 @@ class CaseStudiesController extends Controller
             'keywords' => $request->keywords
         ]);
 
-        if ($request->services) {
-            foreach ($request->services as $service => $key) {
-                CaseStudyService::create([
-                    'service' => $request->services[$key],
-                    'url' => $request->service_url[$key],
-                    'case_study_id' => $caseStudy->id
-                ]);
-            }
-        }
+        // if ($request->services) {
+        //     foreach ($request->services as $service => $key) {
+        //         CaseStudyService::create([
+        //             'service' => $request->services[$key],
+        //             'url' => $request->service_url[$key],
+        //             'case_study_id' => $caseStudy->id
+        //         ]);
+        //     }
+        // }
 
         if ($request->project_credits) {
             foreach ($request->project_credits as $member) {
@@ -168,7 +168,7 @@ class CaseStudiesController extends Controller
             'client_designation' => 'required',
             'client_review' => 'required',
             // 'client_image' => 'required',
-            'services' => 'required',
+            // 'services' => 'required',
             'mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4|max:20000'
         ]);
 
@@ -229,16 +229,16 @@ class CaseStudiesController extends Controller
             'keywords' => $request->keywords
         ]);
 
-        if ($request->services) {
-            $caseStudy->caseStudyServices()->delete();
-            foreach ($request->services as $service => $key) {
-                CaseStudyService::create([
-                    'service' => $request->services[$key],
-                    'url' => $request->service_url[$key],
-                    'case_study_id' => $caseStudy->id
-                ]);
-            }
-        }
+        // if ($request->services) {
+        //     $caseStudy->caseStudyServices()->delete();
+        //     foreach ($request->services as $service => $key) {
+        //         CaseStudyService::create([
+        //             'service' => $request->services[$key],
+        //             'url' => $request->service_url[$key],
+        //             'case_study_id' => $caseStudy->id
+        //         ]);
+        //     }
+        // }
 
         if ($request->project_credits) {
             $caseStudy->caseStudyCredits()->delete();
