@@ -231,7 +231,13 @@ class CaseStudiesController extends Controller
 
         if ($request->services) {
             $caseStudy->caseStudyServices()->delete();
-            $caseStudy->caseStudyServices()->createMany($request->services);
+            foreach ($request->services as $service => $key) {
+                CaseStudyService::create([
+                    'service' => $request->services[$service],
+                    'url' => $request->service_url[$service],
+                    'case_study_id' => $caseStudy->id
+                ]);
+            }
         }
 
         if ($request->project_credits) {
