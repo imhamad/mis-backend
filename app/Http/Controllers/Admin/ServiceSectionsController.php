@@ -29,7 +29,6 @@ class ServiceSectionsController extends Controller
 
     public function store(Request $request)
     {
-        return $request->all();
         $validator = Validator::make($request->all(), [
             'service_id' => 'required',
             'breadcrumb_title' => 'required',
@@ -98,7 +97,6 @@ class ServiceSectionsController extends Controller
 
     public function update(Request $request, $id)
     {
-        return $request->all();
         $validator = Validator::make($request->all(), [
             'breadcrumb_title' => 'required',
             'service_title' => 'required',
