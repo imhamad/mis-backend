@@ -138,6 +138,7 @@ class ServiceSectionsController extends Controller
         foreach ($request->service_deliverable_icons as $item) {
             ServiceDeliverableIcon::create([
                 'service_id' => $serviceSection->id,
+                'service_section_id' => $serviceSection->id,
                 'icon' => imageUploader($item, 'service-deliverable-icon')
             ]);
         }
