@@ -29,6 +29,7 @@ class ServiceSectionsController extends Controller
 
     public function store(Request $request)
     {
+        return $request->all();
         $validator = Validator::make($request->all(), [
             'service_id' => 'required',
             'breadcrumb_title' => 'required',
