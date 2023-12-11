@@ -60,6 +60,7 @@ class ServicesController extends Controller
             'keywords' => $request->keywords,
             'og_url' => $request->og_url,
             'process_image' => $process_image,
+            'video' => $request->video
         ]);
 
         return response()->json([
@@ -128,6 +129,7 @@ class ServicesController extends Controller
             'keywords' => $request->keywords,
             'og_url' => $request->og_url,
             'process_image' => $process_image,
+            'video' => $request->video
         ]);
 
         return response()->json([

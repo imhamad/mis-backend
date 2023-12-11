@@ -32,6 +32,7 @@ return new class extends Migration
             $table->text('keywords')->nullable();
             $table->text('og_url')->nullable();
             $table->string('process_image')->nullable();
+            $table->string('video')->nullable();
             $table->timestamps();
         });
     }
