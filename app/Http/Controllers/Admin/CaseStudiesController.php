@@ -125,7 +125,7 @@ class CaseStudiesController extends Controller
         $caseStudy->case_study_image = url($caseStudy->case_study_image);
         $caseStudy->industry_of_client_image = url($caseStudy->industry_of_client_image);
         $caseStudy->client_image = url($caseStudy->client_image);
-        $caseStudy->video = url($caseStudy->video);
+        $caseStudy->video = $caseStudy->video ? url($caseStudy->video) : '';
 
         $project_credits = $caseStudy->caseStudyCredits->pluck('member_id');
         $caseStudy->project_credits = $project_credits;
