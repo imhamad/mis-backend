@@ -378,6 +378,7 @@ class FrontApisController extends Controller
         $blog->created_by = $created_by;
         $blog->category_title = $blog->category->title ?? '';
         $blog->category_slug = $blog->category->slug ?? '';
+        $blog->sponsor_logo = url($blog->sponsor_logo);
 
         $blog->related_blogs = \App\Models\Blog::where('category_id', $blog->category_id)->where('id', '!=', $blog->id)->limit(4)->get()->map(function ($item) {
             $item->image = url($item->image);

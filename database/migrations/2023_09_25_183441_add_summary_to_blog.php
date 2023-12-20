@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::table('blogs', function (Blueprint $table) {
             $table->text('summary')->nullable()->after('image');
+            $table->string('cta', 255)->nullable()->after('summary');
+            $table->string('sponsor_logo', 255)->nullable()->after('cta');
         });
     }
 

@@ -65,6 +65,10 @@ class BlogsController extends Controller
         if ($request->powered_by_logo)
             $powered_by_logo = imageUploader($request->powered_by_logo, 'powered_logo');
 
+        $sponsor_logo = '';
+        if ($request->sponsor_logo)
+            $sponsor_logo = imageUploader($request->sponsor_logo, 'sponsor_logo');
+
         $blog = Blog::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
@@ -76,6 +80,8 @@ class BlogsController extends Controller
             'summary' => $request->summary,
             'read_time' => $request->read_time,
             'powered_by_logo' => $powered_by_logo,
+            'cta' => $request->cta,
+            'sponsor_logo' => $sponsor_logo,
         ]);
 
         return response()->json([
@@ -103,6 +109,7 @@ class BlogsController extends Controller
         $blog->reviews = $blog->fetchLastReview();
         $blog->image = url($blog->image);
         $blog->powered_by_logo = url($blog->powered_by_logo);
+        $blog->sponsor_logo = url($blog->sponsor_logo);
 
         return response()->json($blog, 200);
     }
@@ -137,6 +144,10 @@ class BlogsController extends Controller
         if ($request->powered_by_logo)
             $powered_by_logo = imageUploader($request->powered_by_logo, 'powered_logo');
 
+        $sponsor_logo = $blog->sponsor_logo;
+        if ($request->sponsor_logo)
+            $sponsor_logo = imageUploader($request->sponsor_logo, 'sponsor_logo');
+
         $blog->update([
             'title' => $request->title ?? $blog->title,
             'slug' => Str::slug($request->title ?? $blog->title),
@@ -147,6 +158,8 @@ class BlogsController extends Controller
             'summary' => $request->summary ?? $blog->summary,
             'read_time' => $request->read_time ?? $blog->read_time,
             'powered_by_logo' => $powered_by_logo,
+            'cta' => $request->cta ?? $blog->cta,
+            'sponsor_logo' => $sponsor_logo,
         ]);
 
         return response()->json([

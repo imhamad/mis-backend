@@ -20,6 +20,8 @@ class Blog extends Model
         'summary',
         'read_time',
         'powered_by_logo',
+        'cta',
+        'sponsor_logo'
     ];
 
     protected $hidden = [
