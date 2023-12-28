@@ -79,10 +79,10 @@ class ServicesController extends Controller
             ], 404);
         }
 
-        $service->image = url($service->image);
-        $service->service_icon = url($service->service_icon);
-        $service->client_image = url($service->client_image);
-        $service->process_image = url($service->process_image);
+        $service->image = $service->image ? url($service->image) : '';
+        $service->service_icon = $service->service_icon ? url($service->service_icon) : '';
+        $service->client_image = $service->client_image ? url($service->client_image) : '';
+        $service->process_image = $service->process_image ? url($service->process_image) : '';
 
         return response()->json($service, 200);
     }
