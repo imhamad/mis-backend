@@ -308,7 +308,7 @@ class FrontApisController extends Controller
 
     public function servicesDropdown()
     {
-        $services = \App\Models\Service::select('service_pre_title', 'service_title', 'service_icon', 'id', 'service_icon', 'slug')->get()->map(function ($item) {
+        $services = \App\Models\Service::select('service_pre_title', 'service_title', 'service_icon', 'id', 'service_icon', 'slug', 'menu_visibility')->get()->map(function ($item) {
             $item->service_icon = url($item->service_icon);
             return $item;
         });

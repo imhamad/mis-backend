@@ -26,7 +26,8 @@ class Service extends Model
         'keywords',
         'og_url',
         'process_image',
-        'video'
+        'video',
+        'menu_visibility',
     ];
 
     protected $hidden = [

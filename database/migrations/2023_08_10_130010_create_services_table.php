@@ -33,6 +33,8 @@ return new class extends Migration
             $table->text('og_url')->nullable();
             $table->string('process_image')->nullable();
             $table->string('video')->nullable();
+
+            $table->boolean('menu_visibility')->default(0);
             $table->timestamps();
         });
     }
