@@ -15,13 +15,13 @@ class FrontApisController extends Controller
     {
         $services = \App\Models\Service::inRandomOrder()->select('service_title', 'service_pre_title', 'service_description', 'service_icon', 'client_name', 'slug')->get()->map(function ($item) {
             // Convert the icon URL to an absolute URL using the "url" helper function
-            $item->service_icon = url($item->service_icon);
+            $item->service_icon = baseURL($item->service_icon);
             return $item;
         });
 
         // Retrieve the first record from the HomePage model
         $homePageData = \App\Models\HomePage::first();
-        $homePageData->image = url($homePageData->image);  // Convert the image URL to an absolute URL using the "url" helper function
+        $homePageData->image = baseURL($homePageData->image);  // Convert the image URL to an absolute URL using the "url" helper function
 
         // Return a JSON response with specific data
         return response()->json([
@@ -38,12 +38,12 @@ class FrontApisController extends Controller
         $about_page = \App\Models\AboutPage::first();
 
         // Convert the image URL to an absolute URL using the "url" helper function
-        $about_page->image = url($about_page->image);
+        $about_page->image = baseURL($about_page->image);
 
         // Retrieve open source cultures data with status as 1
         $open_source_cultures_slider = \App\Models\OpenSourceCulture::where('status', 1)->get()->map(function ($item) {
             // Convert the icon URL to an absolute URL using the "url" helper function
-            $item->icon = url($item->icon);
+            $item->icon = baseURL($item->icon);
             return $item;
         });
 
@@ -52,7 +52,7 @@ class FrontApisController extends Controller
             ->select('name', 'logo', 'link')
             ->get()->map(function ($item) {
                 // Convert the logo URL to an absolute URL using the "url" helper function
-                $item->logo = url($item->logo);
+                $item->logo = baseURL($item->logo);
                 return $item;
             });
 
@@ -61,14 +61,14 @@ class FrontApisController extends Controller
             ->select('name', 'logo', 'link')
             ->get()->map(function ($item) {
                 // Convert the logo URL to an absolute URL using the "url" helper function
-                $item->logo = url($item->logo);
+                $item->logo = baseURL($item->logo);
                 return $item;
             });
 
         // Retrieve our team members data
         $our_team = \App\Models\OurTeamMember::get()->map(function ($item) {
             // Convert the image URL to an absolute URL using the "url" helper function
-            $item->image = url($item->image);
+            $item->image = baseURL($item->image);
             return $item;
         });
 
@@ -92,10 +92,10 @@ class FrontApisController extends Controller
             return response()->json(['msgErr' => 'Service not found'], 404);
         }
 
-        $service->service_icon = url($service->service_icon);
-        $service->image = url($service->image);
-        $service->client_image = url($service->client_image);
-        $service->process_image = url($service->process_image);
+        $service->service_icon = baseURL($service->service_icon);
+        $service->image = baseURL($service->image);
+        $service->client_image = baseURL($service->client_image);
+        $service->process_image = baseURL($service->process_image);
 
         $service_sections = \App\Models\ServiceSection::where('service_id', $service->id)->get()->map(function ($item) {
             $delivable_list = \App\Models\ServiceDeliverableList::where('service_section_id', $item->id)->get()->map(function ($item) {
@@ -103,7 +103,7 @@ class FrontApisController extends Controller
             });
 
             $delivable_icons = \App\Models\ServiceDeliverableIcon::where('service_section_id', $item->id)->get()->map(function ($item) {
-                return url($item->icon);
+                return baseURL($item->icon);
             });
 
             $item->deliverables_list = $delivable_list;
@@ -129,8 +129,8 @@ class FrontApisController extends Controller
         $service_page = \App\Models\ServicePage::first();
 
         // Convert image URLs to absolute URLs using the "url" helper function
-        $service_page->image = url($service_page->image);
-        $service_page->services_process_image = url($service_page->services_process_image);
+        $service_page->image = baseURL($service_page->image);
+        $service_page->services_process_image = baseURL($service_page->services_process_image);
 
         // Retrieve services data from the Service model
         $services = \App\Models\Service::get();
@@ -149,7 +149,7 @@ class FrontApisController extends Controller
 
             $value = [];
             foreach ($item->serviceDeliverableIcons as $icon) {
-                $value[] = url($icon->icon);
+                $value[] = baseURL($icon->icon);
             }
             // Assign the deliverables icons to the service object
             $item->deliverables_icons = $value;
@@ -186,7 +186,7 @@ class FrontApisController extends Controller
         $case_study_page = \App\Models\CaseStudyPage::first();
 
         // Convert the image URL to an absolute URL using the "url" helper function
-        $case_study_page->image = url($case_study_page->image);
+        $case_study_page->image = baseURL($case_study_page->image);
 
         // Return a JSON response with the processed data
         return response()->json([
@@ -215,7 +215,7 @@ class FrontApisController extends Controller
         // Process and transform case study data
         $case_studies = $case_studies->map(function ($item) {
             // Convert image URLs to absolute URLs using the "url" helper function
-            $item->case_study_image = url($item->case_study_image);
+            $item->case_study_image = baseURL($item->case_study_image);
 
             $category = \App\Models\Category::find($item->category_id);
             $item->category = $category ? $category->title : '';
@@ -236,10 +236,10 @@ class FrontApisController extends Controller
         $case_study = \App\Models\CaseStudy::where('slug', $slug)->first();
 
         // Convert image URLs to absolute URLs using the "url" helper function
-        $case_study->case_study_image = url($case_study->case_study_image);
-        $case_study->image = url($case_study->image);
-        $case_study->industry_of_client_image = url($case_study->industry_of_client_image);
-        $case_study->client_image = url($case_study->client_image);
+        $case_study->case_study_image = baseURL($case_study->case_study_image);
+        $case_study->image = baseURL($case_study->image);
+        $case_study->industry_of_client_image = baseURL($case_study->industry_of_client_image);
+        $case_study->client_image = baseURL($case_study->client_image);
 
         // Process and transform related data
         $case_study->caseStudyServices->map(function ($item) {
@@ -248,7 +248,7 @@ class FrontApisController extends Controller
         });
 
         $case_study->caseStudySliders->map(function ($item) {
-            $item->image = url($item->image);
+            $item->image = baseURL($item->image);
             unset($item->case_study_id, $item->id);
             return $item;
         });
@@ -292,7 +292,7 @@ class FrontApisController extends Controller
             return $query->limit($request->count);
         })
             ->get()->map(function ($item) {
-                $item->image = url($item->image);
+                $item->image = baseURL($item->image);
                 return $item;
             });
 
@@ -302,14 +302,14 @@ class FrontApisController extends Controller
     public function getRandomTestimonial(Request $request)
     {
         $testimonial = \App\Models\Testimonial::inRandomOrder()->first();
-        $testimonial->image = url($testimonial->image);
+        $testimonial->image = baseURL($testimonial->image);
         return response()->json($testimonial);
     }
 
     public function servicesDropdown()
     {
         $services = \App\Models\Service::select('service_pre_title', 'service_title', 'service_icon', 'id', 'service_icon', 'slug', 'menu_visibility')->get()->map(function ($item) {
-            $item->service_icon = url($item->service_icon);
+            $item->service_icon = baseURL($item->service_icon);
             return $item;
         });
 
@@ -322,7 +322,7 @@ class FrontApisController extends Controller
         $blog_page_data = \App\Models\BlogPage::first();
 
         // Convert the image URL to an absolute URL using the "url" helper function
-        $blog_page_data->image = url($blog_page_data->image);
+        $blog_page_data->image = baseURL($blog_page_data->image);
 
         // Return a JSON response with the processed data
         return response()->json($blog_page_data);
@@ -345,8 +345,8 @@ class FrontApisController extends Controller
 
         // Modify the paginated data
         $blogs->getCollection()->transform(function ($item) {
-            $item->image = url($item->image);
-            $item->powered_by_logo = url($item->powered_logo);
+            $item->image = baseURL($item->image);
+            $item->powered_by_logo = baseURL($item->powered_logo);
             $item->created_time = date('M d, D', strtotime($item->updated_at));
             $created_by = ($item->user ? $item->user->first_name : '') . ' ' . ($item->user ? $item->user->last_name : '');
             $item->created_by = $created_by;
@@ -370,24 +370,24 @@ class FrontApisController extends Controller
             ]);
         }
 
-        $blog->image = url($blog->image);
-        $blog->powered_by_logo = url($blog->powered_by_logo);
+        $blog->image = baseURL($blog->image);
+        $blog->powered_by_logo = baseURL($blog->powered_by_logo);
         $blog->created_time = date('M d, D', strtotime($blog->updated_at));
         $created_by = $blog->user ? $blog->user->first_name : '';
         $created_by .= ' ' . ($blog->user ? $blog->user->last_name : '');
         $blog->created_by = $created_by;
         $blog->category_title = $blog->category->title ?? '';
         $blog->category_slug = $blog->category->slug ?? '';
-        $blog->sponsor_logo = url($blog->sponsor_logo);
+        $blog->sponsor_logo = baseURL($blog->sponsor_logo);
 
         $blog->related_blogs = \App\Models\Blog::where('category_id', $blog->category_id)->where('id', '!=', $blog->id)->limit(4)->get()->map(function ($item) {
-            $item->image = url($item->image);
+            $item->image = baseURL($item->image);
             $item->created_time = date('M d, D', strtotime($item->updated_at));
             $created_by = ($item->user ? $item->user->first_name : '') . ' ' . ($item->user ? $item->user->last_name : '');
             $item->created_by = $created_by;
             $item->category_title = $item->category->title ?? '';
             $item->category_slug = $item->category->slug ?? '';
-            $item->powered_by_logo = url($item->powered_by_logo);
+            $item->powered_by_logo = baseURL($item->powered_by_logo);
 
             unset($item->category, $item->user, $item->created_at, $item->updated_at);
             return $item;
@@ -395,7 +395,7 @@ class FrontApisController extends Controller
 
         $blog->author = [
             'full_name' => $blog->user->first_name . ' ' . $blog->user->last_name,
-            'avatar' => url($blog->user->avatar),
+            'avatar' => baseURL($blog->user->avatar),
             'linkedin_url' => $blog->user->linkedin_url,
             'description' => $blog->user->description ?? '',
             // contribution = user's more blogs

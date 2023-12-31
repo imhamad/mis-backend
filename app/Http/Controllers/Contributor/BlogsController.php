@@ -20,7 +20,7 @@ class BlogsController extends Controller
             ->where('user_id', auth()->user()->id)
             ->with('category')
             ->paginate(10)->through(function ($blog) {
-                $blog->image = url($blog->image);
+                $blog->image = baseURL($blog->image);
                 $category = $blog->category->title ?? null;
                 $blog->created_date = $blog->updated_at->format('d M, Y');
                 $blog->status_text = BlogStatus::getStatusName($blog->status);
@@ -28,7 +28,7 @@ class BlogsController extends Controller
                 unset($blog->category);
                 $blog->category = $category;
                 $blog->category_slug = Str::slug($category);
-                $blog->powered_by_logo = url($blog->powered_by_logo);
+                $blog->powered_by_logo = baseURL($blog->powered_by_logo);
 
                 if ($blog->status == BlogStatus::PENDING) {
                     $blog->review = $blog->fetchLastReview() ? true : false;
@@ -107,9 +107,9 @@ class BlogsController extends Controller
         unset($blog->category);
         $blog->category = $category;
         $blog->reviews = $blog->fetchLastReview();
-        $blog->image = url($blog->image);
-        $blog->powered_by_logo = url($blog->powered_by_logo);
-        $blog->sponsor_logo = url($blog->sponsor_logo);
+        $blog->image = baseURL($blog->image);
+        $blog->powered_by_logo = baseURL($blog->powered_by_logo);
+        $blog->sponsor_logo = baseURL($blog->sponsor_logo);
 
         return response()->json($blog, 200);
     }
@@ -212,7 +212,7 @@ class BlogsController extends Controller
         $blogs = Blog::currentuser()
             ->with('category')->orderBy('id', 'desc')->limit(3)->get()
             ->map(function ($blog) {
-                $blog->image = url($blog->image);
+                $blog->image = baseURL($blog->image);
                 $category = $blog->category->title ?? null;
                 $blog->created_date = $blog->updated_at->format('d/m/Y');
                 $blog->status_text = BlogStatus::getStatusName($blog->status);

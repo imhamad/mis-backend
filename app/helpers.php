@@ -106,3 +106,9 @@ if (!function_exists('videoUploader')) {
     }
 }
 
+if (!function_exists('baseURL')) {
+    function baseURL($url)
+    {
+        return $url ? url($url) : null;
+    }
+}

@@ -19,8 +19,8 @@ class CaseStudiesController extends Controller
             ->paginate(10);
 
         $caseStudies->each(function ($caseStudy) {
-            $caseStudy->case_study_image = url($caseStudy->case_study_image);
-            $caseStudy->video = url($caseStudy->video);
+            $caseStudy->case_study_image = baseURL($caseStudy->case_study_image);
+            $caseStudy->video = baseURL($caseStudy->video);
         });
         return response()->json($caseStudies, 200);
     }
@@ -121,11 +121,11 @@ class CaseStudiesController extends Controller
     public function show($id): JsonResponse
     {
         $caseStudy = CaseStudy::with('caseStudyServices')->find($id);
-        $caseStudy->image = url($caseStudy->image);
-        $caseStudy->case_study_image = url($caseStudy->case_study_image);
-        $caseStudy->industry_of_client_image = url($caseStudy->industry_of_client_image);
-        $caseStudy->client_image = url($caseStudy->client_image);
-        $caseStudy->video = $caseStudy->video ? url($caseStudy->video) : '';
+        $caseStudy->image = baseURL($caseStudy->image);
+        $caseStudy->case_study_image = baseURL($caseStudy->case_study_image);
+        $caseStudy->industry_of_client_image = baseURL($caseStudy->industry_of_client_image);
+        $caseStudy->client_image = baseURL($caseStudy->client_image);
+        $caseStudy->video = $caseStudy->video ? baseURL($caseStudy->video) : '';
 
         $project_credits = $caseStudy->caseStudyCredits->pluck('member_id');
         $caseStudy->project_credits = $project_credits;

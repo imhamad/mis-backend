@@ -17,7 +17,7 @@ class OpenSourceCultureController extends Controller
             ->paginate(10)
             ->through(function ($opensourceculture) {
                 // attach the image url
-                $opensourceculture->icon = url($opensourceculture->icon);
+                $opensourceculture->icon = baseURL($opensourceculture->icon);
 
                 return $opensourceculture;
             });
@@ -65,7 +65,7 @@ class OpenSourceCultureController extends Controller
         }
 
         // attach the image url
-        $opensourceculture->icon = url($opensourceculture->icon);
+        $opensourceculture->icon = baseURL($opensourceculture->icon);
 
         return response()->json($opensourceculture, 200);
     }
@@ -81,7 +81,7 @@ class OpenSourceCultureController extends Controller
         }
 
         // attach the image url
-        $opensourceculture->icon = url($opensourceculture->icon);
+        $opensourceculture->icon = baseURL($opensourceculture->icon);
 
         return response()->json($opensourceculture, 200);
     }

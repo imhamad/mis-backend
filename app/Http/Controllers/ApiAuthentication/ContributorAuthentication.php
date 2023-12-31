@@ -117,7 +117,7 @@ class ContributorAuthentication extends Controller
                 "last_name" => $user->last_name,
                 "description" => $user->description,
                 "linkedin_url" => $user->linkedin_url,
-                "avatar" => $user->avatar ? url($user->avatar) : '',
+                "avatar" => $user->avatar ? baseURL($user->avatar) : '',
             ]);
         } else {
             return response()->json([
@@ -188,7 +188,7 @@ class ContributorAuthentication extends Controller
             'last_name' => $user->last_name,
             'email' => $user->email,
             'user_type' => $user_type,
-            'avatar' => $user->avatar ? url($user->avatar) : '',
+            'avatar' => $user->avatar ? baseURL($user->avatar) : '',
         ];
 
         return response($response, 200);

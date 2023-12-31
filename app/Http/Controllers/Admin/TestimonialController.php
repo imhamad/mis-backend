@@ -15,7 +15,7 @@ class TestimonialController extends Controller
         $tesimonials = Testimonial::where('name', 'LIKE', "%{$request->search}%")
             ->paginate(10)
             ->through(function ($tesimonial) {
-                $tesimonial->image = url($tesimonial->image);
+                $tesimonial->image = baseURL($tesimonial->image);
                 return $tesimonial;
             });
 
@@ -66,7 +66,7 @@ class TestimonialController extends Controller
             ], 404);
         }
 
-        $testimonial->image = url($testimonial->image);
+        $testimonial->image = baseURL($testimonial->image);
 
         return response()->json($testimonial, 200);
     }

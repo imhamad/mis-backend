@@ -14,7 +14,7 @@ class OurTeamMembersController extends Controller
         $teamMembers = OurTeamMember::where('name', 'LIKE', "%{$request->search}%")
             ->paginate(10)->through(function ($teamMember) {
                 // attach the image url
-                $teamMember->image = url($teamMember->image);
+                $teamMember->image = baseURL($teamMember->image);
 
                 return $teamMember;
             });
@@ -58,7 +58,7 @@ class OurTeamMembersController extends Controller
     {
         $teamMember = OurTeamMember::find($id);
 
-        $teamMember->image = url($teamMember->image);
+        $teamMember->image = baseURL($teamMember->image);
 
         if (!$teamMember) {
             return response()->json([

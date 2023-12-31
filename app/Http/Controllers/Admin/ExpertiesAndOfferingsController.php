@@ -21,8 +21,8 @@ class ExpertiesAndOfferingsController extends Controller
             ->where('title', 'LIKE', "%{$request->search}%")
             ->paginate(10)
             ->through(function ($expertiesAndOffering) {
-                // attach the image url
-                $expertiesAndOffering->icon = url($expertiesAndOffering->icon);
+                // attach the image baseURL
+                $expertiesAndOffering->icon = baseURL($expertiesAndOffering->icon);
 
                 return $expertiesAndOffering;
             });
@@ -91,8 +91,8 @@ class ExpertiesAndOfferingsController extends Controller
             ], 404);
         }
 
-        // attach the image url
-        $expertiesAndOffering->icon = url($expertiesAndOffering->icon);
+        // attach the image baseURL
+        $expertiesAndOffering->icon = baseURL($expertiesAndOffering->icon);
 
         return response()->json($expertiesAndOffering, 200);
     }
@@ -113,8 +113,8 @@ class ExpertiesAndOfferingsController extends Controller
             ], 404);
         }
 
-        // attach the image url
-        $expertiesAndOfferings->icon = url($expertiesAndOfferings->icon);
+        // attach the image baseURL
+        $expertiesAndOfferings->icon = baseURL($expertiesAndOfferings->icon);
 
         return response()->json($expertiesAndOfferings, 200);
     }

@@ -42,7 +42,7 @@ class ServiceSection extends Model
     public function serviceDeliverableIconsArray()
     {
         return $this->serviceDeliverableIcons->map(function ($item) {
-            return url($item->icon);
+            return baseURL($item->icon);
         });
     }
 }

@@ -30,7 +30,7 @@ class ContributorsController extends Controller
             })
             ->select('id', 'first_name', 'last_name', 'email', 'status', 'description', 'avatar', 'request_status', 'linkedin_url', 'created_at')
             ->paginate(10)->through(function ($user) {
-                $user->avatar = url($user->avatar);
+                $user->avatar = baseURL($user->avatar);
                 $user->status = $user->status == 1 ? ['value' => $user->status, 'label' => 'Inactive'] : ['value' => $user->status, 'label' => 'Active'];
                 $user->request_status = ucfirst($user->request_status);
                 $user->request_date = $user->created_at->format('d M, Y');
@@ -52,7 +52,7 @@ class ContributorsController extends Controller
 
         if (!$user)
             return response()->json(['msg' => 'Contributor not found.'], 404);
-        $user->avatar = url($user->avatar);
+        $user->avatar = baseURL($user->avatar);
 
         $blogs = $user->blogs()->groupBy('status')->selectRaw('count(*) as total, status')->get()->map(function ($item) {
             if ($item->status == BlogStatus::DRAFT)
@@ -89,7 +89,7 @@ class ContributorsController extends Controller
                 return $query->where('status', $request->status);
             })
             ->paginate(10)->through(function ($blog) {
-                $blog->image = url($blog->image);
+                $blog->image = baseURL($blog->image);
                 $category = $blog->category->title ?? null;
                 $blog->created_date = $blog->updated_at->format('d M, Y');
                 $blog->status_text = BlogStatus::getStatusName($blog->status);

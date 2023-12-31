@@ -12,7 +12,7 @@ class PagesAPIController extends Controller
     {
         $homePageData = \App\Models\HomePage::first();
 
-        $homePageData->image = url($homePageData->image);
+        $homePageData->image = baseURL($homePageData->image);
 
         return response()->json($homePageData);
     }
@@ -45,7 +45,7 @@ class PagesAPIController extends Controller
     {
         $aboutPageData = \App\Models\AboutPage::first();
 
-        $aboutPageData->image = url($aboutPageData->image);
+        $aboutPageData->image = baseURL($aboutPageData->image);
 
         return response()->json($aboutPageData);
     }
@@ -81,8 +81,8 @@ class PagesAPIController extends Controller
     {
         $servicePageData = \App\Models\ServicePage::first();
 
-        $servicePageData->image = url($servicePageData->image);
-        $servicePageData->services_process_image = url($servicePageData->services_process_image);
+        $servicePageData->image = baseURL($servicePageData->image);
+        $servicePageData->services_process_image = baseURL($servicePageData->services_process_image);
 
         return response()->json($servicePageData);
     }
@@ -118,7 +118,7 @@ class PagesAPIController extends Controller
     {
         $caseStudyPageData = \App\Models\CaseStudyPage::first();
 
-        $caseStudyPageData->image = url($caseStudyPageData->image);
+        $caseStudyPageData->image = baseURL($caseStudyPageData->image);
 
         return response()->json($caseStudyPageData);
     }
@@ -150,7 +150,7 @@ class PagesAPIController extends Controller
     {
         $blogPage = \App\Models\BlogPage::first();
 
-        $blogPage->image = url($blogPage->image);
+        $blogPage->image = baseURL($blogPage->image);
 
         return response()->json($blogPage);
     }

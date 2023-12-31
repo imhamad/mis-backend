@@ -14,10 +14,10 @@ class ServicesController extends Controller
     {
         $services = Service::where('service_title', 'LIKE', "%{$request->search}%")
             ->paginate(10)->through(function ($service) {
-                $service->image = url($service->image);
-                $service->service_icon = url($service->service_icon);
-                $service->client_image = url($service->client_image);
-                $service->process_image = url($service->process_image);
+                $service->image = baseURL($service->image);
+                $service->service_icon = baseURL($service->service_icon);
+                $service->client_image = baseURL($service->client_image);
+                $service->process_image = baseURL($service->process_image);
                 return $service;
             });
 
@@ -80,10 +80,10 @@ class ServicesController extends Controller
             ], 404);
         }
 
-        $service->image = $service->image ? url($service->image) : '';
-        $service->service_icon = $service->service_icon ? url($service->service_icon) : '';
-        $service->client_image = $service->client_image ? url($service->client_image) : '';
-        $service->process_image = $service->process_image ? url($service->process_image) : '';
+        $service->image = $service->image ? baseURL($service->image) : '';
+        $service->service_icon = $service->service_icon ? baseURL($service->service_icon) : '';
+        $service->client_image = $service->client_image ? baseURL($service->client_image) : '';
+        $service->process_image = $service->process_image ? baseURL($service->process_image) : '';
 
         return response()->json($service, 200);
     }

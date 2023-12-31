@@ -15,8 +15,8 @@ class CaseStudySlidersController extends Controller
             ->where('case_study_id', $request->case_study_id)
             ->paginate(10)
             ->through(function ($caseStudySlider) {
-                // attach the image url
-                $caseStudySlider->image = url($caseStudySlider->image);
+                // attach the image baseURL
+                $caseStudySlider->image = baseURL($caseStudySlider->image);
 
                 return $caseStudySlider;
             });
@@ -61,8 +61,8 @@ class CaseStudySlidersController extends Controller
             return response()->json(['msgErr' => 'Case Study Slider not found.'], 404);
         }
 
-        // attach the image url
-        $caseStudySlider->image = url($caseStudySlider->image);
+        // attach the image baseURL
+        $caseStudySlider->image = baseURL($caseStudySlider->image);
 
         return response()->json($caseStudySlider, 200);
     }
@@ -73,8 +73,8 @@ class CaseStudySlidersController extends Controller
             return response()->json(['msgErr' => 'Case Study Slider not found.'], 404);
         }
 
-        // attach the image url
-        $caseStudySlider->image = url($caseStudySlider->image);
+        // attach the image baseURL
+        $caseStudySlider->image = baseURL($caseStudySlider->image);
 
         return response()->json($caseStudySlider, 200);
     }

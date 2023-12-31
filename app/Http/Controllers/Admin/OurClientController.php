@@ -18,7 +18,7 @@ class OurClientController extends Controller
             ->paginate(10)
             ->through(function ($ourclient) {
                 // attach the image url
-                $ourclient->logo = url($ourclient->logo);
+                $ourclient->logo = baseURL($ourclient->logo);
 
                 return $ourclient;
             });
@@ -69,7 +69,7 @@ class OurClientController extends Controller
         }
 
         // attach the image url
-        $client->logo = url($client->logo);
+        $client->logo = baseURL($client->logo);
 
         return response()->json($client, 200);
     }
