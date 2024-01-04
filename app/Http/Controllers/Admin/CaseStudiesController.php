@@ -131,7 +131,7 @@ class CaseStudiesController extends Controller
         $caseStudy->video = $caseStudy->video ? baseURL($caseStudy->video) : '';
 
         $project_credits = $caseStudy->caseStudyCredits->pluck('member_id');
-        $project_credits = OurTeamMember::whereIn('id', $project_credits)->select('id as value', DB::raw('CONCAT(name, " - ", designation) AS label'),)->get()->toArray();
+        $project_credits = OurTeamMember::whereIn('id', $project_credits)->select('id as value', DB::raw('CONCAT(name, " - ", designation) AS label'))->get()->toArray();
         $caseStudy->project_credits = $project_credits;
 
         return response()->json($caseStudy, 200);
