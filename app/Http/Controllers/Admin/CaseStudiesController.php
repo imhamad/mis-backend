@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\CaseStudy;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
+use App\Models\OurTeamMember;
 use App\Models\CaseStudyService;
-use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class CaseStudiesController extends Controller
@@ -129,7 +131,7 @@ class CaseStudiesController extends Controller
         $caseStudy->video = $caseStudy->video ? baseURL($caseStudy->video) : '';
 
         $project_credits = $caseStudy->caseStudyCredits->pluck('member_id');
-        $project_credits = User::whereIn('id', $project_credits)->select('id as value', 'name as label')->get()->toArray();
+        $project_credits = OurTeamMember::whereIn('id', $project_credits)->select('id as value', DB::raw('CONCAT(name, " - ", designation) AS label'),)->get()->toArray();
         $caseStudy->project_credits = $project_credits;
 
         return response()->json($caseStudy, 200);
