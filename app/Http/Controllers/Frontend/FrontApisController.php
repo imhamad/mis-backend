@@ -399,7 +399,7 @@ class FrontApisController extends Controller
             'linkedin_url' => $blog->user->linkedin_url,
             'description' => $blog->user->description ?? '',
             // contribution = user's more blogs
-            'contirbution' => \App\Models\Blog::with('category')->where('user_id', $blog->user_id)->where('id', '!=', $blog->id)->limit(8)->get()->map(function ($item) {
+            'contirbution' => \App\Models\Blog::with('category')->where('user_id', $blog->user_id)->where('id', '!=', $blog->id)->latest()->limit(6)->get()->map(function ($item) {
                 $item->category_title = $item->category->title ?? '';
                 $item->category_slug = $item->category->slug ?? '';
                 unset($item->category, $item->description);
