@@ -205,7 +205,7 @@ class CaseStudiesController extends Controller
             'challenge' => $request->challenge,
             'value' => $request->value,
             'category_id' => $request->category_id,
-            'project_credit' => $request->project_credit,
+            'project_credit' => '$request->project_credit',
             'client_name' => $request->client_name,
             'client_designation' => $request->client_designation,
             'client_review' => $request->client_review,
@@ -219,9 +219,9 @@ class CaseStudiesController extends Controller
             $caseStudy->caseStudyServices()->createMany($request->services);
         }
 
-        if ($request->project_credits) {
+        if ($request->project_credit) {
             $caseStudy->caseStudyCredits()->delete();
-            foreach ($request->project_credits as $member) {
+            foreach ($request->project_credit as $member) {
                 $caseStudy->caseStudyCredits()->create([
                     'member_id' => $member
                 ]);
