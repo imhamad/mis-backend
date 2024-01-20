@@ -17,17 +17,21 @@ class ExpertiesAndOfferingsController extends Controller
      */
     public function index(Request  $request)
     {
-        $expertiesAndOfferings = ExpertiesAndOffering::where('status', 1)
-            ->where('title', 'LIKE', "%{$request->search}%")
-            ->paginate(10)
-            ->through(function ($expertiesAndOffering) {
-                // attach the image baseURL
-                $expertiesAndOffering->icon = baseURL($expertiesAndOffering->icon);
+        try {
+            $expertiesAndOfferings = ExpertiesAndOffering::where('status', 1)
+                ->where('title', 'LIKE', "%{$request->search}%")
+                ->paginate(10)
+                ->through(function ($expertiesAndOffering) {
+                    // attach the image baseURL
+                    $expertiesAndOffering->icon = baseURL($expertiesAndOffering->icon);
 
-                return $expertiesAndOffering;
-            });
+                    return $expertiesAndOffering;
+                });
 
-        return response()->json($expertiesAndOfferings, 200);
+            return response()->json($expertiesAndOfferings, 200);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
+        }
     }
 
     /**
@@ -48,31 +52,35 @@ class ExpertiesAndOfferingsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'description' => 'required',
-            'icon' => 'required',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'description' => 'required',
+                'icon' => 'required',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $image = '';
+            if ($request->icon) {
+                $image = imageUploader($request->icon, $request->title);
+            }
+
+            $expertiesAndOfferings = ExpertiesAndOffering::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'icon' => $image,
+            ]);
+
+            return response()->json([
+                'msg' => 'Experties and offering created successfully.',
+                'data' => $expertiesAndOfferings,
+            ], 201);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
-
-        $image = '';
-        if ($request->icon) {
-            $image = imageUploader($request->icon, $request->title);
-        }
-
-        $expertiesAndOfferings = ExpertiesAndOffering::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'icon' => $image,
-        ]);
-
-        return response()->json([
-            'msg' => 'Experties and offering created successfully.',
-            'data' => $expertiesAndOfferings,
-        ], 201);
     }
 
     /**
@@ -83,18 +91,22 @@ class ExpertiesAndOfferingsController extends Controller
      */
     public function show($id)
     {
-        $expertiesAndOffering = ExpertiesAndOffering::find($id);
+        try {
+            $expertiesAndOffering = ExpertiesAndOffering::find($id);
 
-        if (!$expertiesAndOffering) {
-            return response()->json([
-                'msgErr' => 'Experties and offering not found.',
-            ], 404);
+            if (!$expertiesAndOffering) {
+                return response()->json([
+                    'msgErr' => 'Experties and offering not found.',
+                ], 404);
+            }
+
+            // attach the image baseURL
+            $expertiesAndOffering->icon = baseURL($expertiesAndOffering->icon);
+
+            return response()->json($expertiesAndOffering, 200);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
-
-        // attach the image baseURL
-        $expertiesAndOffering->icon = baseURL($expertiesAndOffering->icon);
-
-        return response()->json($expertiesAndOffering, 200);
     }
 
     /**
@@ -105,18 +117,22 @@ class ExpertiesAndOfferingsController extends Controller
      */
     public function edit($id)
     {
-        $expertiesAndOfferings = ExpertiesAndOffering::find($id);
+        try {
+            $expertiesAndOfferings = ExpertiesAndOffering::find($id);
 
-        if (!$expertiesAndOfferings) {
-            return response()->json([
-                'msgErr' => 'Experties and offering not found.',
-            ], 404);
+            if (!$expertiesAndOfferings) {
+                return response()->json([
+                    'msgErr' => 'Experties and offering not found.',
+                ], 404);
+            }
+
+            // attach the image baseURL
+            $expertiesAndOfferings->icon = baseURL($expertiesAndOfferings->icon);
+
+            return response()->json($expertiesAndOfferings, 200);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
-
-        // attach the image baseURL
-        $expertiesAndOfferings->icon = baseURL($expertiesAndOfferings->icon);
-
-        return response()->json($expertiesAndOfferings, 200);
     }
 
     /**
@@ -128,44 +144,47 @@ class ExpertiesAndOfferingsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'description' => 'required',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'title' => 'required',
+                'description' => 'required',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
 
-        $expertiesAndOfferings = ExpertiesAndOffering::find($id);
+            $expertiesAndOfferings = ExpertiesAndOffering::find($id);
 
-        if (!$expertiesAndOfferings) {
+            if (!$expertiesAndOfferings) {
+                return response()->json([
+                    'msgErr' => 'Experties and offering not found.',
+                ], 404);
+            }
+
+            $image = $expertiesAndOfferings->icon;
+            if ($request->icon) {
+                $image = imageUploader($request->icon, $request->title);
+            }
+
+            if (!$expertiesAndOfferings) {
+                return response()->json([
+                    'msgErr' => 'Experties and offering not found.',
+                ], 404);
+            }
+
+            $expertiesAndOfferings->title = $request->title;
+            $expertiesAndOfferings->description = $request->description;
+            $expertiesAndOfferings->icon = $image;
+            $expertiesAndOfferings->save();
+
             return response()->json([
-                'msgErr' => 'Experties and offering not found.',
-            ], 404);
+                'msg' => 'Experties and offering updated successfully.',
+                'data' => $expertiesAndOfferings,
+            ], 201);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
-
-        $image = $expertiesAndOfferings->icon;
-        if ($request->icon) {
-            $image = imageUploader($request->icon, $request->title);
-        }
-
-        if (!$expertiesAndOfferings) {
-            return response()->json([
-                'msgErr' => 'Experties and offering not found.',
-            ], 404);
-        }
-
-        $expertiesAndOfferings->title = $request->title;
-        $expertiesAndOfferings->description = $request->description;
-        $expertiesAndOfferings->icon = $image;
-        $expertiesAndOfferings->save();
-
-        return response()->json([
-            'msg' => 'Experties and offering updated successfully.',
-            'data' => $expertiesAndOfferings,
-        ], 201);
     }
 
     /**
@@ -176,18 +195,22 @@ class ExpertiesAndOfferingsController extends Controller
      */
     public function destroy($id)
     {
-        $expertiesAndOfferings = ExpertiesAndOffering::find($id);
+        try {
+            $expertiesAndOfferings = ExpertiesAndOffering::find($id);
 
-        if (!$expertiesAndOfferings) {
+            if (!$expertiesAndOfferings) {
+                return response()->json([
+                    'msgErr' => 'Experties and offering not found.',
+                ], 404);
+            }
+
+            $expertiesAndOfferings->delete();
+
             return response()->json([
-                'msgErr' => 'Experties and offering not found.',
-            ], 404);
+                'msg' => 'Experties and offering deleted successfully.',
+            ], 200);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
-
-        $expertiesAndOfferings->delete();
-
-        return response()->json([
-            'msg' => 'Experties and offering deleted successfully.',
-        ], 200);
     }
 }

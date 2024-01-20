@@ -98,7 +98,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
     Route::get('/get-theme-data', [CommonController::class, 'getThemeData']);
     Route::post('/update-theme-data', [CommonController::class, 'updateThemeData']);
 
-    Route::resource('case-studies', CaseStudiesController::class);
+    Route::resource('case-studies', CaseStudiesController::class); // exception done till here
     Route::resource('case-study-sliders', CaseStudySlidersController::class);
 
     // configurations

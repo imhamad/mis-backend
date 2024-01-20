@@ -35,38 +35,46 @@ class CommonController extends Controller
     // getThemeData
     public function getThemeData()
     {
-        $theme = Theme::first();
+        try {
+            $theme = Theme::first();
 
-        return response()->json($theme);
+            return response()->json($theme);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
+        }
     }
 
     // updateThemeData
     public function updateThemeData(Request $request)
     {
-        $theme = Theme::first();
+        try {
+            $theme = Theme::first();
 
-        // about page
-        $theme->about_heroic_block_pre_title = $request->about_heroic_block_pre_title ? $request->about_heroic_block_pre_title : $theme->about_heroic_block_pre_title;
-        $theme->about_heroic_block_title = $request->about_heroic_block_title ? $request->about_heroic_block_title : $theme->about_heroic_block_title;
-        $theme->about_cta_link = $request->about_cta_link ? $request->about_cta_link : $theme->about_cta_link;
-        $theme->about_open_source_culture = $request->about_open_source_culture ? $request->about_open_source_culture : $theme->about_open_source_culture;
+            // about page
+            $theme->about_heroic_block_pre_title = $request->about_heroic_block_pre_title ? $request->about_heroic_block_pre_title : $theme->about_heroic_block_pre_title;
+            $theme->about_heroic_block_title = $request->about_heroic_block_title ? $request->about_heroic_block_title : $theme->about_heroic_block_title;
+            $theme->about_cta_link = $request->about_cta_link ? $request->about_cta_link : $theme->about_cta_link;
+            $theme->about_open_source_culture = $request->about_open_source_culture ? $request->about_open_source_culture : $theme->about_open_source_culture;
 
-        // services page
-        $theme->services_heroic_block_pre_title = $request->services_heroic_block_pre_title ? $request->services_heroic_block_pre_title : $theme->services_heroic_block_pre_title;
-        $theme->services_heroic_block_title = $request->services_heroic_block_title ? $request->services_heroic_block_title : $theme->services_heroic_block_title;
+            // services page
+            $theme->services_heroic_block_pre_title = $request->services_heroic_block_pre_title ? $request->services_heroic_block_pre_title : $theme->services_heroic_block_pre_title;
+            $theme->services_heroic_block_title = $request->services_heroic_block_title ? $request->services_heroic_block_title : $theme->services_heroic_block_title;
 
-        if ($request->services_process_image)
-            $theme->services_process_image = imageUploader($request->services_process_image, 'service process-imag');
+            if ($request->services_process_image)
+                $theme->services_process_image = imageUploader($request->services_process_image, 'service process-imag');
 
-        // case studies page
-        $theme->casestudy_heroic_block_pre_title = $request->casestudy_heroic_block_pre_title ? $request->casestudy_heroic_block_pre_title : $theme->casestudy_heroic_block_pre_title;
-        $theme->casestudy_heroic_block_title = $request->casestudy_heroic_block_title ? $request->casestudy_heroic_block_title : $theme->casestudy_heroic_block_title;
+            // case studies page
+            $theme->casestudy_heroic_block_pre_title = $request->casestudy_heroic_block_pre_title ? $request->casestudy_heroic_block_pre_title : $theme->casestudy_heroic_block_pre_title;
+            $theme->casestudy_heroic_block_title = $request->casestudy_heroic_block_title ? $request->casestudy_heroic_block_title : $theme->casestudy_heroic_block_title;
 
-        $theme->save();
+            $theme->save();
 
-        return response()->json([
-            'msg' => 'Theme data updated successfully.'
-        ]);
+            return response()->json([
+                'msg' => 'Theme data updated successfully.'
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
+        }
     }
 
     // getTeamMembersDropdown

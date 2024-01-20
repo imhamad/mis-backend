@@ -79,56 +79,68 @@ class Authentication extends Controller
     // get_profile
     public function get_profile(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        if ($user) {
-            return response()->json([
-                "name" => $user->name,
-                "email" => $user->email,
-            ]);
-        } else {
-            return response()->json([
-                "msgErr" => "User not found"
-            ]);
+            if ($user) {
+                return response()->json([
+                    "name" => $user->name,
+                    "email" => $user->email,
+                ]);
+            } else {
+                return response()->json([
+                    "msgErr" => "User not found"
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
     }
 
 
     public function update_profile(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        if ($user) {
-            $user->update([
-                'name' => $request->name,
-            ]);
+            if ($user) {
+                $user->update([
+                    'name' => $request->name,
+                ]);
 
-            return response()->json([
-                "msg" => "Profile has been updated successfully",
-            ]);
-        } else {
-            return response()->json([
-                "msgErr" => "User not found"
-            ]);
+                return response()->json([
+                    "msg" => "Profile has been updated successfully",
+                ]);
+            } else {
+                return response()->json([
+                    "msgErr" => "User not found"
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
     }
 
     // logout
     public function logout(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        if ($user) {
-            // Revoke all tokens...
-            $user->tokens()->delete();
+            if ($user) {
+                // Revoke all tokens...
+                $user->tokens()->delete();
 
-            return response()->json([
-                "msg" => "User has been logged out successfully"
-            ]);
-        } else {
-            return response()->json([
-                "msgErr" => "User not found"
-            ]);
+                return response()->json([
+                    "msg" => "User has been logged out successfully"
+                ]);
+            } else {
+                return response()->json([
+                    "msgErr" => "User not found"
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
     }
 
@@ -152,35 +164,39 @@ class Authentication extends Controller
 
     public function change_password(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        $validator = Validator::make($request->all(), [
-            'current_password' => 'required|string',
-            "password" => "required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_!@#$%^&*()-+=]).*$/",
-            "password_confirmation" => "required|same:password",
-        ], [
-            'password.required' => 'This field is required',
-            'password.min' => 'Password must be at least 8 characters',
-            'password.regex' => 'Correct password format: (Mixed Alphabet & number)',
-            'current_password.required' => 'This field is required',
-            'password_confirmation.required' => 'This field is required',
-            'password_confirmation.same' => 'Password does not match',
-        ]);
+            $validator = Validator::make($request->all(), [
+                'current_password' => 'required|string',
+                "password" => "required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_!@#$%^&*()-+=]).*$/",
+                "password_confirmation" => "required|same:password",
+            ], [
+                'password.required' => 'This field is required',
+                'password.min' => 'Password must be at least 8 characters',
+                'password.regex' => 'Correct password format: (Mixed Alphabet & number)',
+                'current_password.required' => 'This field is required',
+                'password_confirmation.required' => 'This field is required',
+                'password_confirmation.same' => 'Password does not match',
+            ]);
 
-        if ($validator->fails()) {
-            return response(['errors' => $validator->errors()], 422);
+            if ($validator->fails()) {
+                return response(['errors' => $validator->errors()], 422);
+            }
+
+            if (!Hash::check($request->current_password, $user->password)) {
+
+                $validator->errors()->add('current_password', 'Password did not match');
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $request['password'] = Hash::make($request['password']);
+
+            $user->update($request->all());
+            return response(['msg' => 'Password updated successfully'], 200);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => $exception->getMessage()]);
         }
-
-        if (!Hash::check($request->current_password, $user->password)) {
-
-            $validator->errors()->add('current_password', 'Password did not match');
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $request['password'] = Hash::make($request['password']);
-
-        $user->update($request->all());
-        return response(['msg' => 'Password updated successfully'], 200);
     }
 
     // forgot_password
