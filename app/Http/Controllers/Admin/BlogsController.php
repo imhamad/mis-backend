@@ -14,101 +14,113 @@ class BlogsController extends Controller
 {
     public function index(Request $request)
     {
-        $blogs = Blog::where('title', 'LIKE', "%{$request->search}%")
-            ->orderBy('id', 'desc')
-            ->with('category')
-            ->where('status', '!=', BlogStatus::DRAFT)
-            ->when($request->status, function ($query) use ($request) {
-                return $query->where('status', $request->status);
-            })
-            ->paginate(10)->through(function ($blog) {
-                $blog->image = baseURL($blog->image);
-                $blog->powered_by_logo = baseURL($blog->powered_by_logo);
-                $category = $blog->category->title ?? null;
-                $blog->created_date = $blog->updated_at->format('d M, Y');
-                $blog->status_text = BlogStatus::getStatusName($blog->status);
+        try {
+            $blogs = Blog::where('title', 'LIKE', "%{$request->search}%")
+                ->orderBy('id', 'desc')
+                ->with('category')
+                ->where('status', '!=', BlogStatus::DRAFT)
+                ->when($request->status, function ($query) use ($request) {
+                    return $query->where('status', $request->status);
+                })
+                ->paginate(10)->through(function ($blog) {
+                    $blog->image = baseURL($blog->image);
+                    $blog->powered_by_logo = baseURL($blog->powered_by_logo);
+                    $category = $blog->category->title ?? null;
+                    $blog->created_date = $blog->updated_at->format('d M, Y');
+                    $blog->status_text = BlogStatus::getStatusName($blog->status);
 
-                unset($blog->category);
-                $blog->category = $category;
-                $blog->category_slug = Str::slug($category);
+                    unset($blog->category);
+                    $blog->category = $category;
+                    $blog->category_slug = Str::slug($category);
 
-                if ($blog->status == BlogStatus::PENDING) {
-                    $blog->review = $blog->fetchLastReview() ? true : false;
-                } else {
-                    $blog->review = false;
-                }
+                    if ($blog->status == BlogStatus::PENDING) {
+                        $blog->review = $blog->fetchLastReview() ? true : false;
+                    } else {
+                        $blog->review = false;
+                    }
 
-                return $blog;
-            });
+                    return $blog;
+                });
 
-        return response()->json($blogs, 200);
+            return response()->json($blogs, 200);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
+        }
     }
 
     public function show($slug)
     {
-        $blog = Blog::where('slug', $slug)->first();
+        try {
+            $blog = Blog::where('slug', $slug)->first();
 
-        if (!$blog) {
-            return response()->json([
-                'msgErr' => 'Blog not found.',
-            ], 404);
+            if (!$blog) {
+                return response()->json([
+                    'msgErr' => 'Blog not found.',
+                ], 404);
+            }
+
+            $blog->image = baseURL($blog->image);
+            $blog->powered_by_logo = baseURL($blog->powered_by_logo);
+            $category = $blog->category->title ?? null;
+            $blog->created_date = $blog->updated_at->format('d M, Y');
+            $blog->status_text = BlogStatus::getStatusName($blog->status);
+
+            unset($blog->category);
+            $blog->category = $category;
+            $blog->category_slug = Str::slug($category);
+
+            if ($blog->status == BlogStatus::PENDING) {
+                $blog->review = $blog->reviews()->get() ?? false;
+            } else {
+                $blog->review = false;
+            }
+
+            $blog->author = $blog->user?->first_name ?? '' . ' ' . $blog->user?->last_name ?? null;
+            unset($blog->user);
+
+            return response()->json($blog, 200);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
-
-        $blog->image = baseURL($blog->image);
-        $blog->powered_by_logo = baseURL($blog->powered_by_logo);
-        $category = $blog->category->title ?? null;
-        $blog->created_date = $blog->updated_at->format('d M, Y');
-        $blog->status_text = BlogStatus::getStatusName($blog->status);
-
-        unset($blog->category);
-        $blog->category = $category;
-        $blog->category_slug = Str::slug($category);
-
-        if ($blog->status == BlogStatus::PENDING) {
-            $blog->review = $blog->reviews()->get() ?? false;
-        } else {
-            $blog->review = false;
-        }
-
-        $blog->author = $blog->user?->first_name ?? '' . ' ' . $blog->user?->last_name ?? null;
-        unset($blog->user);
-
-        return response()->json($blog, 200);
     }
 
     public function update(Request $request, $slug)
     {
-        $blog = Blog::where('slug', $slug)->first();
+        try {
+            $blog = Blog::where('slug', $slug)->first();
 
-        if (!$blog) {
-            return response()->json([
-                'msgErr' => 'Blog not found.',
-            ], 404);
-        }
+            if (!$blog) {
+                return response()->json([
+                    'msgErr' => 'Blog not found.',
+                ], 404);
+            }
 
-        $validator = Validator::make($request->all(), [
-            'status' => 'required', // pending = 1, published = 2, cancelled = 3
-            'review' => 'required_if:status,3,1',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        if ($request->status == BlogStatus::REJECTED || $request->status == BlogStatus::PENDING) {
-            $blog->reviews()->create([
-                'user_id' => auth()->user()->id,
-                'review' => $request->review,
-                'blog_status' => $request->status,
+            $validator = Validator::make($request->all(), [
+                'status' => 'required', // pending = 1, published = 2, cancelled = 3
+                'review' => 'required_if:status,3,1',
             ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            if ($request->status == BlogStatus::REJECTED || $request->status == BlogStatus::PENDING) {
+                $blog->reviews()->create([
+                    'user_id' => auth()->user()->id,
+                    'review' => $request->review,
+                    'blog_status' => $request->status,
+                ]);
+            }
+
+            $blog->status = $request->status;
+            $blog->save();
+
+            return response()->json([
+                'msg' => 'Blog updated successfully.',
+            ], 201);
+        } catch (\Exception $exception) {
+            return response()->json(['msgErr' => 'Internal server error']);
         }
-
-        $blog->status = $request->status;
-        $blog->save();
-
-        return response()->json([
-            'msg' => 'Blog updated successfully.',
-        ], 201);
     }
 
     public function dashboard_statistics()
