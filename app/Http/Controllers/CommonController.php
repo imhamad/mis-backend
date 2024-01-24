@@ -15,21 +15,29 @@ class CommonController extends Controller
     // termsOfUse
     public function termsOfUse()
     {
-        $settings = Setting::first();
+        try {
+            $settings = Setting::first();
 
-        return response()->json([
-            'terms_of_use' => $settings->terms_of_use
-        ]);
+            return response()->json([
+                'terms_of_use' => $settings->terms_of_use
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
+        }
     }
 
     // privacyPolicy
     public function privacyPolicy()
     {
-        $settings = Setting::first();
+        try {
+            $settings = Setting::first();
 
-        return response()->json([
-            'privacy_policy' => $settings->privacy_policy
-        ]);
+            return response()->json([
+                'privacy_policy' => $settings->privacy_policy
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
+        }
     }
 
     // getThemeData
@@ -80,24 +88,36 @@ class CommonController extends Controller
     // getTeamMembersDropdown
     public function getTeamMembersDropdown()
     {
-        $teamMembers = OurTeamMember::selectRaw('id as value, CONCAT(name, " - ", designation) as label')->get();
+        try {
+            $teamMembers = OurTeamMember::selectRaw('id as value, CONCAT(name, " - ", designation) as label')->get();
 
-        return response()->json($teamMembers);
+            return response()->json($teamMembers);
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
+        }
     }
 
     // getCategoriesDropdown
     public function getCategoriesDropdown(Request $request)
     {
-        $categories = Category::where('type', $request->type)->selectRaw('id as value, title as label')->get();
+        try {
+            $categories = Category::where('type', $request->type)->selectRaw('id as value, title as label')->get();
 
-        return response()->json($categories);
+            return response()->json($categories);
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
+        }
     }
 
     // getColorsDropdown
     public function getColorsDropdown()
     {
-        $colors = BackgroundColor::selectRaw('color_code as value, color_name as label')->get();
+        try {
+            $colors = BackgroundColor::selectRaw('color_code as value, color_name as label')->get();
 
-        return response()->json($colors);
+            return response()->json($colors);
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
+        }
     }
 }

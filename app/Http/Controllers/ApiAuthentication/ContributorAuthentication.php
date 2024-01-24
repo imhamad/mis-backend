@@ -35,35 +35,39 @@ class ContributorAuthentication extends Controller
             'linkedin_url.url' => 'Please include a complete URL e.g https://www.linkedin.com/in/john-doe/',
         ]);
 
-        // Create a new user with validated data
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make(12345678),
-            'user_code' => $this->runCode(),  // Generate and assign a user code
-            'user_uuid' => Str::uuid(),  // Generate and assign a UUID
-            'user_type' => 'contributor',
-            'description' => $request->description,
-            'linkedin_url' => $request->linkedin_url,
-            'name' => $request->first_name . ' ' . $request->last_name,
-        ]);
+        try {
+            // Create a new user with validated data
+            $user = User::create([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'password' => Hash::make(12345678),
+                'user_code' => $this->runCode(),  // Generate and assign a user code
+                'user_uuid' => Str::uuid(),  // Generate and assign a UUID
+                'user_type' => 'contributor',
+                'description' => $request->description,
+                'linkedin_url' => $request->linkedin_url,
+                'name' => $request->first_name . ' ' . $request->last_name,
+            ]);
 
-        $user = User::where('email', $request->email)->first();
+            $user = User::where('email', $request->email)->first();
 
-        Mail::to($user->email)
-            ->send(new AccountCreation($user));
+            Mail::to($user->email)
+                ->send(new AccountCreation($user));
 
-        Notification::create([
-            'notification_title' => 'Account Request',
-            'notification_description' => 'There is a new account request.',
-            'type' => 'account_creation',
-        ]);
+            Notification::create([
+                'notification_title' => 'Account Request',
+                'notification_description' => 'There is a new account request.',
+                'type' => 'account_creation',
+            ]);
 
-        // Return a response using the make_response method
-        return response()->json([
-            'msg' => 'Your request has been submitted successfully. You will be notified through email once your account is approved.'
-        ], 200);
+            // Return a response using the make_response method
+            return response()->json([
+                'msg' => 'Your request has been submitted successfully. You will be notified through email once your account is approved.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
+        }
     }
 
     // Login Endpoint
@@ -82,96 +86,112 @@ class ContributorAuthentication extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Find the user by email
-        $user = User::where('email', $request->email)->first();
+        try {
+            // Find the user by email
+            $user = User::where('email', $request->email)->first();
 
-        if ($user->status == 1) {
-            $validator->errors()->add('email', 'Your account is not active');
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        if ($user) {
-            // Check if the provided password matches the hashed password in the database
-            if (Hash::check($request->password, $user->password)) {
-                return $this->make_response($user, 200);  // Return a successful response using make_response
-            } else {
-                $validator->errors()->add('password', 'Incorrect credentials');
+            if ($user->status == 1) {
+                $validator->errors()->add('email', 'Your account is not active');
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-        } else {
-            $validator->errors()->add('email', 'User does not exist');
-            return response()->json(['errors' => $validator->errors()], 422);
+
+            if ($user) {
+                // Check if the provided password matches the hashed password in the database
+                if (Hash::check($request->password, $user->password)) {
+                    return $this->make_response($user, 200);  // Return a successful response using make_response
+                } else {
+                    $validator->errors()->add('password', 'Incorrect credentials');
+                    return response()->json(['errors' => $validator->errors()], 422);
+                }
+            } else {
+                $validator->errors()->add('email', 'User does not exist');
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
         }
     }
 
     // get_profile
     public function get_profile(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        if ($user) {
-            return response()->json([
-                "name" => $user->name,
-                "email" => $user->email,
-                "first_name" => $user->first_name,
-                "last_name" => $user->last_name,
-                "description" => $user->description,
-                "linkedin_url" => $user->linkedin_url,
-                "avatar" => $user->avatar ? baseURL($user->avatar) : '',
-            ]);
-        } else {
-            return response()->json([
-                "msgErr" => "User not found"
-            ]);
+            if ($user) {
+                return response()->json([
+                    "name" => $user->name,
+                    "email" => $user->email,
+                    "first_name" => $user->first_name,
+                    "last_name" => $user->last_name,
+                    "description" => $user->description,
+                    "linkedin_url" => $user->linkedin_url,
+                    "avatar" => $user->avatar ? baseURL($user->avatar) : '',
+                ]);
+            } else {
+                return response()->json([
+                    "msgErr" => "User not found"
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
         }
     }
 
 
     public function update_profile(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        if ($user) {
-            $avatar = $user->avatar;
-            if ($request->avatar)
-                $avatar = imageUploader($request->avatar, $user->user_code);
+            if ($user) {
+                $avatar = $user->avatar;
+                if ($request->avatar)
+                    $avatar = imageUploader($request->avatar, $user->user_code);
 
-            $user->update([
-                'name' => $request->first_name . ' ' . $request->last_name,
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'description' => $request->description,
-                'linkedin_url' => $request->linkedin_url,
-                'avatar' => $avatar,
-            ]);
+                $user->update([
+                    'name' => $request->first_name . ' ' . $request->last_name,
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'description' => $request->description,
+                    'linkedin_url' => $request->linkedin_url,
+                    'avatar' => $avatar,
+                ]);
 
-            return response()->json([
-                "msg" => "Profile has been updated successfully",
-                "data" => $this->make_response($user)->original
-            ]);
-        } else {
-            return response()->json([
-                "msgErr" => "User not found"
-            ]);
+                return response()->json([
+                    "msg" => "Profile has been updated successfully",
+                    "data" => $this->make_response($user)->original
+                ]);
+            } else {
+                return response()->json([
+                    "msgErr" => "User not found"
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
         }
     }
 
     // logout
     public function logout(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        if ($user) {
-            // Revoke all tokens...
-            $user->tokens()->delete();
+            if ($user) {
+                // Revoke all tokens...
+                $user->tokens()->delete();
 
-            return response()->json([
-                "msg" => "User has been logged out successfully"
-            ]);
-        } else {
-            return response()->json([
-                "msgErr" => "User not found"
-            ]);
+                return response()->json([
+                    "msg" => "User has been logged out successfully"
+                ]);
+            } else {
+                return response()->json([
+                    "msgErr" => "User not found"
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
         }
     }
 
@@ -220,16 +240,20 @@ class ContributorAuthentication extends Controller
             return response(['errors' => $validator->errors()], 422);
         }
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        try {
+            if (!Hash::check($request->current_password, $user->password)) {
 
-            $validator->errors()->add('current_password', 'Current password does not match');
-            return response()->json(['errors' => $validator->errors()], 422);
+                $validator->errors()->add('current_password', 'Current password does not match');
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $request['password'] = Hash::make($request['password']);
+
+            $user->update($request->all());
+            return response(['msg' => 'Password updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['msg' => $e->getMessage()], 500);
         }
-
-        $request['password'] = Hash::make($request['password']);
-
-        $user->update($request->all());
-        return response(['msg' => 'Password updated successfully'], 200);
     }
 
     // forgot_password

@@ -107,7 +107,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'check_admin'])->group(funct
 
     // blogs
     Route::resource('blogs', AdminBlogsController::class, ['except' => ['store', 'destroy']]);
-    Route::resource('testimonials', TestimonialController::class); // exception done till here
+    Route::resource('testimonials', TestimonialController::class);
 
     Route::get('contributors-list', [ContributorsController::class, 'contributorsList']);
     Route::get('contributor-details/{id}', [ContributorsController::class, 'contributorDetails']);
