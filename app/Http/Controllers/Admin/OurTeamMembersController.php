@@ -34,6 +34,7 @@ class OurTeamMembersController extends Controller
                 'designation' => 'required',
                 'image' => 'required',
                 'url' => 'url',
+                'is_current' => 'boolean',
             ]);
 
             if ($validator->fails()) {
@@ -51,6 +52,7 @@ class OurTeamMembersController extends Controller
                 'designation' => $request->designation,
                 'image' => $image,
                 'url' => $request->url,
+                'is_current' => $request->is_current ?? false,
             ]);
 
             return response()->json([
@@ -88,6 +90,7 @@ class OurTeamMembersController extends Controller
                 'name' => 'string',
                 'designation' => 'string',
                 'url' => 'url',
+                'is_current' => 'boolean',
             ]);
 
             if ($validator->fails()) {
@@ -113,6 +116,7 @@ class OurTeamMembersController extends Controller
                 'designation' => $request->designation ?? $teamMember->designation,
                 'image' => $image,
                 'url' => $request->url ?? $teamMember->url,
+                'is_current' => $request->is_current ?? $teamMember->is_current,
             ]);
 
             return response()->json([

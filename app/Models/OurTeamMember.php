@@ -14,6 +14,7 @@ class OurTeamMember extends Model
         'designation',
         'image',
         'url',
+        'is_current',
     ];
 
     protected $hidden = [
