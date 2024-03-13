@@ -73,7 +73,7 @@ class FrontApisController extends Controller
                 });
 
             // Retrieve our team members data
-            $our_team = \App\Models\OurTeamMember::get()->map(function ($item) {
+            $our_team = \App\Models\OurTeamMember::where('is_current', 1)->get()->map(function ($item) {
                 // Convert the image URL to an absolute URL using the "url" helper function
                 $item->image = baseURL($item->image);
                 return $item;
