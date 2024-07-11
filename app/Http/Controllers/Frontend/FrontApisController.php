@@ -510,7 +510,7 @@ class FrontApisController extends Controller
 
             $model->relationship_to_deknows = json_decode($model->relationship_to_deknows);
 
-            Mail::to('sulaimanbarki@gmail.com')
+            Mail::to(env('CONTACT_MAIL', 'contact@deknows.com'))
                 ->send(new \App\Mail\ContactEmail($model));
 
             return response()->json(['msg' => 'Contact request submitted successfully']);
