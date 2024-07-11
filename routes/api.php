@@ -40,6 +40,7 @@ Route::prefix('frontend')->group(function () {
     Route::get('/blog-page', [FrontApisController::class, 'blogPage']);
     Route::get('/blog-search', [FrontApisController::class, 'blogSearch']);
     Route::get('/blog/{slug}', [FrontApisController::class, 'getBlog']);
+    Route::post('/contact', [FrontApisController::class, 'contactUs']);
 
     // drop downs
     Route::prefix('dropdown')->group(function () {

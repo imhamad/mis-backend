@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Blog;
+use App\Models\Contact;
 use App\Enums\BlogStatus;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Blog;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+
 
 class FrontApisController extends Controller
 {
@@ -477,6 +481,40 @@ class FrontApisController extends Controller
             unset($blog->category, $blog->user, $blog->created_at, $blog->updated_at);
 
             return response()->json($blog);
+        } catch (\Exception $e) {
+            return response()->json([
+                'msgErr' => 'Internal server error'
+            ]);
+        }
+    }
+
+    public function contactUs(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'de_contact_fullname' => 'required',
+            'de_contact_business_email' => 'required|email|unique:contacts,de_contact_business_email',
+            'de_contact_business_email' => 'required|email',
+            'de_contacting_country' => 'required',
+            'relationship_to_deknows' => 'required',
+            'de_job_title' => 'required',
+            'how_can_we_help_you' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $contact = $request->all();
+            $contact['relationship_to_deknows'] = json_encode($contact['relationship_to_deknows']);
+            $model = Contact::create($contact);
+
+            $model->relationship_to_deknows = json_decode($model->relationship_to_deknows);
+
+            Mail::to('sulaimanbarki@gmail.com')
+                ->send(new \App\Mail\ContactEmail($model));
+
+            return response()->json(['msg' => 'Contact request submitted successfully']);
         } catch (\Exception $e) {
             return response()->json([
                 'msgErr' => 'Internal server error'
