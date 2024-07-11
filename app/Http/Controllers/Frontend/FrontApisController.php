@@ -493,7 +493,6 @@ class FrontApisController extends Controller
         $validator = Validator::make($request->all(), [
             'de_contact_fullname' => 'required',
             'de_contact_business_email' => 'required|email|unique:contacts,de_contact_business_email',
-            'de_contact_business_email' => 'required|email',
             'de_contacting_country' => 'required',
             'relationship_to_deknows' => 'required',
             'how_can_we_help_you' => 'required',
