@@ -496,7 +496,6 @@ class FrontApisController extends Controller
             'de_contact_business_email' => 'required|email',
             'de_contacting_country' => 'required',
             'relationship_to_deknows' => 'required',
-            'de_job_title' => 'required',
             'how_can_we_help_you' => 'required',
         ]);
 
