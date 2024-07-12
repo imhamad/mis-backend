@@ -496,6 +496,8 @@ class FrontApisController extends Controller
             'de_contacting_country' => 'required',
             'relationship_to_deknows' => 'required',
             'how_can_we_help_you' => 'required',
+        ], [
+            'de_contact_business_email.unique' => 'The email has been used once, could you try with a new email',
         ]);
 
         if ($validator->fails()) {
