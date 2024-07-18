@@ -514,7 +514,7 @@ class FrontApisController extends Controller
             Mail::to(env('CONTACT_MAIL', 'contact@deknows.com'))
                 ->send(new \App\Mail\ContactEmail($model));
 
-            return response()->json(['msg' => 'Contact request submitted successfully']);
+            return response()->json(['msg' => 'Thank you for reaching us out. Just to let you know, your request has been successfully submitted. We will respond you back within 8 Hours. For urgent matters, please get in touch directly at notification@deknows.com']);
         } catch (\Exception $e) {
             return response()->json([
                 'msgErr' => 'Internal server error'
